@@ -1,0 +1,20 @@
+[book]
+title = "OMIR R1 Specification"
+authors = ["OMIR Working Group"]
+description = "OMIR — Open Memory Interoperability Resources. An open, vendor-neutral, at-rest data format for portable AI agent and cognitive memory."
+language = "en"
+src = "src"
+
+[output.html]
+default-theme = "rust"
+preferred-dark-theme = "ayu"
+git-repository-url = "https://github.com/omir-wg/omir-standard"
+edit-url-template = "https://github.com/omir-wg/omir-standard/edit/main/spec/{path}"
+no-section-label = false
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+enable = true

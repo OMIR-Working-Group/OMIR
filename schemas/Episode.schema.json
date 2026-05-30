@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R1/schemas/Episode.schema.json",
+  "title": "OMIR Episode (R1)",
+  "description": "A bounded experience — the raw event from which MemoryRecords, Entities, and Relationships are derived. The episodic backbone of the graph. OMM level 3.",
+  "type": "object",
+  "properties": {
+    "resourceType": { "const": "Episode" },
+    "id": { "$ref": "common.schema.json#/$defs/Id" },
+    "meta": { "$ref": "common.schema.json#/$defs/Meta" },
+    "name": { "type": "string", "description": "Human-readable title for the episode." },
+    "content": { "type": "string", "description": "The actual experience data." },
+    "source": {
+      "enum": ["message", "document", "event", "observation"],
+      "description": "What kind of input produced this episode."
+    },
+    "eventTime": {
+      "$ref": "common.schema.json#/$defs/Instant",
+      "description": "When the original event occurred (event time)."
+    },
+    "createdAt": {
+      "$ref": "common.schema.json#/$defs/Instant",
+      "description": "When this episode was ingested (ingestion time)."
+    },
+    "entityRefs": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Reference" },
+      "description": "Entities extracted from this episode."
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "extension": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Extension" }
+    }
+  },
+  "required": ["resourceType", "id", "content", "createdAt"],
+  "additionalProperties": false
+}

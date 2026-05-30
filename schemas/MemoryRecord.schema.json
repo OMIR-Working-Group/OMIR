@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R1/schemas/MemoryRecord.schema.json",
+  "title": "OMIR MemoryRecord (R1)",
+  "description": "The atomic unit of agent memory: a remembered experience, plan, prompt, or learning. OMM level 4.",
+  "type": "object",
+  "properties": {
+    "resourceType": { "const": "MemoryRecord" },
+    "id": { "$ref": "common.schema.json#/$defs/Id" },
+    "meta": { "$ref": "common.schema.json#/$defs/Meta" },
+    "content": {
+      "type": "string",
+      "description": "WHAT — the primary human-readable content of the memory."
+    },
+    "kind": {
+      "enum": ["memory", "plan", "prompt", "learning"],
+      "default": "memory",
+      "description": "Record lifecycle class. One core record, several lifecycles; retrieval stays unified."
+    },
+    "experienceType": {
+      "enum": [
+        "conversation", "decision", "error", "learning", "discovery", "pattern",
+        "context", "task", "code_edit", "file_access", "search", "command",
+        "observation", "intention"
+      ],
+      "description": "Finer-grained nature of the experience. 'intention' denotes prospective (future-directed) memory."
+    },
+    "tier": {
+      "enum": ["working", "session", "longterm", "archive"],
+      "default": "working",
+      "description": "Position in the memory hierarchy. Promotion is driven by age x importance x access."
+    },
+    "createdAt": { "$ref": "common.schema.json#/$defs/Instant" },
+    "eventTime": {
+      "$ref": "common.schema.json#/$defs/Instant",
+      "description": "WHEN the described event actually happened. MAY precede createdAt (encoding time)."
+    },
+    "importance": { "$ref": "common.schema.json#/$defs/UnitInterval" },
+    "confidence": { "$ref": "common.schema.json#/$defs/Confidence" },
+    "decay": { "$ref": "common.schema.json#/$defs/Decay" },
+    "provenance": { "$ref": "common.schema.json#/$defs/Provenance" },
+    "entityRefs": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Reference" },
+      "description": "References to Entity resources mentioned by this memory. Enables spreading activation without a graph lookup."
+    },
+    "parentId": {
+      "$ref": "common.schema.json#/$defs/Id",
+      "description": "Parent MemoryRecord id, for hierarchical knowledge trees."
+    },
+    "validUntil": {
+      "$ref": "common.schema.json#/$defs/Instant",
+      "description": "Temporal invalidation: this record is considered superseded after this instant."
+    },
+    "version": { "type": "integer", "minimum": 1, "default": 1 },
+    "extension": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Extension" }
+    }
+  },
+  "required": ["resourceType", "id", "content", "createdAt"],
+  "additionalProperties": false
+}

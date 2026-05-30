@@ -1,0 +1,206 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "@vocab": "https://omir.io/ns#",
+    "omir": "https://omir.io/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "id": "@id",
+    "resourceType": "@type",
+
+    "ref": {
+      "@id": "omir:ref",
+      "@type": "@id"
+    },
+
+    "entry": {
+      "@id": "omir:entry",
+      "@container": "@set"
+    },
+    "extension": {
+      "@id": "omir:extension",
+      "@container": "@set"
+    },
+
+    "content": "omir:content",
+    "name": "omir:name",
+    "summary": "omir:summary",
+    "context": "omir:context",
+
+    "kind": "omir:kind",
+    "experienceType": "omir:experienceType",
+    "tier": "omir:tier",
+    "source": "omir:source",
+    "sourceType": "omir:sourceType",
+    "relationType": "omir:relationType",
+
+    "labels": {
+      "@id": "omir:labels",
+      "@container": "@set"
+    },
+
+    "createdAt": {
+      "@id": "omir:createdAt",
+      "@type": "xsd:dateTime"
+    },
+    "eventTime": {
+      "@id": "omir:eventTime",
+      "@type": "xsd:dateTime"
+    },
+    "lastUpdated": {
+      "@id": "omir:lastUpdated",
+      "@type": "xsd:dateTime"
+    },
+    "lastSeenAt": {
+      "@id": "omir:lastSeenAt",
+      "@type": "xsd:dateTime"
+    },
+    "lastAccess": {
+      "@id": "omir:lastAccess",
+      "@type": "xsd:dateTime"
+    },
+    "validAt": {
+      "@id": "omir:validAt",
+      "@type": "xsd:dateTime"
+    },
+    "validUntil": {
+      "@id": "omir:validUntil",
+      "@type": "xsd:dateTime"
+    },
+    "invalidatedAt": {
+      "@id": "omir:invalidatedAt",
+      "@type": "xsd:dateTime"
+    },
+    "generatedAt": {
+      "@id": "omir:generatedAt",
+      "@type": "xsd:dateTime"
+    },
+
+    "importance": {
+      "@id": "omir:importance",
+      "@type": "xsd:decimal"
+    },
+    "salience": {
+      "@id": "omir:salience",
+      "@type": "xsd:decimal"
+    },
+    "strength": {
+      "@id": "omir:strength",
+      "@type": "xsd:decimal"
+    },
+    "credibility": {
+      "@id": "omir:credibility",
+      "@type": "xsd:decimal"
+    },
+    "calibrated": {
+      "@id": "omir:calibrated",
+      "@type": "xsd:decimal"
+    },
+    "alpha": {
+      "@id": "omir:alpha",
+      "@type": "xsd:decimal"
+    },
+    "beta": {
+      "@id": "omir:beta",
+      "@type": "xsd:decimal"
+    },
+    "halfLifeHours": {
+      "@id": "omir:halfLifeHours",
+      "@type": "xsd:decimal"
+    },
+    "mentionCount": {
+      "@id": "omir:mentionCount",
+      "@type": "xsd:integer"
+    },
+    "accessCount": {
+      "@id": "omir:accessCount",
+      "@type": "xsd:integer"
+    },
+    "version": {
+      "@id": "omir:version",
+      "@type": "xsd:integer"
+    },
+    "maturity": {
+      "@id": "omir:maturity",
+      "@type": "xsd:integer"
+    },
+    "anchored": {
+      "@id": "omir:anchored",
+      "@type": "xsd:boolean"
+    },
+    "properNoun": {
+      "@id": "omir:properNoun",
+      "@type": "xsd:boolean"
+    },
+
+    "confidence": {
+      "@id": "omir:confidence",
+      "@type": "@id"
+    },
+    "decay": {
+      "@id": "omir:decay",
+      "@type": "@id"
+    },
+    "provenance": {
+      "@id": "omir:provenance",
+      "@type": "@id"
+    },
+    "meta": {
+      "@id": "omir:meta",
+      "@type": "@id"
+    },
+
+    "entityRefs": {
+      "@id": "omir:entityRefs",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "from": {
+      "@id": "omir:from",
+      "@type": "@id"
+    },
+    "to": {
+      "@id": "omir:to",
+      "@type": "@id"
+    },
+    "parentId": {
+      "@id": "omir:parentId",
+      "@type": "@id"
+    },
+    "sourceEpisode": {
+      "@id": "omir:sourceEpisode",
+      "@type": "@id"
+    },
+
+    "omirVersion": "omir:omirVersion",
+    "profile": {
+      "@id": "omir:profile",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "externalId": "omir:externalId",
+    "attributes": {
+      "@id": "omir:attributes",
+      "@container": "@index"
+    },
+    "metadata": {
+      "@id": "omir:metadata",
+      "@container": "@index"
+    },
+
+    "url": {
+      "@id": "omir:url",
+      "@type": "@id"
+    },
+    "valueString": "omir:valueString",
+    "valueNumber": {
+      "@id": "omir:valueNumber",
+      "@type": "xsd:decimal"
+    },
+    "valueBoolean": {
+      "@id": "omir:valueBoolean",
+      "@type": "xsd:boolean"
+    },
+    "valueJson": "omir:valueJson"
+  }
+}

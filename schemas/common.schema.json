@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R1/schemas/common.schema.json",
+  "title": "OMIR Common Definitions (R1)",
+  "description": "Shared sub-schemas for OMIR R1 resources. Referenced via $ref by every resource schema. OMIR — Open Memory Interoperability Resources.",
+  "$defs": {
+    "Id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{1,128}$",
+      "description": "Resource-local identifier, unique within its resourceType inside a Bundle."
+    },
+    "Reference": {
+      "type": "object",
+      "description": "FHIR-style typed reference of the form 'ResourceType/id'.",
+      "properties": {
+        "ref": {
+          "type": "string",
+          "pattern": "^(MemoryRecord|Entity|Relationship|Episode)/[A-Za-z0-9._:-]{1,128}$"
+        }
+      },
+      "required": ["ref"],
+      "additionalProperties": false
+    },
+    "Instant": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 / ISO 8601 timestamp. UTC is RECOMMENDED."
+    },
+    "UnitInterval": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "A normalized score in the closed interval [0,1]."
+    },
+    "Meta": {
+      "type": "object",
+      "description": "Metadata envelope. MAY appear on any OMIR resource.",
+      "properties": {
+        "omirVersion": { "type": "string", "const": "R1" },
+        "profile": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri" },
+          "description": "Canonical URLs of profiles this resource claims to conform to."
+        },
+        "source": {
+          "type": "string",
+          "description": "Implementation that produced the resource, e.g. 'veld/0.7.6'."
+        },
+        "createdAt": { "$ref": "#/$defs/Instant" },
+        "lastUpdated": { "$ref": "#/$defs/Instant" },
+        "maturity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5,
+          "description": "OMIR Maturity Model (OMM) level of this resource TYPE in the spec, 0 (draft) .. 5 (normative/stable)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Extension": {
+      "type": "object",
+      "description": "Typed, namespaced extension. Carries implementation-specific data (e.g. Veld's 20-signal scores, external isotropy/closure dimensions) WITHOUT breaking core conformance. Consumers MAY ignore unknown extensions.",
+      "properties": {
+        "url": { "type": "string", "format": "uri", "description": "Canonical URL that defines this extension." },
+        "valueString": { "type": "string" },
+        "valueNumber": { "type": "number" },
+        "valueBoolean": { "type": "boolean" },
+        "valueJson": { "description": "Arbitrary JSON value for structured extensions." }
+      },
+      "required": ["url"],
+      "additionalProperties": false
+    },
+    "Confidence": {
+      "type": "object",
+      "description": "Calibrated confidence. Bayesian Beta(alpha, beta) posterior plus a derived point estimate.",
+      "properties": {
+        "alpha": { "type": "number", "exclusiveMinimum": 0 },
+        "beta": { "type": "number", "exclusiveMinimum": 0 },
+        "calibrated": { "$ref": "#/$defs/UnitInterval" }
+      },
+      "additionalProperties": false
+    },
+    "Decay": {
+      "type": "object",
+      "description": "Forgetting state. Anchored resources resist decay. Mirrors OMIR's 'better forgetting' principle.",
+      "properties": {
+        "halfLifeHours": { "type": "number", "exclusiveMinimum": 0 },
+        "lastAccess": { "$ref": "#/$defs/Instant" },
+        "accessCount": { "type": "integer", "minimum": 0 },
+        "anchored": { "type": "boolean", "default": false }
+      },
+      "additionalProperties": false
+    },
+    "Provenance": {
+      "type": "object",
+      "description": "Where a resource came from and how much to trust the origin.",
+      "properties": {
+        "source": { "type": "string" },
+        "sourceType": {
+          "type": "string",
+          "description": "Origin class, e.g. conversation | document | webhook | observation | command."
+        },
+        "credibility": { "$ref": "#/$defs/UnitInterval" },
+        "externalId": {
+          "type": "string",
+          "description": "Stable upstream identifier, '{system}:{id}', e.g. 'github:pr-123' or 'linear:SHO-39'."
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

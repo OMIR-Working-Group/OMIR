@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R1/schemas/Relationship.schema.json",
+  "title": "OMIR Relationship (R1)",
+  "description": "A directed, weighted edge between two Entity resources. Strength is dynamic (Hebbian): it increases with co-activation and decays without use. OMM level 3.",
+  "type": "object",
+  "properties": {
+    "resourceType": { "const": "Relationship" },
+    "id": { "$ref": "common.schema.json#/$defs/Id" },
+    "meta": { "$ref": "common.schema.json#/$defs/Meta" },
+    "from": {
+      "$ref": "common.schema.json#/$defs/Reference",
+      "description": "Source Entity reference, e.g. { \"ref\": \"Entity/john\" }."
+    },
+    "to": {
+      "$ref": "common.schema.json#/$defs/Reference",
+      "description": "Target Entity reference."
+    },
+    "relationType": {
+      "type": "string",
+      "description": "Open vocabulary. Common values: works_with, works_at, employed_by, part_of, contains, owned_by, located_in, located_at, related_to. Implementations MAY mint new lowercase snake_case values."
+    },
+    "strength": {
+      "$ref": "common.schema.json#/$defs/UnitInterval",
+      "description": "Synaptic weight (0..1). Dynamic under Hebbian plasticity."
+    },
+    "context": { "type": "string", "description": "Free-text note describing the relationship." },
+    "createdAt": { "$ref": "common.schema.json#/$defs/Instant" },
+    "validAt": {
+      "$ref": "common.schema.json#/$defs/Instant",
+      "description": "When this relationship was last observed to hold (temporal tracking)."
+    },
+    "invalidatedAt": {
+      "$ref": "common.schema.json#/$defs/Instant",
+      "description": "When this relationship was invalidated, if ever (temporal edge invalidation)."
+    },
+    "sourceEpisode": {
+      "$ref": "common.schema.json#/$defs/Reference",
+      "description": "Episode reference that produced this relationship."
+    },
+    "extension": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Extension" }
+    }
+  },
+  "required": ["resourceType", "id", "from", "to", "relationType"],
+  "additionalProperties": false
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R1/schemas/Bundle.schema.json",
+  "title": "OMIR Bundle (R1)",
+  "description": "A serialized collection of OMIR resources — the on-disk '.omir' document. JSON-LD compatible: an optional '@context' enables linked-data processing without changing the core shape.",
+  "type": "object",
+  "properties": {
+    "@context": {
+      "description": "Optional JSON-LD context. SHOULD be 'https://omir.io/spec/R1/context.jsonld' or an object that includes it."
+    },
+    "resourceType": { "const": "Bundle" },
+    "omirVersion": { "const": "R1" },
+    "id": { "$ref": "common.schema.json#/$defs/Id" },
+    "generatedAt": { "$ref": "common.schema.json#/$defs/Instant" },
+    "source": { "type": "string", "description": "Producing implementation, e.g. 'veld/0.7.6 (MIF adapter)'." },
+    "entry": {
+      "type": "array",
+      "description": "The resources carried by this bundle. Order is not significant; references resolve by 'ResourceType/id'.",
+      "items": {
+        "oneOf": [
+          { "$ref": "MemoryRecord.schema.json" },
+          { "$ref": "Entity.schema.json" },
+          { "$ref": "Relationship.schema.json" },
+          { "$ref": "Episode.schema.json" }
+        ]
+      }
+    }
+  },
+  "required": ["resourceType", "omirVersion", "entry"],
+  "additionalProperties": false
+}

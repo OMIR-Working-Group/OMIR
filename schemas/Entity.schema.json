@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R1/schemas/Entity.schema.json",
+  "title": "OMIR Entity (R1)",
+  "description": "A named thing extracted from memory — a person, place, organization, concept, technology, product, skill, or discriminative keyword. OMM level 3.",
+  "type": "object",
+  "properties": {
+    "resourceType": { "const": "Entity" },
+    "id": { "$ref": "common.schema.json#/$defs/Id" },
+    "meta": { "$ref": "common.schema.json#/$defs/Meta" },
+    "name": { "type": "string", "description": "Canonical surface form, e.g. 'John', 'Paris', 'Rust programming'." },
+    "labels": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "person", "organization", "location", "technology", "concept",
+          "event", "date", "product", "skill", "keyword", "project", "other"
+        ]
+      },
+      "description": "One or more type labels. Open at the edges via 'other' + extension."
+    },
+    "summary": { "type": "string", "description": "Context summary built from surrounding relationships." },
+    "mentionCount": { "type": "integer", "minimum": 0 },
+    "salience": {
+      "$ref": "common.schema.json#/$defs/UnitInterval",
+      "description": "How important this entity is (0..1). Higher salience = stronger gravitational pull in retrieval."
+    },
+    "properNoun": { "type": "boolean", "description": "Proper nouns carry higher base salience than common nouns." },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": { "type": "string" },
+      "description": "Type-specific key/value attributes."
+    },
+    "createdAt": { "$ref": "common.schema.json#/$defs/Instant" },
+    "lastSeenAt": { "$ref": "common.schema.json#/$defs/Instant" },
+    "extension": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Extension" },
+      "description": "E.g. name embeddings (model + vector) ride here; embeddings are NOT core in R1."
+    }
+  },
+  "required": ["resourceType", "id", "name"],
+  "additionalProperties": false
+}
