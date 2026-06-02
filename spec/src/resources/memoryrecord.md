@@ -10,6 +10,8 @@ The atomic unit of agent memory: a remembered experience, plan, prompt, or learn
 
 A `MemoryRecord` is the smallest retrievable item of cognitive state — one remembered thing, with the context needed to score, decay, and re-surface it. One core record type carries several lifecycle classes (`memory`, `plan`, `prompt`, `learning`) so that retrieval stays unified across them.
 
+> See [Memory Semantics](../semantics.md) for how `confidence`, `decay`, `tier`, and `provenance` behave over time.
+
 ## Fields
 
 | Field | Type | Card. | Description |

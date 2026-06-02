@@ -10,6 +10,8 @@ A bounded experience — the raw event from which `MemoryRecord`s, `Entity`s, an
 
 An `Episode` is the raw, time-bounded input — a message, document, event, or observation — that downstream resources are extracted from. It preserves both event time and ingestion time, and lists the entities it produced, so derived records remain traceable to their origin.
 
+> See [Memory Semantics §6](../semantics.md#6-the-temporal-model) for the event-time vs. ingestion-time model.
+
 ## Fields
 
 | Field | Type | Card. | Description |

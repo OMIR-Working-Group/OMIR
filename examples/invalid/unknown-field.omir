@@ -1,0 +1,14 @@
+{
+  "resourceType": "Bundle",
+  "omirVersion": "R1",
+  "id": "invalid-unknown-field",
+  "entry": [
+    {
+      "resourceType": "MemoryRecord",
+      "id": "m1",
+      "content": "Proprietary data MUST ride in extension[], not as a new top-level field.",
+      "createdAt": "2026-05-30T11:42:05Z",
+      "vendorScore": 0.7
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+# omir-validate — reference conformance validator for OMIR R1.
+# Apache-2.0, deliberately decoupled from the CC-BY-4.0 spec/schemas and from
+# any product. Standalone workspace so it is never pulled into another crate's
+# build graph (see HANDOFF §5).
+[package]
+name = "omir-validate"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.94"
+description = "Reference conformance validator for the OMIR R1 at-rest agent-memory format."
+license = "Apache-2.0"
+repository = "https://github.com/omir-wg/omir-standard"
+readme = "README.md"
+
+[lib]
+name = "omir_validate"
+path = "src/lib.rs"
+
+[[bin]]
+name = "omir-validate"
+path = "src/main.rs"
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# Offline-only: we register the embedded schemas via `with_resource`, so the
+# HTTP/file retrievers (reqwest, tower-http, …) are dead weight. Keep it light.
+jsonschema = { version = "0.46", default-features = false }
+clap = { version = "4", features = ["derive"] }
+
+[workspace]

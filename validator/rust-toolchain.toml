@@ -1,0 +1,5 @@
+# Pinned toolchain for reproducible builds (HANDOFF §5). CI installs this exact
+# version; bump deliberately, not incidentally.
+[toolchain]
+channel = "1.94.1"
+components = ["rustfmt", "clippy"]

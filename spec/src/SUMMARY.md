@@ -1,9 +1,9 @@
 # Summary
 
-[OMIR R1 Specification](./overview.md)
-
 - [Overview](./overview.md)
 - [Design Principles](./principles.md)
+- [Memory Semantics](./semantics.md)
+- [Theory & Scope](./theory.md)
 - [Encodings](./encodings.md)
 - [Extensions](./extensions.md)
 - [Profiles](./profiles.md)
@@ -16,3 +16,8 @@
 - [Relationship](./resources/relationship.md)
 - [Episode](./resources/episode.md)
 - [Bundle](./resources/bundle.md)
+
+# Beyond R1
+
+- [Toward a Global Standard](./global-standard.md)
+- [Efficiency & Information-Bearing Codes](./efficiency.md)

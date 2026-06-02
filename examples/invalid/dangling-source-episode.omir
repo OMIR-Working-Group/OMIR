@@ -1,0 +1,17 @@
+{
+  "resourceType": "Bundle",
+  "omirVersion": "R1",
+  "id": "invalid-dangling-source-episode",
+  "entry": [
+    { "resourceType": "Entity", "id": "a", "name": "Alpha" },
+    { "resourceType": "Entity", "id": "b", "name": "Beta" },
+    {
+      "resourceType": "Relationship",
+      "id": "r1",
+      "from": { "ref": "Entity/a" },
+      "to": { "ref": "Entity/b" },
+      "relationType": "related_to",
+      "sourceEpisode": { "ref": "Episode/ghost" }
+    }
+  ]
+}

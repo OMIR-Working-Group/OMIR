@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR — Spec Feedback</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>Spec feedback</h1>
+      <p class="lead">Browse the OMIR R1 specification tree and attach feedback to any part — a
+      whole section, or a specific resource at its maturity level. This is how the standard
+      stays honest: maturity is a promise about change, and the fastest way to move a resource
+      up the <a href="./spec/R1/principles.html#4-honest-maturity-via-omm">OMIR Maturity Model</a>
+      is real implementer feedback.</p>
+      <div class="callout">
+        <strong>How this works.</strong> Feedback you save is stored <em>locally in your browser</em>
+        (nothing is uploaded). When you're ready to file it with the Working Group, use
+        <strong>Open as GitHub issue</strong> on any item — it pre-fills an issue against
+        <code>omir-wg/omir-standard</code> with the section and maturity level attached. You can also
+        export everything as JSON.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Specification tree</h2>
+      <p class="muted">Each node links to its rendered spec page. Use <strong>Give feedback</strong>
+      to tie a note to that exact part.</p>
+      <div id="tree"></div>
+    </section>
+
+    <section class="section">
+      <h2>Your saved feedback <span class="pill" id="fb-count">0</span></h2>
+      <p class="muted" id="fb-empty">No feedback saved yet. Pick a part of the spec above and add a note.</p>
+      <div id="fb-list"></div>
+      <div class="fb-actions" id="fb-bulk" hidden>
+        <button class="button secondary" id="fb-export">Export all (JSON)</button>
+        <button class="button secondary" id="fb-clear">Clear all</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+
+  <script>
+    // The R1 spec tree. `omm` is the OMIR Maturity Model level (resources only);
+    // Bundle is the document envelope and carries no OMM grade.
+    const SPEC = [
+      { group: "Specification", items: [
+        { id: "overview",    title: "Overview",          href: "./spec/R1/overview.html",    desc: "The full scope of OMIR." },
+        { id: "principles",  title: "Design Principles", href: "./spec/R1/principles.html",  desc: "Why the spec is shaped this way." },
+        { id: "semantics",   title: "Memory Semantics",  href: "./spec/R1/semantics.html",   desc: "What the fields mean over time — the cognitive model." },
+        { id: "encodings",   title: "Encodings",         href: "./spec/R1/encodings.html",   desc: "The .omir JSON and .omirb binary forms." },
+        { id: "extensions",  title: "Extensions",        href: "./spec/R1/extensions.html",  desc: "Keep the core stable while innovating." },
+        { id: "profiles",    title: "Profiles",          href: "./spec/R1/profiles.html",    desc: "Constrain the core for a domain." },
+        { id: "conformance", title: "Conformance",       href: "./spec/R1/conformance.html", desc: "What makes a Bundle valid." },
+      ]},
+      { group: "Resources", items: [
+        { id: "memoryrecord", title: "MemoryRecord", href: "./spec/R1/resources/memoryrecord.html", omm: 4, desc: "The atomic unit of memory: experience, plan, prompt, or learning." },
+        { id: "entity",       title: "Entity",       href: "./spec/R1/resources/entity.html",       omm: 3, desc: "A named thing extracted from memory, with salience." },
+        { id: "relationship", title: "Relationship", href: "./spec/R1/resources/relationship.html", omm: 3, desc: "A directed, weighted (Hebbian) edge between two entities." },
+        { id: "episode",      title: "Episode",      href: "./spec/R1/resources/episode.html",      omm: 3, desc: "A bounded experience the other resources derive from." },
+        { id: "bundle",       title: "Bundle",       href: "./spec/R1/resources/bundle.html",       env: true, desc: "The container that is the .omir document." },
+      ]},
+      { group: "Beyond R1", items: [
+        { id: "global-standard", title: "Toward a Global Standard", href: "./spec/R1/global-standard.html", desc: "Generalizing from a Veld-seeded core to a vendor-neutral global format (non-normative)." },
+      ]},
+    ];
+
+    const KEY = "omir-feedback";
+    const node = (id) => SPEC.flatMap(g => g.items).find(i => i.id === id);
+
+    function load() {
+      try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+      catch { return []; }
+    }
+    function save(items) { localStorage.setItem(KEY, JSON.stringify(items)); }
+
+    function ommBadge(item) {
+      if (item.env) return '<span class="omm omm-env">envelope</span>';
+      if (item.omm != null) return `<span class="omm omm-${item.omm}">OMM-${item.omm}</span>`;
+      return "";
+    }
+
+    function authorDefault() {
+      try {
+        const u = JSON.parse(localStorage.getItem("omir-site-user"));
+        return u && u.name ? `${u.name}${u.email ? " <" + u.email + ">" : ""}` : "";
+      } catch { return ""; }
+    }
+
+    function esc(s) {
+      return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+    }
+
+    function issueUrl(rec) {
+      const lvl = rec.env ? "envelope" : (rec.omm != null ? `OMM-${rec.omm}` : "n/a");
+      const title = `[Spec feedback] ${rec.section}${rec.omm != null ? ` (OMM-${rec.omm})` : ""}`;
+      const body =
+        `**Section:** ${rec.section}\n` +
+        `**Maturity:** ${lvl}\n` +
+        `**Kind:** ${rec.kind}\n` +
+        (rec.author ? `**From:** ${rec.author}\n` : "") +
+        `\n${rec.message}\n\n---\n_Filed from the omir.io feedback page._`;
+      return `https://github.com/omir-wg/omir-standard/issues/new?labels=feedback` +
+        `&title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function renderTree() {
+      const root = document.getElementById("tree");
+      root.innerHTML = "";
+      for (const g of SPEC) {
+        const wrap = document.createElement("div");
+        wrap.className = "tree-group";
+        wrap.innerHTML = `<h3>${g.group}</h3>`;
+        for (const item of g.items) {
+          const el = document.createElement("div");
+          el.className = "node";
+          el.innerHTML = `
+            <div class="node-head">
+              <span class="node-title">${item.title}</span>
+              ${ommBadge(item)}
+              <span class="node-actions">
+                <a class="button secondary" href="${item.href}">Read</a>
+                <button class="button" data-fb="${item.id}">Give feedback</button>
+              </span>
+            </div>
+            <p class="node-desc">${item.desc}</p>
+            <div class="fb-form hidden" id="form-${item.id}"></div>`;
+          wrap.appendChild(el);
+        }
+        root.appendChild(wrap);
+      }
+      root.querySelectorAll("[data-fb]").forEach(btn =>
+        btn.addEventListener("click", () => toggleForm(btn.dataset.fb)));
+    }
+
+    function toggleForm(id) {
+      const host = document.getElementById(`form-${id}`);
+      if (!host.classList.contains("hidden")) { host.classList.add("hidden"); return; }
+      const item = node(id);
+      host.innerHTML = `
+        <div class="row">
+          <div>
+            <label>Kind</label>
+            <select id="k-${id}">
+              <option value="Question">Question</option>
+              <option value="Issue">Issue / bug</option>
+              <option value="Suggestion" selected>Suggestion</option>
+              <option value="Maturity">Maturity (is the OMM level right?)</option>
+              <option value="Praise">Praise / +1</option>
+            </select>
+          </div>
+          <div>
+            <label>Your name <span class="muted">(optional)</span></label>
+            <input id="a-${id}" type="text" placeholder="e.g. Jane, Acme Memory" value="${esc(authorDefault())}">
+          </div>
+        </div>
+        <label>Feedback on <strong>${item.title}</strong>${item.omm != null ? ` (OMM-${item.omm})` : ""}</label>
+        <textarea id="m-${id}" placeholder="What's unclear, missing, wrong, or right about this part of the spec?"></textarea>
+        <div class="fb-actions">
+          <button class="button" id="s-${id}">Save locally</button>
+          <button class="button secondary" id="c-${id}">Cancel</button>
+        </div>`;
+      host.classList.remove("hidden");
+      document.getElementById(`s-${id}`).addEventListener("click", () => submit(id));
+      document.getElementById(`c-${id}`).addEventListener("click", () => host.classList.add("hidden"));
+      document.getElementById(`m-${id}`).focus();
+    }
+
+    function submit(id) {
+      const item = node(id);
+      const message = document.getElementById(`m-${id}`).value.trim();
+      if (!message) { document.getElementById(`m-${id}`).focus(); return; }
+      const rec = {
+        ref: id,
+        section: item.title,
+        omm: item.omm ?? null,
+        env: !!item.env,
+        kind: document.getElementById(`k-${id}`).value,
+        author: document.getElementById(`a-${id}`).value.trim(),
+        message,
+        ts: new Date().toISOString(),
+      };
+      const items = load();
+      items.unshift(rec);
+      save(items);
+      document.getElementById(`form-${id}`).classList.add("hidden");
+      renderList();
+    }
+
+    function renderList() {
+      const items = load();
+      const list = document.getElementById("fb-list");
+      const count = document.getElementById("fb-count");
+      const empty = document.getElementById("fb-empty");
+      const bulk = document.getElementById("fb-bulk");
+      count.textContent = items.length;
+      empty.style.display = items.length ? "none" : "";
+      bulk.hidden = items.length === 0;
+      list.innerHTML = "";
+      items.forEach((rec, i) => {
+        const lvl = rec.env ? '<span class="omm omm-env">envelope</span>'
+          : (rec.omm != null ? `<span class="omm omm-${rec.omm}">OMM-${rec.omm}</span>` : "");
+        const when = rec.ts ? rec.ts.slice(0, 16).replace("T", " ") : "";
+        const el = document.createElement("div");
+        el.className = "fb-item";
+        el.innerHTML = `
+          <div class="meta">
+            <span class="pill">${esc(rec.kind)}</span>
+            <strong>${esc(rec.section)}</strong> ${lvl}
+            ${rec.author ? `· <span>${esc(rec.author)}</span>` : ""}
+            <span style="margin-left:auto">${when}</span>
+          </div>
+          <p style="margin:.4rem 0 .5rem">${esc(rec.message)}</p>
+          <div class="fb-actions">
+            <a class="button secondary" href="${issueUrl(rec)}" target="_blank" rel="noopener">Open as GitHub issue</a>
+            <button class="button secondary" data-del="${i}">Delete</button>
+          </div>`;
+        list.appendChild(el);
+      });
+      list.querySelectorAll("[data-del]").forEach(btn =>
+        btn.addEventListener("click", () => {
+          const items = load();
+          items.splice(Number(btn.dataset.del), 1);
+          save(items);
+          renderList();
+        }));
+    }
+
+    document.getElementById("fb-export").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(load(), null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "omir-feedback.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+    document.getElementById("fb-clear").addEventListener("click", () => {
+      if (confirm("Delete all locally saved feedback?")) { save([]); renderList(); }
+    });
+
+    renderTree();
+    renderList();
+  </script>
+</body>
+</html>

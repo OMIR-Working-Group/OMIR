@@ -1,0 +1,15 @@
+{
+  "resourceType": "Bundle",
+  "omirVersion": "R1",
+  "id": "invalid-dangling-ref",
+  "entry": [
+    { "resourceType": "Entity", "id": "a", "name": "Alpha" },
+    {
+      "resourceType": "Relationship",
+      "id": "r1",
+      "from": { "ref": "Entity/a" },
+      "to": { "ref": "Entity/ghost" },
+      "relationType": "related_to"
+    }
+  ]
+}

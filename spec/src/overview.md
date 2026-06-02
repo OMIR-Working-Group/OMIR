@@ -67,7 +67,7 @@ Every piece of data in OMIR is a **Resource**. R1 defines five resource types:
 | [Bundle](./resources/bundle.md) | The container. A Bundle **is** the `.omir` document. | — |
 
 The maturity column refers to the **OMIR Maturity Model (OMM)** — see
-[Design Principles](./principles.md#honest-maturity-via-omm). It is surfaced per
+[Design Principles](./principles.md#4-honest-maturity-via-omm). It is surfaced per
 resource in `meta.maturity`.
 
 ## References

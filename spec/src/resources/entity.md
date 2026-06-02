@@ -10,6 +10,8 @@ A named thing extracted from memory — a person, place, organization, concept, 
 
 An `Entity` is a canonicalized node in the knowledge graph. It is the target of `MemoryRecord.entityRefs` and `Episode.entityRefs`, and the endpoint type for every `Relationship`. Salience governs how strongly an entity pulls on retrieval.
 
+> See [Memory Semantics §5](../semantics.md#5-salience) for how `salience` is computed and used in retrieval.
+
 ## Fields
 
 | Field | Type | Card. | Description |

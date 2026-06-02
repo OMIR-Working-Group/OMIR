@@ -119,4 +119,4 @@ The `Bundle` does not hold typed `Reference` fields of its own; it is the resolu
 - **`entry[]`** may contain **`MemoryRecord`**, **`Entity`**, **`Relationship`**, and **`Episode`** resources.
 - Cross-resource references (`MemoryRecord.entityRefs`, `Episode.entityRefs`, `Relationship.from` / `to` / `sourceEpisode`) resolve against the `entry[]` members by their `ResourceType/id`.
 
-A `Bundle` MUST NOT appear inside another `Bundle`'s `entry[]` — the `oneOf` admits only the four core resources.
+A `Bundle` MUST NOT appear inside another `Bundle`'s `entry[]` — the `oneOf` admits only the four core resources (`MemoryRecord`, `Entity`, `Relationship`, `Episode`).

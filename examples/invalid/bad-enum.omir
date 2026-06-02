@@ -1,0 +1,14 @@
+{
+  "resourceType": "Bundle",
+  "omirVersion": "R1",
+  "id": "invalid-bad-enum",
+  "entry": [
+    {
+      "resourceType": "MemoryRecord",
+      "id": "m1",
+      "content": "tier must be one of working|session|longterm|archive.",
+      "createdAt": "2026-05-30T11:42:05Z",
+      "tier": "permanent"
+    }
+  ]
+}

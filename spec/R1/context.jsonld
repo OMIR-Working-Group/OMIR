@@ -8,6 +8,13 @@
     "id": "@id",
     "resourceType": "@type",
 
+    "Episode": {
+      "@id": "omir:Episode",
+      "@context": {
+        "source": { "@id": "omir:episodeSource" }
+      }
+    },
+
     "ref": {
       "@id": "omir:ref",
       "@type": "@id"

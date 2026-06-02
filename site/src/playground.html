@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR Playground</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>Playground</h1>
+      <p class="lead">Paste a <code>.omir</code> Bundle, validate it against the R1 schemas, and
+      see its entities and relationships as a graph — entirely in your browser.</p>
+      <div class="callout warn">
+        <strong>Coming soon — and on purpose, client-side.</strong> The playground will run the
+        reference validator <em>in your browser</em> (the Rust <code>omir-validate</code> crate
+        compiled to WebAssembly). Nothing you paste leaves your machine — a real privacy property
+        for a <em>memory</em> format. The validator now exists as a working CLI; the remaining step
+        is the WASM build.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Validate today, from the CLI</h2>
+      <p>Until the in-browser validator ships, the same conformance checks run from the command line.
+      The reference validator (<a href="https://github.com/omir-wg/omir-standard/tree/main/validator"><code>omir-validate</code></a>,
+      Apache-2.0) checks structural validity, reference integrity, and the version marker, and emits
+      a human or JSON conformance report.</p>
+      <pre><code># from the repository root
+cd validator
+cargo run -- ../examples/minimal-bundle.omir
+
+#   structural ............. pass   (5 entries: 2 Entity, 1 Episode, 1 MemoryRecord, 1 Relationship)
+#   reference integrity .... pass   (7 of 7 references resolved)
+#   version presence ....... pass   (Bundle=R1, 5/5 entries meta.omirVersion=R1)
+#
+# RESULT: PASS  —  Core conformant ✓  (badge-eligible)
+
+# machine-readable report for CI / badge automation:
+cargo run -- ../examples/minimal-bundle.omir --format json</code></pre>
+      <p>Try it against the deliberately broken fixtures in <code>examples/invalid/</code> to see
+      what rejection looks like (a dangling reference, a score out of range, a bad enum, an
+      undeclared field) — each exits non-zero with a located finding.</p>
+    </section>
+
+    <section class="section">
+      <h2>What the in-browser version will add</h2>
+      <ul>
+        <li><strong>Paste &amp; validate</strong> — drop a <code>.omir</code> document in, get the
+          conformance report instantly, with findings anchored to the offending JSON path.</li>
+        <li><strong>Graph view</strong> — entities as nodes (sized by <code>salience</code>),
+          relationships as edges (weighted by <code>strength</code>), so a Bundle is legible at a
+          glance.</li>
+        <li><strong>Zero upload</strong> — the WASM validator runs locally; your memory never
+          touches a server.</li>
+      </ul>
+      <p class="muted">See <a href="./spec/R1/conformance.html">Conformance</a> for the exact rules
+      the validator enforces, and <a href="./guides.html">Guides</a> to build your first Bundle.</p>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0 · code Apache-2.0</footer>
+</body>
+</html>

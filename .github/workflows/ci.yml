@@ -1,0 +1,105 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---- Track 1: the reference validator (Rust, Apache-2.0) ----
+  validator:
+    name: validator (build · fmt · clippy · test · corpus)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: validator
+    steps:
+      - uses: actions/checkout@v4
+
+      # rust-toolchain.toml pins the channel + rustfmt/clippy; rustup honours it.
+      - name: Show toolchain
+        run: rustup show
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: validator
+
+      - name: Format check
+        run: cargo fmt --check
+
+      - name: Clippy (deny warnings)
+        run: cargo clippy --all-targets --locked -- -D warnings
+
+      - name: Test
+        run: cargo test --locked
+
+      - name: Conformance corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== positive: the example MUST pass Core =="
+          cargo run --quiet --locked -- ../examples/minimal-bundle.omir --no-color
+
+          echo "== negative: every invalid fixture MUST be rejected (exit 1) =="
+          for f in ../examples/invalid/*.omir; do
+            if cargo run --quiet --locked -- "$f" --no-color >/dev/null 2>&1; then
+              echo "FAIL: $f was accepted but should be rejected"
+              exit 1
+            else
+              echo "ok (rejected): $f"
+            fi
+          done
+
+  # ---- Spec + site: mdBook build, JSON validity, link/anchor check ----
+  site:
+    name: spec + site (mdbook · json · links)
+    runs-on: ubuntu-latest
+    env:
+      MDBOOK_VERSION: "0.5.3"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install mdBook ${{ env.MDBOOK_VERSION }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.local/bin"
+          url="https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+          curl -sSL "$url" | tar -xz -C "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: JSON validity (schemas, examples, context)
+        run: |
+          set -euo pipefail
+          ok=1
+          for f in schemas/*.json examples/*.omir examples/invalid/*.omir spec/R1/context.jsonld; do
+            if python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$f"; then
+              echo "ok: $f"
+            else
+              echo "INVALID JSON: $f"; ok=0
+            fi
+          done
+          [ "$ok" -eq 1 ]
+
+      - name: Schema self-validation (JSON Schema 2020-12 meta-schema)
+        run: |
+          python -m pip install --quiet check-jsonschema
+          python -m check_jsonschema --check-metaschema schemas/*.json
+
+      - name: Build site (mdbook spec + assemble)
+        run: sh site/build.sh
+
+      - name: Link & anchor check
+        run: bash scripts/check-links.sh site/src

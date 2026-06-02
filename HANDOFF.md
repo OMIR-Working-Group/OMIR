@@ -124,7 +124,7 @@ omir-standard/
 4. **Consider R1 additions at low OMM** (don't overreach): `ContextBlock` (Letta-style mutable agent state), `Intention` as a first-class resource, `Provenance`/`ConsolidationEvent` as resources. Propose via the RFC process in `CONTRIBUTING.md`; grade them OMM-0/1.
 5. **`git init`**, push to the **`omir-wg`** GitHub org (already wired into `spec/book.toml`; see §2), wire CI: JSON-schema self-validation, mdBook build, and a **link checker** (see gotchas §8).
 
-**Toolchain (pin these):** Rust **edition 2021** + a committed `rust-toolchain.toml`; schema validation via the **`jsonschema`** crate (draft 2020-12, with local `$ref` resolution across `schemas/`); CI installs **mdBook 0.4.x** for the spec build. `omir-validate` and `omir-gen` are separate Apache-2.0 crates, each with its own `[workspace]` (kept out of Veld's workspace).
+**Toolchain (pin these):** Rust **edition 2021** + a committed `rust-toolchain.toml`; schema validation via the **`jsonschema`** crate (draft 2020-12, with local `$ref` resolution across `schemas/`); CI installs **mdBook 0.5.x (pinned 0.5.3)** for the spec build. `omir-validate` and `omir-gen` are separate Apache-2.0 crates, each with its own `[workspace]` (kept out of Veld's workspace).
 
 ---
 

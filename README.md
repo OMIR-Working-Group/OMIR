@@ -1,5 +1,7 @@
 # OMIR — Open Memory Interoperability Resources
 
+[![CI](https://github.com/omir-wg/omir-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/omir-wg/omir-standard/actions/workflows/ci.yml)
+
 **The open, vendor-neutral format for agent memory.**
 
 OMIR (pronounced *"OH-meer"*) is an open, at-rest data format for portable AI agent and cognitive memory — a document standard, not a wire protocol or a product. Where MCP and A2A *transport* memory between agents and tools, OMIR *is* the memory at rest: a stable, inspectable file you can archive, diff, migrate, and hand to another system. It is modeled deliberately on HL7 FHIR, carrying that ecosystem's hard-won lessons about resources, references, profiles, and honest maturity grading into the agent-memory domain.

@@ -2,6 +2,10 @@
 spec/book/
 book/
 
+# --- Site build output (mdBook spec rendered into src; assembled deploy tree) ---
+site/src/spec/
+site/public/
+
 # --- Rust build artifacts (validator/, generators/) ---
 target/
 **/target/

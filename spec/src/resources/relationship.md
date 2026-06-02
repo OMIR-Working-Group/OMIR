@@ -10,6 +10,8 @@ A directed, weighted edge between two `Entity` resources. Strength is dynamic (H
 
 A `Relationship` is a typed graph edge linking two entities. Its `strength` carries Hebbian synaptic weight, and `validAt` / `invalidatedAt` give it a temporal lifecycle so superseded edges can be retained rather than deleted.
 
+> See [Memory Semantics §4](../semantics.md#4-hebbian-relationship-strength) for how `strength` rises with co-activation and decays with disuse.
+
 ## Fields
 
 | Field | Type | Card. | Description |

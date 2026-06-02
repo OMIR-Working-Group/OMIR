@@ -1,8 +1,12 @@
 # OMIR Website — omir.io (Track 2 design doc)
 
-**Status: DESIGN DOC — not yet built.** No site scaffolding exists in the repo yet.
-This specifies what to build for **Track 2 (priority 2, after the Standard)** so a cold
-agent can start without guessing. License: **site content CC-BY-4.0; site code Apache-2.0**.
+**Status: SCAFFOLDED & BUILDING.** A static `site/` now exists: landing pages in
+`site/src/`, a `site/build.sh` that renders the mdBook spec into `site/public/spec/R1`
+and assembles the pages alongside it, and `site/public/` as the (gitignored) deploy
+artifact. Pages live: Home, Spec, Guides, Implementations, Feedback, About. `/playground`
+remains **blocked on Track 1** (needs `omir-validate` → WASM; the validator is now
+scaffolded). This doc remains the Track 2 contract. License: **site content CC-BY-4.0;
+site code Apache-2.0**.
 
 ---
 
@@ -31,18 +35,23 @@ build feeds the site, so co-location avoids a cross-repo build. Split into a sep
 site/
 ├─ public/                # Pages deploy output (built artifact; gitignored)
 ├─ src/                   # landing pages (plain static HTML first; Astro only if needed)
+├─ src/index.html         # friendly OMIR landing page prototype
 ├─ wrangler.toml          # (or Pages dashboard config)
-└─ build.(sh|ts)          # mdbook build spec/ → site/public/spec/R1 ; then copy landing
+└─ build.sh               # mdbook build spec/ → site/src/spec/R1 ; then assemble site/public/
 ```
 
 ## Build pipeline
 
-1. `mdbook build spec/ -d <abs>/site/public/spec/R1` — **pin mdBook 0.4.x** (same version CI installs; see HANDOFF §5 Toolchain).
-2. Build/copy landing pages into `site/public/`.
+1. `mdbook build spec/ -d <abs>/site/src/spec/R1` — **pin mdBook 0.5.x (0.5.3)** (same version CI installs; see HANDOFF §5 Toolchain). Rendering the spec *next to* the landing pages keeps `site/src/` directly browsable (open `site/src/index.html`; the `./spec/R1/…` links resolve with no assembly step).
+2. Assemble the deploy tree: copy `site/src/` → `site/public/`.
 3. Cloudflare Pages deploys `site/public/`.
+
+All three steps are wrapped by `site/build.sh` (run `sh site/build.sh`). Both `site/src/spec/` and `site/public/` are gitignored build output.
 
 Landing framework: **start with plain static HTML.** The spec itself is mdBook; don't
 over-tool the shell. Reach for Astro only if component reuse actually demands it.
+
+The initial landing page can include interactive sign-in and in-place editing as a prototype for content preview workflows.
 
 ## Information architecture
 
@@ -53,6 +62,7 @@ omir.io/
 ├─ /playground    paste a .omir file → live validate + graph viz   (BLOCKED on Track 1)
 ├─ /implementations  who speaks OMIR (Veld first; the scoreboard)
 ├─ /guides        implementer how-tos; migration from Mem0/Letta
+├─ /feedback      spec tree + feedback tied to any section/OMM level (local capture → prefilled GitHub issue)
 ├─ /governance    rendered from GOVERNANCE.md
 ├─ /maturity      OMM dashboard per resource (generated from schemas/ meta)
 └─ /blog          announcements, ballot results

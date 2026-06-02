@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash scripts/check-links.sh site/src)",
+      "Bash(python -m pip install --quiet check-jsonschema)",
+      "Bash(check-jsonschema --check-metaschema schemas/*.json)",
+      "Bash(grep -q 'href=\"./field-map.html\"' site/src/__TRACKED_VAR__.html)",
+      "Bash(python -m check_jsonschema --check-metaschema schemas/*.json)",
+      "Bash(python -)",
+      "Bash(cargo fmt *)"
+    ]
+  }
+}

@@ -1,11 +1,20 @@
 # omir-validate — Reference Conformance Validator (DESIGN DOC)
 
-> **Status: DESIGN — NOT YET IMPLEMENTED.**
-> This document specifies the intended behavior of the `omir-validate` reference
-> CLI. The tool described here does **not exist yet**; nothing in this README
-> should be read as a description of shipped software. It is the design contract
-> the implementation will be built against, published ahead of the code so the
-> OMIR Working Group can review the conformance rules before they are frozen.
+> **Status: SCAFFOLD IMPLEMENTED (v0.1.0).**
+> A working Rust crate now lives alongside this design doc (`Cargo.toml`,
+> `src/`, `tests/`). It implements check groups **2.1 structural**, **2.2
+> reference integrity**, and **2.3 version presence** at the **core** and
+> **strict** levels, emits both the human and canonical JSON reports, and uses
+> the documented exit codes. The conformance corpus (`../examples/`, including
+> `../examples/invalid/`) is green: the conformant Bundle passes Core and
+> Strict; every invalid fixture is rejected.
+>
+> **Not yet implemented** (tracked, not regressions): **2.4 profile**
+> conformance (flags are accepted but reported as `skipped`, never affecting
+> Core) and **`.omirb`** (CBOR) input. This README remains the design contract;
+> where prose and code differ, the gap is one of the two items above.
+>
+> Build & run: `cd validator && cargo test && cargo run -- ../examples/minimal-bundle.omir`.
 
 `omir-validate` is the **reference implementation** of the OMIR R1 conformance
 suite: a single, dependency-light Rust CLI that decides whether a `.omir` (or
@@ -81,8 +90,9 @@ run surfaces as many findings as possible.
      `validUntil`, `validAt`, `invalidatedAt`, `lastSeenAt`, …),
    - `Id` and `Reference` lexical patterns
      (`^[A-Za-z0-9._:-]{1,128}$`; refs `^(MemoryRecord|Entity|Relationship|Episode)/…$`).
-   An entry whose `resourceType` is not one of the four R1 resource types is a
-   violation (`E101`) — `Bundle.entry[]` is a closed `oneOf` in R1.
+   An entry whose `resourceType` is not one of the four R1 resource types
+   (`MemoryRecord`, `Entity`, `Relationship`, `Episode`) is a violation (`E101`) —
+   `Bundle.entry[]` is a closed `oneOf` in R1.
 
 ### 2.2 Reference integrity (cross-entry)
 

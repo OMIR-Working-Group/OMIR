@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR Implementations</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>Implementations</h1>
+      <p class="lead">Who speaks OMIR. This is the scoreboard — and the most important page on the site.</p>
+      <div class="callout warn">
+        <strong>The honest metric.</strong> A format authored by exactly one vendor is just that
+        vendor's export format with a logo. The number that matters for OMIR is not spec completeness —
+        it is <strong>a second implementer who did not write the spec</strong>. That single independent
+        integration is what turns a file format into a standard. If that's you, we want to hear from you.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Conformant implementations</h2>
+      <p>An implementation is a <strong>producer</strong> (emits <code>.omir</code>), a
+      <strong>consumer</strong> (reads it), or both. Conformance is graded by the reference validator at
+      the <strong>Core</strong> level — structural validity, full reference integrity, and the
+      <code>R1</code> marker. See <a href="./spec/R1/conformance.html">Conformance</a>.</p>
+      <table>
+        <tr>
+          <th>Implementation</th><th>Role</th><th>Conformance</th><th>Encodings</th><th>Notes</th>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/Portll/veld">Veld</a> — <em>Agentic Memory</em></td>
+          <td>Producer</td>
+          <td>Targeting Core</td>
+          <td><code>.omir</code></td>
+          <td>Reference implementation. Veld's internal Memory Interchange Format (MIF) exports to OMIR
+          via an adapter — the way an EHR implements FHIR. Exercises the full R1 core:
+          <code>MemoryRecord</code> (OMM-4), <code>Entity</code>, <code>Relationship</code>,
+          <code>Episode</code> (OMM-3).</td>
+        </tr>
+        <tr>
+          <td class="muted">Your implementation here</td>
+          <td class="muted">—</td>
+          <td class="muted">—</td>
+          <td class="muted">—</td>
+          <td class="muted">Open a PR adding a row, or file it via <a href="./feedback.html">Feedback</a>.</td>
+        </tr>
+      </table>
+      <p class="muted">Veld convenes the Working Group as the reference implementation, but does not own
+      the standard — the spec and schemas are CC-BY-4.0 and the format is vendor-neutral by design.</p>
+    </section>
+
+    <section class="section">
+      <h2>How to get listed</h2>
+      <ol>
+        <li><strong>Implement against the schemas.</strong> Use the R1 JSON Schemas in
+          <code>schemas/</code> as your authoritative field list; build a <code>Bundle</code> exporter
+          or importer. See <a href="./guides.html">Guides</a>.</li>
+        <li><strong>Pass the reference validator at Core.</strong> Run
+          <code>omir-validate &lt;your-bundle&gt;.omir --level core</code> until it exits <code>0</code>.
+          For consumers, also run it against the published R1 example Bundles.</li>
+        <li><strong>Publish a conformance statement.</strong> A short note listing the release you target
+          (R1), your role(s), the conformance level, and the extension URLs you emit.</li>
+        <li><strong>Claim the badge.</strong> A clean Core run makes an artifact or producer eligible for
+          the <strong>"Powered by OMIR"</strong> badge. The JSON conformance report is the evidence the
+          Working Group accepts.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Why neutrality is the whole game</h2>
+      <p>OMIR is positioned <em>inside</em> the agent-interoperability tent, not against it. MCP and A2A
+      (now under the Linux Foundation) <strong>transport</strong> memory between agents at runtime; OMIR
+      <strong>is</strong> the memory at rest — the document on disk, in the archive, in the export. A
+      protocol that ships a memory blob still benefits from a neutral, versioned, schema-validated
+      definition of what that blob <em>contains</em>. That's the role OMIR plays, and the reason a second
+      implementer can adopt it without betting on any one vendor.</p>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+</body>
+</html>

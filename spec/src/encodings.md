@@ -33,7 +33,7 @@ array carries the resources.
       "kind": "learning",
       "tier": "longterm",
       "importance": 0.82,
-      "confidence": { "alpha": 9, "beta": 1, "calibrated": 0.9 },
+      "confidence": { "alpha": 9.0, "beta": 1.0, "calibrated": 0.9 },
       "entityRefs": [{ "ref": "Entity/john" }]
     },
     {
@@ -69,6 +69,11 @@ OMIR is **JSON-LD compatible** without forcing linked-data tooling on anyone. A 
 - The `@context` maps OMIR property names to IRIs so that OMIR Bundles can participate
   in RDF graphs, SPARQL queries, and linked-data pipelines for implementations that
   want them. This is **opt-in**.
+- `Episode.source` is mapped to its own predicate (`omir:episodeSource`, via a JSON-LD
+  1.1 type-scoped context) so the *kind of input* an episode came from is not conflated
+  with the producer/origin `source` carried by `Bundle`, `Meta`, and `Provenance`.
+  Broader per-field disambiguation of shared term names arrives with the R2 vocabulary
+  work (see [Toward a Global Standard](./global-standard.md)).
 
 ### Constraints on the canonical form
 
@@ -80,6 +85,10 @@ OMIR is **JSON-LD compatible** without forcing linked-data tooling on anyone. A 
 - Resources **MUST NOT** carry undeclared top-level properties; every R1 resource
   schema sets `additionalProperties: false`. Implementation-specific data goes in
   `extension[]` (see [Extensions](./extensions.md)).
+- JSON numbers are **values, not lexical forms**: `9` and `9.0` denote the same
+  `number`, and R1 does **not** mandate a canonical numeric spelling. A future binary or
+  attestation profile may pin one (see
+  [Toward a Global Standard](./global-standard.md)); within R1 the two are equivalent.
 
 ## The `.omirb` binary profile
 
