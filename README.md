@@ -1,6 +1,6 @@
 # OMIR — Open Memory Interoperability Resources
 
-[![CI](https://github.com/omir-wg/omir-standard/actions/workflows/ci.yml/badge.svg)](https://github.com/omir-wg/omir-standard/actions/workflows/ci.yml)
+[![CI](https://github.com/OMIR-Working-Group/OMIR/actions/workflows/ci.yml/badge.svg)](https://github.com/OMIR-Working-Group/OMIR/actions/workflows/ci.yml)
 
 **The open, vendor-neutral format for agent memory.**
 

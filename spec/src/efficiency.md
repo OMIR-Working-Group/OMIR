@@ -6,7 +6,7 @@
 > [OMM](./principles.md#4-honest-maturity-via-omm) — **OMM-0/1** — and earn its level through
 > independent implementation. It is the **efficiency-first** companion to
 > [Toward a Global Standard](./global-standard.md) (the interchange-first schema roadmap) and
-> the forward-looking counterpart to [`memory_theory.md`](https://github.com/omir-wg/omir-standard/blob/main/memory_theory.md) (the
+> the forward-looking counterpart to [`memory_theory.md`](https://github.com/OMIR-Working-Group/OMIR/blob/main/memory_theory.md) (the
 > backward-looking divergence map). The live R1 schemas are **not** edited here — R1 resources
 > set `additionalProperties:false` (CR-6), so every proposal is an R2-line / R1.x candidate,
 > stated as a delta, never applied to the frozen R1 set.
@@ -46,12 +46,12 @@ new structure: an `Episode` event-boundary (EP-4) and a `Chunk` consolidation-pr
 | **EP-6** | chunk(`composedOf`) + schema typing + edge-norm fix | **new `Chunk` resource** (Templates = reusable Chunks); `MemoryRecord.schemaType` (CodeableConcept); `Relationship.reverseStrength/normalizedStrength/normalization` + `Check::GraphNormalization` (E250/E251) | Chunk = §3.1/§5.2 **breaking**; edge-norm §5.1-additive; schemaType rides A | Chunk **R2 · OMM-0** (§4 RFC); edge-norm **R1.x** · OMM-0; schemaType rides **A · R2** | **A** + graph + *new* | **D5** (closes), D8 |
 | **EP-F** | VSA / HRR structural code (frontier) | Embedding `space:"vsa"` + structure tags; **extension-first** | extension (no RFC) → promotable | extension now; **D · R2+** · OMM-0 later | **D** + `.omirb` profile | — |
 
-Routing convention (from [GOVERNANCE §3.1/§5.1/§5.2](https://github.com/omir-wg/omir-standard/blob/main/GOVERNANCE.md)): a **new optional
+Routing convention (from [GOVERNANCE §3.1/§5.1/§5.2](https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md)): a **new optional
 field** is §5.1-additive (no existing bundle becomes invalid → ships as an **R1.x** increment)
 but still touches the normative surface, so it is **RFC-gated** (the RFC authorizes the schema
 edit; R1.x is the release lane). A change that **widens the shared `Reference` pattern or the
 `Bundle.entry` oneOf** (a new resource type) is §5.2-breaking → **R2**, full RFC per
-[CONTRIBUTING §4](https://github.com/omir-wg/omir-standard/blob/main/CONTRIBUTING.md). Adding a new, unreferenced `$defs` member to
+[CONTRIBUTING §4](https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md). Adding a new, unreferenced `$defs` member to
 `common.schema.json` is itself purely additive; it is the field that *references* it that
 carries the additivity class. New fields ride at **OMM-0** under the per-field `x-omir-maturity`
 signal ([global-standard, Pass-3](./global-standard.md#breakers--adversarial-stress-test-3-passes)),
@@ -341,10 +341,10 @@ Chunk (`reusable: true`) *is* a Template — a schema/pattern that *new* memorie
 distinguished by the flag, not two resource types** — `Template` is not minted separately. This is
 the proposal's only **new core resource type**: it widens the `Reference` pattern and
 `Bundle.entry` `oneOf` → **§3.1/§5.2 breaking → R2**, full
-[CONTRIBUTING §4](https://github.com/omir-wg/omir-standard/blob/main/CONTRIBUTING.md) RFC
+[CONTRIBUTING §4](https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md) RFC
 (`spec/rfcs/RFC-<nnnn>-chunk.md`, number TSC-assigned).
 
-**The consolidation *event* is not a resource.** [HANDOFF §5](https://github.com/omir-wg/omir-standard/blob/main/HANDOFF.md)'s
+**The consolidation *event* is not a resource.** [HANDOFF §5](https://github.com/OMIR-Working-Group/OMIR/blob/main/HANDOFF.md)'s
 floated `ConsolidationEvent`/`Reflection` re-imports the consolidation *process* that
 [semantics.md](./semantics.md) ("what OMIR deliberately does *not* specify") puts out of scope, and
 duplicates what Theme E already models. The derivation is carried as a **Theme-E provenance hop on
@@ -537,6 +537,6 @@ applies to the RDF and attestation vectors.
 ## Process
 
 None of this is unilateral. Every change here is a **candidate** — an RFC, debated by the Working
-Group and balloted ([CONTRIBUTING](https://github.com/omir-wg/omir-standard/blob/main/CONTRIBUTING.md), [GOVERNANCE](https://github.com/omir-wg/omir-standard/blob/main/GOVERNANCE.md)) —
+Group and balloted ([CONTRIBUTING](https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md), [GOVERNANCE](https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md)) —
 entering at **OMM-0/1** and earning maturity through *independent* implementation. The efficiency
 framing changes the *motivation* (watts, not just interchange), not the gate.

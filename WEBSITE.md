@@ -29,7 +29,7 @@ adopter list is the scoreboard.
 
 Keep the site **in this repo under `site/`** (monorepo with the spec) for now — the spec
 build feeds the site, so co-location avoids a cross-repo build. Split into a separate
-`omir-wg/omir.io` repo only if the marketing site later outgrows the spec.
+`OMIR-Working-Group/omir.io` repo only if the marketing site later outgrows the spec.
 
 ```
 site/
@@ -87,7 +87,7 @@ The conversion surface: paste a `.omir` Bundle → **validate** + **graph viz**.
 
 ## Open decisions (ask the human)
 
-- Monorepo `site/` vs a separate `omir-wg/omir.io` repo.
+- Monorepo `site/` vs a separate `OMIR-Working-Group/omir.io` repo.
 - Landing framework (plain HTML vs Astro).
 - Whether `/playground` ships in v1 or waits for `omir-validate`→WASM (**recommended: wait**).
 

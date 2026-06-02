@@ -42,7 +42,7 @@
         <strong>How this works.</strong> Feedback you save is stored <em>locally in your browser</em>
         (nothing is uploaded). When you're ready to file it with the Working Group, use
         <strong>Open as GitHub issue</strong> on any item — it pre-fills an issue against
-        <code>omir-wg/omir-standard</code> with the section and maturity level attached. You can also
+        <code>OMIR-Working-Group/OMIR</code> with the section and maturity level attached. You can also
         export everything as JSON.
       </div>
     </section>
@@ -127,7 +127,7 @@
         `**Kind:** ${rec.kind}\n` +
         (rec.author ? `**From:** ${rec.author}\n` : "") +
         `\n${rec.message}\n\n---\n_Filed from the omir.io feedback page._`;
-      return `https://github.com/omir-wg/omir-standard/issues/new?labels=feedback` +
+      return `https://github.com/OMIR-Working-Group/OMIR/issues/new?labels=feedback` +
         `&title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
     }
 

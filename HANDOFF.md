@@ -46,7 +46,7 @@ These were researched and settled. Reopening them wastes effort.
 - **Name / acronym:** OMIR — "Open Memory Interoperability Resources." Rejected: anything "engram" (6+ live products + DeepSeek) or "mem*/memory-layer/memory-passport" (Mem0/MemoryLake turf).
 - **File extensions:** `.omir` (canonical JSON / JSON-LD) and `.omirb` (compact binary profile, CBOR; bincode as an internal sub-profile). Both verified collision-free. **Rejected** `.mf` (Java JAR/MetaFont/Panda3D/FrameMaker) and `.mif` (MapInfo/FrameMaker) — both heavily squatted.
 - **Domain:** **`omir.io`** — purchased, hosted on **Cloudflare**. (`omir.org`/`.com`/`.dev`/`.net`/`.co`/`.app` are all taken; `omir.io` was double-confirmed available via NS + RDAP. Exact match, and `.io` is the protocol-native TLD — cf. `modelcontextprotocol.io`.) Every `omir.org` placeholder in the repo has already been rewritten to `omir.io`.
-- **GitHub org:** `omir-wg` — already wired into `spec/book.toml` (`git-repository-url` + `edit-url-template` → `https://github.com/omir-wg/omir-standard`). The org **name is decided**; only its public **registration** is pending human approval. Don't invent a different org.
+- **GitHub org:** `OMIR-Working-Group` — already wired into `spec/book.toml` (`git-repository-url` + `edit-url-template` → `https://github.com/OMIR-Working-Group/OMIR`). The org **name is decided**; only its public **registration** is pending human approval. Don't invent a different org.
 - **Positioning:** an **at-rest data format**, NOT a wire protocol and NOT a product. Frame relative to MCP/A2A as **complementary**: "MCP/A2A transport memory; OMIR *is* the memory at rest." Pitch *into* the Linux Foundation Agentic AI Foundation, never against it.
 - **Data model:** FHIR-style. Everything is a **Resource**; resources link by typed reference `ResourceType/id`; an **80/20 core** plus a typed `extension[]` escape hatch for proprietary data; constrainable via **Profiles**.
 - **Maturity model:** **OMM** (OMIR Maturity Model), integer levels 0–5 per resource type, surfaced in `meta.maturity`. **Grade honestly. Never overclaim stability.**
@@ -122,7 +122,7 @@ omir-standard/
 2. **Build `omir-gen`** (Rust, Apache-2.0) per `generators/README.md`: render `spec/src/resources/*.md` field tables **from** `schemas/`. Add a CI check that fails if committed pages drift from a fresh generation. (Mirrors Veld's `gen-module-index.rs` discipline.)
 3. **Grow the conformance corpus** in `examples/` — minimal + full per resource, plus deliberately **invalid** fixtures (dangling ref, bad enum, score out of range) the validator must reject.
 4. **Consider R1 additions at low OMM** (don't overreach): `ContextBlock` (Letta-style mutable agent state), `Intention` as a first-class resource, `Provenance`/`ConsolidationEvent` as resources. Propose via the RFC process in `CONTRIBUTING.md`; grade them OMM-0/1.
-5. **`git init`**, push to the **`omir-wg`** GitHub org (already wired into `spec/book.toml`; see §2), wire CI: JSON-schema self-validation, mdBook build, and a **link checker** (see gotchas §8).
+5. **`git init`**, push to the **`OMIR-Working-Group`** GitHub org (already wired into `spec/book.toml`; see §2), wire CI: JSON-schema self-validation, mdBook build, and a **link checker** (see gotchas §8).
 
 **Toolchain (pin these):** Rust **edition 2021** + a committed `rust-toolchain.toml`; schema validation via the **`jsonschema`** crate (draft 2020-12, with local `$ref` resolution across `schemas/`); CI installs **mdBook 0.5.x (pinned 0.5.3)** for the spec build. `omir-validate` and `omir-gen` are separate Apache-2.0 crates, each with its own `[workspace]` (kept out of Veld's workspace).
 
@@ -187,7 +187,7 @@ Recorded so it's ready when prioritized. **Mail intentionally lags the standard 
 
 1. Open `c:\Repositories\Portll\omir-standard`. Read `README.md`, then `spec/src/overview.md`, then the schemas.
 2. Validate the repo: confirm all JSON parses and no `omir.org` remains.
-3. `git init` + first commit + push to the `omir-wg` org (see §2); add CI (schema validation, mdBook build, link check).
+3. `git init` + first commit + push to the `OMIR-Working-Group` org (see §2); add CI (schema validation, mdBook build, link check).
 4. Start **Track 1**: scaffold `omir-validate` against `examples/minimal-bundle.omir`.
 5. In parallel, stand up the `omir.io` skeleton on Cloudflare Pages serving the mdBook build (static `/spec` only; `/playground` is blocked on Track 1). See `WEBSITE.md`.
 6. Leave **email (§7) untouched** until tracks 1 & 2 are substantially shipped.

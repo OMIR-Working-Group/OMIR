@@ -8,8 +8,8 @@ src = "src"
 [output.html]
 default-theme = "rust"
 preferred-dark-theme = "ayu"
-git-repository-url = "https://github.com/omir-wg/omir-standard"
-edit-url-template = "https://github.com/omir-wg/omir-standard/edit/main/spec/{path}"
+git-repository-url = "https://github.com/OMIR-Working-Group/OMIR"
+edit-url-template = "https://github.com/OMIR-Working-Group/OMIR/edit/main/spec/{path}"
 no-section-label = false
 
 [output.html.fold]

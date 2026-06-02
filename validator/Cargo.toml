@@ -9,7 +9,7 @@ edition = "2021"
 rust-version = "1.94"
 description = "Reference conformance validator for the OMIR R1 at-rest agent-memory format."
 license = "Apache-2.0"
-repository = "https://github.com/omir-wg/omir-standard"
+repository = "https://github.com/OMIR-Working-Group/OMIR"
 readme = "README.md"
 
 [lib]

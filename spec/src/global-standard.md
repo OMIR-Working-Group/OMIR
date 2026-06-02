@@ -985,8 +985,8 @@ no ballot is callable before the founding TSC is seated.
 ## Process
 
 None of this is unilateral. Every change here is a **candidate**, to be proposed as an RFC,
-debated by the Working Group, and balloted (see [`CONTRIBUTING.md`](https://github.com/omir-wg/omir-standard/blob/main/CONTRIBUTING.md)
-and [`GOVERNANCE.md`](https://github.com/omir-wg/omir-standard/blob/main/GOVERNANCE.md)).
+debated by the Working Group, and balloted (see [`CONTRIBUTING.md`](https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md)
+and [`GOVERNANCE.md`](https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md)).
 New resources and fields enter at **OMM-0/1** and earn maturity through *independent*
 implementation — the same honesty rule the rest of the spec lives by. The fastest way to
 move any of these forward is the project's stated existential need: **a second implementer**
