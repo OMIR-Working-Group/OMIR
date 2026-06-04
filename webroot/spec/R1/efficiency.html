@@ -1,0 +1,694 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Efficiency &amp; Information-Bearing Codes - OMIR R1 Specification</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="OMIR — Open Memory Interoperability Resources. An open, vendor-neutral, at-rest data format for portable AI agent and cognitive memory.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-0392ca55.css">
+        <link rel="stylesheet" href="css/chrome-fc474251.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "rust";
+            const default_dark_theme = "ayu";
+            window.path_to_searchindex_js = "searchindex-0035a7ce.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-e50f80b2.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OMIR R1 Specification</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/OMIR-Working-Group/OMIR" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/OMIR-Working-Group/OMIR/edit/main/spec/src/efficiency.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="efficiency--information-bearing-codes"><a class="header" href="#efficiency--information-bearing-codes">Efficiency &amp; Information-Bearing Codes</a></h1>
+<blockquote>
+<p><strong>Non-normative.</strong> This page is a design discussion, not part of the R1 conformance
+surface. Nothing here changes what makes a Bundle valid (<a href="./conformance.html">Conformance</a>).
+Every change below would enter through the RFC + ballot process and start low on the
+<a href="./principles.html#4-honest-maturity-via-omm">OMM</a> — <strong>OMM-0/1</strong> — and earn its level through
+independent implementation. It is the <strong>efficiency-first</strong> companion to
+<a href="./global-standard.html">Toward a Global Standard</a> (the interchange-first schema roadmap) and
+the forward-looking counterpart to <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/memory_theory.md"><code>memory_theory.md</code></a> (the
+backward-looking divergence map). The live R1 schemas are <strong>not</strong> edited here — R1 resources
+set <code>additionalProperties:false</code> (CR-6), so every proposal is an R2-line / R1.x candidate,
+stated as a delta, never applied to the frozen R1 set.</p>
+</blockquote>
+<p>Where <a href="./global-standard.html">Toward a Global Standard</a> asks <em>“what blocks interchange across
+domains?”</em>, this page asks a different question: <em>“what state would let an engine store less,
+search cheaper, and infer more — at the same fidelity?”</em> The seven proposals below come from
+the efficient-/predictive-coding, fuzzy-trace, hippocampal-indexing, event-segmentation,
+temporal-context, and chunking lineages. Each is scored on three axes the interchange roadmap
+does not track: <strong>⚡ watts</strong> (store/search less), <strong>🎯 inference</strong> (signal-to-noise), and
+<strong>capability</strong> (what becomes expressible).</p>
+<h2 id="the-one-paragraph-thesis"><a class="header" href="#the-one-paragraph-thesis">The one-paragraph thesis</a></h2>
+<p>These are <strong>not</strong> seven scattered fields. <strong>Four of the seven (EP-2, EP-3, EP-5a, EP-F) are
+variants of a single object</strong> — the algorithm-neutral <code>Embedding</code> representation that
+<a href="./global-standard.html#d-beyond-text-modality-and-embeddings">global-standard §D</a> already
+proposes. The highest-leverage move is therefore a reframing the divergence map already named:
+<strong>extend Theme D from “neutral embeddings” to <em>efficiency-bearing</em> codes</strong> — an <code>Embedding</code>
+that can carry a Matryoshka prefix (rank coarse-to-fine), a sparse code (CPU inverted-index
+search), a reserved drift space (cheap temporal cues), and a VSA structural code (compositional
+ops). The remaining three are: two <strong>information-theoretic scalars OMIR has no field for</strong>
+(EP-1 surprisal, EP-4 replay/interference), and one <strong>graph fix that makes spreading
+activation portable</strong> (EP-6c, the D5 edge-normalization remediation). Two proposals add genuinely
+new structure: an <code>Episode</code> event-boundary (EP-4) and a <code>Chunk</code> consolidation-product resource
+(EP-6a). One adds a producer-level metamemory primitive (EP-5b, the familiarity sketch).</p>
+<h2 id="proposal-index"><a class="header" href="#proposal-index">Proposal index</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>EP</th><th>Prescription (from the principle)</th><th>Concrete delta</th><th>Additivity</th><th>Vehicle · OMM</th><th>Theme</th><th>Divergence</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>EP-1</strong></td><td>surprisal/novelty scalar + model-redundancy flag</td><td>new <code>InformationContent</code> def + <code>MemoryRecord.informationContent</code></td><td>§5.1-additive</td><td>RFC-gated · <strong>R1.x</strong> · OMM-0</td><td><em>new</em></td><td>— (new lever)</td></tr>
+<tr><td><strong>EP-2</strong></td><td>Matryoshka gist + offloadable verbatim</td><td>extend Theme-D <code>Embedding</code>: <code>matryoshka</code>/<code>nestedDims</code>/<code>role</code> + verbatim <code>MediaReference</code></td><td>additive to the D def</td><td>rides <strong>D · R2</strong> · OMM-0</td><td><strong>D</strong></td><td>D2 (partial)</td></tr>
+<tr><td><strong>EP-3</strong></td><td>sparse index layer (indices+values)</td><td><code>Embedding.sparse</code> + Theme-I external-content pointer</td><td>additive to the D def</td><td>rides <strong>D · R2</strong> (+ I · R2+) · OMM-0</td><td><strong>D + I</strong></td><td>—</td></tr>
+<tr><td><strong>EP-4</strong></td><td>boundary metadata + replay priority + interference</td><td><code>Episode.boundaryStrength/boundaryReason</code>; <code>MemoryRecord.replayPriority</code>; new <code>Interference</code> def + field</td><td>§5.1-additive</td><td>RFC-gated · <strong>R1.x</strong> · OMM-0</td><td><em>new</em></td><td><strong>D10</strong> (closes), D8/D4</td></tr>
+<tr><td><strong>EP-5</strong></td><td>temporalContext drift vector + familiarity sketch</td><td>reserved Embedding space <code>omir:temporal-context</code> (D); new <code>FamiliaritySketch</code> def + <code>Bundle.familiaritySketch</code></td><td>sketch §5.1-additive; tc rides D</td><td>sketch <strong>R1.x</strong> · OMM-0; tc rides <strong>D · R2</strong></td><td><strong>D</strong> + <em>new</em></td><td>—</td></tr>
+<tr><td><strong>EP-6</strong></td><td>chunk(<code>composedOf</code>) + schema typing + edge-norm fix</td><td><strong>new <code>Chunk</code> resource</strong> (Templates = reusable Chunks); <code>MemoryRecord.schemaType</code> (CodeableConcept); <code>Relationship.reverseStrength/normalizedStrength/normalization</code> + <code>Check::GraphNormalization</code> (E250/E251)</td><td>Chunk = §3.1/§5.2 <strong>breaking</strong>; edge-norm §5.1-additive; schemaType rides A</td><td>Chunk <strong>R2 · OMM-0</strong> (§4 RFC); edge-norm <strong>R1.x</strong> · OMM-0; schemaType rides <strong>A · R2</strong></td><td><strong>A</strong> + graph + <em>new</em></td><td><strong>D5</strong> (closes), D8</td></tr>
+<tr><td><strong>EP-F</strong></td><td>VSA / HRR structural code (frontier)</td><td>Embedding <code>space:"vsa"</code> + structure tags; <strong>extension-first</strong></td><td>extension (no RFC) → promotable</td><td>extension now; <strong>D · R2+</strong> · OMM-0 later</td><td><strong>D</strong> + <code>.omirb</code> profile</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
+<p>Routing convention (from <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md">GOVERNANCE §3.1/§5.1/§5.2</a>): a <strong>new optional
+field</strong> is §5.1-additive (no existing bundle becomes invalid → ships as an <strong>R1.x</strong> increment)
+but still touches the normative surface, so it is <strong>RFC-gated</strong> (the RFC authorizes the schema
+edit; R1.x is the release lane). A change that <strong>widens the shared <code>Reference</code> pattern or the
+<code>Bundle.entry</code> oneOf</strong> (a new resource type) is §5.2-breaking → <strong>R2</strong>, full RFC per
+<a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md">CONTRIBUTING §4</a>. Adding a new, unreferenced <code>$defs</code> member to
+<code>common.schema.json</code> is itself purely additive; it is the field that <em>references</em> it that
+carries the additivity class. New fields ride at <strong>OMM-0</strong> under the per-field <code>x-omir-maturity</code>
+signal (<a href="./global-standard.html#breakers--adversarial-stress-test-3-passes">global-standard, Pass-3</a>),
+never inheriting their host type’s grade.</p>
+<hr>
+<h2 id="ep-1--information-content-dont-store-what-the-model-can-regenerate"><a class="header" href="#ep-1--information-content-dont-store-what-the-model-can-regenerate">EP-1 — Information content (don’t store what the model can regenerate)</a></h2>
+<p><strong>Principle 1 (efficient coding · predictive coding).</strong> <em>“A surprisal/novelty scalar at
+encoding (information content vs. the producer’s model) and a model-redundancy flag
+(reconstructable from the base model?). This is not importance (value) or confidence (belief) —
+it’s information content, which OMIR has no field for.”</em></p>
+<p>The orthogonality is the whole point: <code>importance</code> is <strong>value</strong>, <code>confidence</code> is <strong>belief</strong>,
+this is <strong>information</strong> (−log p against a generative prior). A record the base model already
+knows is near-zero information regardless of how important or believed it is — and is the single
+biggest watt lever, because most “memories” are model-knowable and need not be persisted or
+searched at all (cf. Titans’ ‖∇loss/∇input‖ write-gate, EM-LLM’s Bayesian surprise).</p>
+<p><strong>New <code>common.schema.json#/$defs</code> member (purely additive):</strong></p>
+<pre><code class="language-json">"InformationContent": {
+  "type": "object",
+  "description": "Information content of a record against a generative prior — what is NOVEL, distinct from what is valued (importance) or believed (confidence). Operationalizes efficient/predictive coding: store the surprising, regenerate the predictable.",
+  "properties": {
+    "novelty": {
+      "$ref": "#/$defs/UnitInterval",
+      "description": "Producer-relative normalized novelty in [0,1]: how surprising this record was against the producer's model at encoding. Comparable WITHIN one producer only (Theory &amp; Scope: stored scalars are producer-relative)."
+    },
+    "surprisalBits": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Raw Shannon surprisal -log2 p(x) in bits against the model named in 'model'. Unbounded and model-relative; the reproducible quantity when 'model' is shared."
+    },
+    "model": {
+      "type": "string",
+      "description": "Identifier of the generative model whose p(x) defines 'novelty'/'surprisalBits', e.g. 'minilm-l6-v2' or a base-LLM id."
+    },
+    "reconstructable": {
+      "type": "boolean",
+      "description": "True if this content is regenerable from the model named in 'reconstructableBy' and is therefore a candidate to DROP and regenerate rather than store/search."
+    },
+    "reconstructableBy": {
+      "type": "string",
+      "description": "Identifier of the model that can regenerate this content when 'reconstructable' is true."
+    }
+  },
+  "additionalProperties": false
+}
+</code></pre>
+<p><strong><code>MemoryRecord</code> additive field:</strong>
+<code>"informationContent": { "$ref": "common.schema.json#/$defs/InformationContent" }</code>.</p>
+<p><strong>Classification.</strong> New optional field on MemoryRecord; no enum/<code>required</code>/<code>Reference</code> change →
+<strong>§5.1-additive</strong>, ships as <strong>R1.x</strong>, RFC-gated for the normative meaning. <strong>OMM-0.</strong> <code>novelty</code>
+is a <code>UnitInterval</code> (CR-7 conformant) and a producer-relative snapshot → on landing it joins the
+<a href="./theory.html#stored-scalars-are-producer-relative">Theory &amp; Scope</a> producer-relative list;
+<code>surprisalBits</code> is the model-relative reproducible form.</p>
+<p><strong>Hits.</strong> ⚡⚡⚡ watts (persist/search only the genuinely novel) · 🎯 inference (signal-to-noise) ·
+capability (compression). <strong>Open questions:</strong> does <code>reconstructable:true</code> license a consumer to
+omit <code>content</code> entirely (ties EP-2 verbatim-eviction)? bits vs nats — pin one (<code>surprisalBits</code>,
+log2, here).</p>
+<hr>
+<h2 id="ep-2--matryoshka-gist--offloadable-verbatim-store-the-gist-fetch-the-words"><a class="header" href="#ep-2--matryoshka-gist--offloadable-verbatim-store-the-gist-fetch-the-words">EP-2 — Matryoshka gist + offloadable verbatim (store the gist, fetch the words)</a></h2>
+<p><strong>Principle 2 (fuzzy-trace · rate-distortion).</strong> <em>“A dual-trace model: a compact, durable,
+anchorable gist code (cheap to rank, slow decay) + an optional, fast-decaying, offloadable
+verbatim payload (via a MediaReference). Crucially, mandate the gist be prefix-truncatable
+(Matryoshka-style) so coarse-to-fine works across producers.”</em></p>
+<p>This is the <strong>efficiency-bearing-codes</strong> extension of Theme D, stated literally. Matryoshka
+representation learning (<a href="https://arxiv.org/abs/2205.13147">2205.13147</a>) is the exact engineering
+analog: rank millions on a truncated prefix, re-rank survivors on more dims. The dual trace maps
+the gist to a durable anchorable <code>Embedding</code> and the verbatim surface to an offloaded
+<code>MediaReference</code> (Theme D) with its own faster decay.</p>
+<p><strong>Extends the Theme-D <code>Embedding</code> def with three efficiency fields:</strong></p>
+<pre><code class="language-json">"matryoshka": {
+  "type": "boolean",
+  "description": "True if 'vector' is a nested (Matryoshka) code: any prefix whose length is in 'nestedDims' is itself a valid, rankable embedding. Enables coarse-to-fine shortlisting on a truncated prefix without re-embedding."
+},
+"nestedDims": {
+  "type": "array",
+  "items": { "type": "integer", "minimum": 1 },
+  "description": "Ascending valid prefix lengths, e.g. [64,128,256,512,768]. A consumer MAY rank on any listed prefix and re-rank on a longer one. Each prefix is comparable only within the same 'space'."
+},
+"role": {
+  "enum": ["gist", "verbatim"],
+  "description": "Dual-trace role. 'gist' is the durable, compact, anchorable code ranked cheaply (pair with decay.anchored + long halfLifeHours); 'verbatim' is the fast-decaying surface trace, typically offloaded via 'ref' (MediaReference) and fetched only for top-k."
+}
+</code></pre>
+<p><strong>Decay split.</strong> The gist reuses the existing <code>Decay</code> block (<code>anchored:true</code>, long
+<code>halfLifeHours</code>); the verbatim trace carries a short <code>halfLifeHours</code> and is the first thing
+dropped under memory pressure — graceful degradation that keeps the rankable gist.</p>
+<p><strong>Classification.</strong> Additive to the (not-yet-landed) Theme-D <code>Embedding</code> def → <strong>rides Theme D ·
+R2 · OMM-0</strong>. No <code>Reference</code>-pattern impact (<code>MediaReference</code> is <code>{uri,contentType,hash}</code>, not a
+typed <code>Reference</code>). <strong>Closes part of D2</strong> (storage/retrieval-strength duality): the durable gist
+is the storage-strength-bearing trace, the evictable verbatim is retrieval-strength-bearing.</p>
+<p><strong>Hits.</strong> ⚡⚡ watts (coarse-to-fine + verbatim eviction) · 🎯 inference (gist generalizes) ·
+capability (summary recall). <strong>Open question:</strong> make <code>nestedDims</code> ascending + power-of-two by
+convention so two producers’ prefixes align for cross-store shortlisting.</p>
+<hr>
+<h2 id="ep-3--sparse-index-layer-index-dont-scan"><a class="header" href="#ep-3--sparse-index-layer-index-dont-scan">EP-3 — Sparse index layer (index, don’t scan)</a></h2>
+<p><strong>Principle 3 (hippocampal indexing · SDM · sparse codes).</strong> <em>“Separate a cheap index layer
+(sparse keys/pointers) from content (offloadable); standardize a sparse-code representation
+(indices+values). The index may point at content living elsewhere (ties to federation, §I).”</em></p>
+<p>A sparse code turns ANN-on-GPU into an exact inverted-index lookup on CPU (≈ an order of
+magnitude cheaper), and modern-Hopfield / SDM gives one-step associative completion. The
+“content lives elsewhere” half is exactly <a href="./global-standard.html#i-federation-and-cross-bundle-references">global-standard §I</a>’s
+federation: the index entry resolves to remote content via the <code>ExternalReference</code> <code>$def</code> (never
+the closed-world bare <code>ResourceType/id</code>).</p>
+<p><strong>Extends the Theme-D <code>Embedding</code> def with a sparse variant (alternative to dense <code>vector</code>):</strong></p>
+<pre><code class="language-json">"sparse": {
+  "type": "object",
+  "description": "Sparse code: parallel 'indices'/'values' over a 'dims'-wide space. Enables CPU inverted-index search and one-step associative completion (Sparse Distributed Memory / modern Hopfield). Mutually exclusive with 'vector' for a given Embedding.",
+  "properties": {
+    "indices": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "Active dimension indices, strictly ascending." },
+    "values":  { "type": "array", "items": { "type": "number" }, "description": "Weights parallel to 'indices'. Equal length to 'indices'." }
+  },
+  "required": ["indices", "values"],
+  "additionalProperties": false
+}
+</code></pre>
+<p><strong>Classification.</strong> Additive to the Theme-D <code>Embedding</code> def → <strong>rides D · R2 · OMM-0</strong>; the
+pointer-to-remote-content rides <strong>Theme I · R2+</strong> (its true gate is I’s CR-5 carve-out +
+<code>ExternalReference</code> <code>$def</code>, not this field). The index/content split composes with EP-2’s
+gist/verbatim and EP-1’s <code>reconstructable</code> drop.</p>
+<p><strong>Hits.</strong> ⚡⚡⚡ watts (CPU sparse search + lazy content load) · 🎯 inference (DG-style
+pattern-separation, anti-interference) · capability (recall from fragments). <strong>Open question:</strong>
+<code>indices</code> length cap / a <code>density</code> hint so a consumer can pick inverted-index vs dense path.</p>
+<hr>
+<h2 id="ep-4--boundary-replay-priority-interference-encode-by-surprise-prune-by-interference"><a class="header" href="#ep-4--boundary-replay-priority-interference-encode-by-surprise-prune-by-interference">EP-4 — Boundary, replay priority, interference (encode by surprise, prune by interference)</a></h2>
+<p><strong>Principle 4 (event segmentation · prioritized replay · rational forgetting).</strong> <em>“Event-boundary
+metadata on episodes (location + boundary strength + why); a replay/consolidation priority
+(surprise × value × recency); an eviction/interference signal (need-probability or local
+embedding density).”</em></p>
+<p>Three deltas, the third of which <strong>closes divergence D10</strong> — the doc’s explicit reframe of D10
+from <em>“missing fidelity”</em> (a bounded non-goal) to <em>“missing the rational-eviction efficiency
+mechanism”</em> (a load-bearing watt lever: a smaller hot index makes every query cheaper).</p>
+<p><strong>(a) <code>Episode</code> additive fields</strong> — the EM-LLM / Event-Segmentation boundary:</p>
+<pre><code class="language-json">"boundaryStrength": {
+  "$ref": "common.schema.json#/$defs/UnitInterval",
+  "description": "Prediction-error / Bayesian-surprise magnitude at this episode's boundary. Where memory is structured; a segmentation cue for downstream consolidation."
+},
+"boundaryReason": {
+  "type": "string",
+  "description": "Open vocabulary: why the cut was made (e.g. 'topic_shift', 'temporal_gap', 'actor_change'). Promotable to a CodeableConcept under Theme A."
+}
+</code></pre>
+<p><strong>(b) <code>MemoryRecord.replayPriority</code></strong> — the prioritized-replay (Schaul 2015) weight:</p>
+<pre><code class="language-json">"replayPriority": {
+  "$ref": "common.schema.json#/$defs/UnitInterval",
+  "description": "Producer-relative consolidation/replay priority (surprise x value x recency snapshot). Prioritizes amortized OFFLINE re-embedding/consolidation/decay to idle time. Snapshot as of meta.lastUpdated; producer-relative (Theory &amp; Scope)."
+}
+</code></pre>
+<p><strong>(c) New <code>Interference</code> def + <code>MemoryRecord.interference</code> field</strong> — the D10 remediation:</p>
+<pre><code class="language-json">"Interference": {
+  "type": "object",
+  "description": "Rational-eviction / interference signal: why a record competes for retrieval and how prunable it is. Closes divergence D10 — forgetting as interference (retroactive/proactive competition among similar traces), not pure time-decay.",
+  "properties": {
+    "needProbability": {
+      "$ref": "#/$defs/UnitInterval",
+      "description": "Anderson need-probability: estimated P(this record is needed soon). The rational eviction key — evict lowest need, NOT oldest (LRU). Distinct from decay (time) and importance (value)."
+    },
+    "localDensity": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Nearest-neighbour crowding in embedding space. High density = high interference from similar traces (the dominant real forgetting mechanism in similarity-based stores)."
+    },
+    "competesWith": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/Reference" },
+      "description": "MemoryRecord references this record competes with — similar traces that degrade each other's retrievability. Reuses the existing Reference pattern (MemoryRecord already in it); no widening."
+    }
+  },
+  "additionalProperties": false
+}
+</code></pre>
+<p><strong>Classification.</strong> All §5.1-additive (new optional fields; <code>competesWith</code> reuses the <strong>existing</strong>
+<code>Reference</code> pattern → no widening) → <strong>R1.x</strong>, RFC-gated, <strong>OMM-0</strong>. On landing, <code>replayPriority</code>
+joins the producer-relative + snapshot enumerations in <a href="./theory.html">Theory &amp; Scope</a>. <strong>Closes
+D10</strong>; advances <strong>D8/D4</strong> (the boundary is the consolidation-as-process / continuous-segmentation
+half).</p>
+<p><strong>Hits.</strong> ⚡⚡⚡ watts (encode less, small hot set, amortized offline replay) · 🎯 inference (clean
+event retrieval, fewer distractors) · capability (continual learning without catastrophic
+forgetting). <strong>Open question:</strong> is <code>competesWith</code> producer-authored or derivable from
+<code>localDensity</code> at import — carry both and let the consumer choose.</p>
+<hr>
+<h2 id="ep-5--temporal-context-drift--familiarity-sketch-cheap-cues-skip-retrieval"><a class="header" href="#ep-5--temporal-context-drift--familiarity-sketch-cheap-cues-skip-retrieval">EP-5 — Temporal-context drift + familiarity sketch (cheap cues, skip retrieval)</a></h2>
+<p><strong>Principle 5 (Temporal Context Model · feeling-of-knowing).</strong> <em>“A per-record/episode
+temporalContext drift vector (timestamps give recency but not cheap similarity-based contiguity);
+a producer-level familiarity sketch over entities/cues.”</em></p>
+<p><strong>(a) temporalContext</strong> is a vector → it rides the Theme-D <code>Embedding</code> with a <strong>reserved space
+convention</strong>, <code>"space": "omir:temporal-context"</code>. Timestamps already give recency; the drift
+vector gives cheap <em>contiguity</em> (recall the neighbours-in-time of a hit) as a dot product, no
+scan (EM-LLM adds exactly this temporal-contiguity stage on top of similarity). No new field —
+a documented reserved space + the contiguity-retrieval semantics. <strong>Rides Theme D · R2 · OMM-0.</strong></p>
+<p><strong>(b) familiarity sketch</strong> is genuinely new: <strong>producer-level</strong> aggregate state OMIR has no home
+for. It answers <em>“do I plausibly hold this?”</em> before paying for retrieval — and in production the
+<strong>skipped</strong> retrievals are often the dominant cost. A negative is authoritative (skip RAG
+entirely); a positive is probabilistic. It lives at the <strong><code>Bundle</code></strong> level (Bundle has no OMM of
+its own; it tracks its resources):</p>
+<pre><code class="language-json">"FamiliaritySketch": {
+  "type": "object",
+  "description": "Producer-level approximate-membership sketch over entities/cues, for metamemory gating: answer 'do I plausibly hold this?' before paying for retrieval (feeling-of-knowing). A negative is authoritative (skip retrieval); a positive is probabilistic. Complements confidence's in-weights-vs-retrieve gate.",
+  "properties": {
+    "kind":   { "enum": ["bloom", "count_min"], "description": "Sketch family." },
+    "domain": { "enum": ["entity", "cue", "content"], "description": "What the sketch is built over." },
+    "hashes": { "type": "integer", "minimum": 1, "description": "Number of hash functions k." },
+    "bits":   { "type": "integer", "minimum": 1, "description": "Filter width m in bits (bloom) / table width (count-min)." },
+    "data":   { "type": "string", "contentEncoding": "base64", "description": "Serialized filter bytes." }
+  },
+  "required": ["kind", "domain", "hashes", "bits", "data"],
+  "additionalProperties": false
+}
+</code></pre>
+<p><code>Bundle</code> additive field: <code>"familiaritySketch": { "$ref": "common.schema.json#/$defs/FamiliaritySketch" }</code>.</p>
+<p><strong>Classification.</strong> temporalContext rides <strong>D · R2</strong>. The sketch is a new optional <code>Bundle</code> field
+→ <strong>§5.1-additive · R1.x</strong>, RFC-gated, <strong>OMM-0</strong>. (A Bundle-level field, unlike a resource field,
+does not interact with any resource’s OMM grade.)</p>
+<p><strong>Hits.</strong> ⚡⚡⚡ watts (short-circuit/skip retrieval; cheap temporal cue) · 🎯 inference (contiguity
+recall) · capability (temporal-neighbourhood recall). <strong>Open question:</strong> sketch hash-function
+identity must be pinned (a named, versioned hash) or a consumer cannot test membership — carry a
+<code>hashAlg</code> field if EP-5b is balloted.</p>
+<hr>
+<h2 id="ep-6--chunks-schema-typing-and-portable-spreading-activation"><a class="header" href="#ep-6--chunks-schema-typing-and-portable-spreading-activation">EP-6 — Chunks, schema typing, and portable spreading activation</a></h2>
+<p><strong>Principle 6 (chunking/expertise · schema · spreading activation).</strong> <em>“Chunk/template resources
+(composedOf) produced by consolidation; schema typing new memories attach to; and — load-bearing
+— make the graph spreading-activation-ready by fixing the edge-strength normalization (divergence
+D5) so PPR gives the same answer across importers, with salience as seed weights.”</em></p>
+<p>Three deltas; (c) is the one the principle flags <strong>load-bearing</strong>.</p>
+<p><strong>(a) The <code>Chunk</code> resource — Templates are reusable Chunks.</strong> A <code>Chunk</code> is a consolidation
+<em>product</em>: a compressed/abstracted unit (<code>composedOf</code> the memories/episodes/entities it
+consolidates), the episodic→semantic derivation made first-class (divergence D8). A <strong>reusable</strong>
+Chunk (<code>reusable: true</code>) <em>is</em> a Template — a schema/pattern that <em>new</em> memories instantiate (via
+<code>MemoryRecord.schemaType</code>, EP-6b) rather than a one-off abstraction. The two are <strong>one resource
+distinguished by the flag, not two resource types</strong> — <code>Template</code> is not minted separately. This is
+the proposal’s only <strong>new core resource type</strong>: it widens the <code>Reference</code> pattern and
+<code>Bundle.entry</code> <code>oneOf</code> → <strong>§3.1/§5.2 breaking → R2</strong>, full
+<a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md">CONTRIBUTING §4</a> RFC
+(<code>spec/rfcs/RFC-&lt;nnnn&gt;-chunk.md</code>, number TSC-assigned).</p>
+<p><strong>The consolidation <em>event</em> is not a resource.</strong> <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/HANDOFF.md">HANDOFF §5</a>’s
+floated <code>ConsolidationEvent</code>/<code>Reflection</code> re-imports the consolidation <em>process</em> that
+<a href="./semantics.html">semantics.md</a> (“what OMIR deliberately does <em>not</em> specify”) puts out of scope, and
+duplicates what Theme E already models. The derivation is carried as a <strong>Theme-E provenance hop on
+the Chunk</strong> — <code>wasGeneratedBy { activity: "consolidation" }</code> + <code>wasDerivedFrom</code> over its
+<code>composedOf</code> set — never a second resource. Veld concurs <em>structurally</em>: its event-sourced journal
+<code>IntentPayload</code> (<code>src/intent_log/payload.rs</code>) is <code>Remember/Forget/Update/Anchor</code> — pure memory CRUD
+with <strong>no consolidation-event variant</strong>; consolidation lands its output as <code>Remember</code>/<code>Update</code> of
+records, so even Veld’s journal models the product, not the event. Draft model:</p>
+<pre><code class="language-json">{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://omir.io/spec/R2/schemas/Chunk.schema.json",
+  "title": "OMIR Chunk (R2 candidate)",
+  "type": "object",
+  "properties": {
+    "resourceType": { "const": "Chunk" },
+    "id":   { "$ref": "common.schema.json#/$defs/Id" },
+    "meta": { "$ref": "common.schema.json#/$defs/Meta" },
+    "content": { "type": "string", "description": "The compressed / abstracted unit — a named template, schema, or expert chunk (MDL: search fewer, denser units)." },
+    "composedOf": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/Reference" },
+      "description": "MemoryRecord / Episode / Entity references this chunk consolidates. The episodic-&gt;semantic derivation, first-class (divergence D8)."
+    },
+    "reusable": {
+      "type": "boolean",
+      "default": false,
+      "description": "True =&gt; this Chunk is a TEMPLATE: a reusable schema/pattern that NEW memories instantiate (via MemoryRecord.schemaType), not a one-off abstraction. Templates are reusable Chunks, never a separate resource."
+    },
+    "schemaType": {
+      "$comment": "CodeableConcept once Theme A lands; bare string until then.",
+      "type": "string",
+      "description": "The schema/pattern class this Chunk represents (open vocabulary, Theme A). A MemoryRecord.schemaType equal to this value attaches that memory to this Template (meaningful when reusable=true)."
+    },
+    "confidence":  { "$ref": "common.schema.json#/$defs/Confidence" },
+    "provenance":  { "$ref": "common.schema.json#/$defs/Provenance" },
+    "createdAt":   { "$ref": "common.schema.json#/$defs/Instant" },
+    "extension":   { "type": "array", "items": { "$ref": "common.schema.json#/$defs/Extension" } }
+  },
+  "required": ["resourceType", "id", "content", "createdAt"],
+  "additionalProperties": false
+}
+</code></pre>
+<p>Required atomic work items mirror <a href="./global-standard.html#the-phases">global-standard Phase 2</a>’s
+new-resource checklist: author the schema; add to <code>Bundle.entry.items.oneOf</code>; widen
+<code>common.schema.json#/$defs/Reference.pattern</code> to include <code>Chunk</code>; extend the validator
+<code>SchemaFiles</code>/<code>RESOURCE_TYPES</code>/registry-walker; register in the JSON-LD <code>@context</code>; ship a
+migration note (no R1 bundle becomes invalid — older consumers ignore unknown <code>entry</code> items).</p>
+<p><strong>(b) <code>MemoryRecord.schemaType</code></strong> — schema-consistent fast integration (Tse et al. 2007): a new
+memory attaches to a schema it instantiates. Best as a <strong>CodeableConcept (Theme A)</strong> since
+schema-types are an open, per-domain vocabulary → <strong>rides Theme A · R2</strong>, caps at A’s grade.</p>
+<p><strong>(c) D5 edge-normalization fix — the load-bearing one.</strong> Today <code>Relationship.strength</code> is a
+single <code>[0,1]</code> scalar; <strong>fan normalization is not representable</strong>, so two importers running
+spreading activation / Personalized PageRank over the same exported strengths get <strong>different
+answers</strong> — the normalization that makes a strength <em>mean</em> something is producer-private. HippoRAG
+shows single-pass PPR multi-hop is 10–20× cheaper and 6–13× faster than iterative retrieval <em>only</em>
+if the weights are portable. <code>Relationship</code> additive fields:</p>
+<pre><code class="language-json">"reverseStrength": {
+  "$ref": "common.schema.json#/$defs/UnitInterval",
+  "description": "Backward association weight P(from|to); asymmetric counterpart to 'strength' = P(to|from). Resolves the symmetric-scalar half of D5 without two independent edges."
+},
+"normalizedStrength": {
+  "$ref": "common.schema.json#/$defs/UnitInterval",
+  "description": "Fan-normalized strength: within a source Entity's outgoing edge set sharing one 'normalization', these values sum to &lt;= 1 + epsilon (ACT-R fan S - ln(fan): source activation conserved and divided). THIS is the portable spreading-activation weight; raw 'strength' is producer-private. MUST co-occur with 'normalization' (dependentRequired)."
+},
+"normalization": { "$ref": "common.schema.json#/$defs/EdgeNormalization" }
+</code></pre>
+<pre><code class="language-json">"EdgeNormalization": {
+  "type": "object",
+  "description": "Declares the regime that makes 'normalizedStrength' portable. Without it, PPR/spreading-activation diverges across importers (divergence D5).",
+  "properties": {
+    "scheme": { "enum": ["fan", "softmax", "none"], "description": "fan = source activation divided among associates; softmax = exp-normalized; none = raw (not portable)." },
+    "over":   { "enum": ["source", "target"], "description": "Normalized over a node's outgoing (source) or incoming (target) edge set." }
+  },
+  "additionalProperties": false
+}
+</code></pre>
+<p><strong>Seed weights.</strong> With <code>normalizedStrength</code> + <code>normalization</code> present, PPR is fully specified
+across importers when seeded by <code>Entity.salience</code> (the documented seed-weight convention) —
+salience as seed, fan-normalized edges as the transition matrix, one pass.</p>
+<p><strong>Validator rule — fan-normalization is enforced, not producer-asserted</strong> (new
+<code>Check::GraphNormalization</code>, codes E250/E251; verified and sapper-hardened):</p>
+<ul>
+<li><strong>E250 — fan-normalization overflow (error).</strong> For each Entity <em>E</em>, partition its edges by
+<code>(normalization.scheme, normalization.over)</code>. Within each partition where <code>scheme ∈ {fan, softmax}</code>: the sum of <code>normalizedStrength</code> over edges with <code>from = E</code> (<code>over: source</code>) — or
+<code>to = E</code> (<code>over: target</code>) — <strong>MUST be ≤ 1 + ε</strong> (ε = 1e-6, rounding-tolerant, per
+global-standard’s <code>aggregateCredibility</code> precedent). Edges with <code>normalization</code> absent or
+<code>scheme: none</code> are excluded; <code>reverseStrength</code> is excluded (asymmetry hint, not part of the fan
+sum).</li>
+<li><strong>E251 — <code>normalizedStrength</code> without <code>normalization</code> (error).</strong> Also enforced in-schema via
+<code>dependentRequired: { normalizedStrength: ["normalization"] }</code>. Without the regime the value is
+unportable — the exact D5 defect the field cures.</li>
+</ul>
+<p><em>Why it survives the sapper pass:</em> <strong>upper-bound only</strong> (a partial export’s subset of fan weights
+sums to ≤ the full sum ≤ 1, so <code>≤ 1+ε</code> holds on partial graphs; a lower bound <code>≈ 1</code> is deliberately
+NOT checked); <strong>partitioned</strong> (mixed regimes never cross-contaminate the sum); <strong>no retroactive
+invalidation</strong> (new R2 fields, the rule ships <em>with</em> them — §5.2-clean, not a tightening of an
+existing field); <strong>decidable &amp; cheap</strong> (pure function of the closed-world bundle, O(edges) group-by
+on <code>from</code>/<code>to</code>, no new index — a fifth <code>Check</code> variant beside
+<code>{Structural, ReferenceIntegrity, VersionPresence, Profile}</code>, mirroring global-standard’s
+<code>Check::Attestation</code>); <strong>not a silent hole</strong> (dodging via <code>scheme: none</code> self-labels the value
+non-portable — honest degradation, not a bypass). Final code numbers are TSC-assigned.</p>
+<p><strong>Classification.</strong> Chunk (+<code>reusable</code> Templates) = <strong>R2 · OMM-0</strong> (§4 RFC, <code>Reference</code>-widening).
+<code>schemaType</code> rides <strong>A · R2</strong>. Edge-norm fields = §5.1-additive (no widening) → <strong>R1.x</strong>, RFC-gated,
+<strong>OMM-0</strong>, on <code>Relationship</code> (OMM-3), <strong>plus the <code>Check::GraphNormalization</code> validator variant
+(E250/E251)</strong>. <strong>Closes D5</strong>; advances <strong>D8</strong>.</p>
+<p><strong>Hits.</strong> ⚡⚡ watts (fewer, denser units; single-pass vs iterative multi-hop) · 🎯 inference
+(portable multi-hop/transitive) · capability (abstraction, expertise).</p>
+<hr>
+<h2 id="ep-f--vsa--hrr-structural-code-frontier-lowest-priority-highest-ceiling"><a class="header" href="#ep-f--vsa--hrr-structural-code-frontier-lowest-priority-highest-ceiling">EP-F — VSA / HRR structural code (frontier; lowest priority, highest ceiling)</a></h2>
+<p><strong>Frontier (Vector Symbolic Architectures · Holographic Reduced Representations · HDC).</strong> An
+optional VSA structural code — bind (circular convolution) + bundle (superpose) a whole relational
+structure into one low-precision hypervector, cleanup via an item memory — gives OMIR
+<strong>analogical/compositional</strong> retrieval in cheap vector ops. Low-precision and edge-friendly: a
+natural fit for the <code>.omirb</code> robotics profile. <strong>Speculative</strong> — propose <strong>extension-first</strong> (no
+RFC), under a WG/vendor URL, promotable to a reserved Theme-D <code>Embedding</code> space once a second
+implementer exercises it:</p>
+<pre><code class="language-json">{
+  "url": "https://omir.io/spec/R2/ext/vsa-code",
+  "valueJson": {
+    "space": "vsa", "op": "hrr", "dims": 10000, "dtype": "int8",
+    "vector": "&lt;base64 or array&gt;", "cleanupRef": "Entity/item-memory"
+  }
+}
+</code></pre>
+<p><strong>Classification.</strong> <strong>Extension now</strong> (prefer-an-extension-over-an-RFC, the 80/20 rule); promotable
+to a Theme-D <code>Embedding</code> space at <strong>R2+ · OMM-0</strong> when field-exercised. Ties to the <code>.omirb</code>
+binary profile (low-precision bytes). <strong>Hits.</strong> capability (compositional/analogical recall) ·
+⚡ watts (low-precision edge ops); 🎯 neutral. No divergence — pure capability frontier.</p>
+<hr>
+<h2 id="overlook--sequence"><a class="header" href="#overlook--sequence">Overlook — sequence</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Step</th><th>EPs</th><th>Release · OMM</th><th>Breaking?</th><th>Unlocks</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td><strong>EP-1</strong> info-content · <strong>EP-4</strong> replay/interference · <strong>EP-6c</strong> edge-norm</td><td><strong>R1.x</strong> · OMM-0</td><td>No (additive optional fields)</td><td>The watt levers that need no new object: store-less, prune-by-interference, portable PPR. <strong>Closes D5 &amp; D10.</strong></td></tr>
+<tr><td>2</td><td><strong>EP-5b</strong> familiarity sketch · <strong>EP-4a</strong> boundary</td><td><strong>R1.x</strong> · OMM-0</td><td>No</td><td>Skip-retrieval gating; segmentation cue.</td></tr>
+<tr><td>3</td><td><strong>EP-2 / EP-3 / EP-5a / EP-F</strong> (all on the Theme-D <code>Embedding</code>)</td><td><strong>R2</strong> · OMM-0</td><td>Rides Theme D’s R2 line</td><td>Efficiency-bearing codes: Matryoshka, sparse, drift, VSA.</td></tr>
+<tr><td>4</td><td><strong>EP-6a</strong> Chunk · <strong>EP-6b</strong> schemaType</td><td><strong>R2</strong> · OMM-0</td><td><strong>Yes</strong> (new resource / CodeableConcept)</td><td>Consolidation product + schema attachment. Needs Themes A &amp; E.</td></tr>
+</tbody>
+</table>
+</div>
+<h2 id="overlook--dependencies"><a class="header" href="#overlook--dependencies">Overlook — dependencies</a></h2>
+<pre><code>Theme D (neutral Embedding) ──► EP-2 (matryoshka), EP-3 (sparse), EP-5a (drift space), EP-F (vsa)
+Theme A (CodeableConcept)   ──► EP-6b (schemaType), EP-4a boundaryReason (promotion)
+Theme E (PROV wasGeneratedBy)──► EP-6a Chunk's consolidation *event* (vs a 2nd resource)
+Theme I (ExternalReference)  ──► EP-3 (index points at remote content)
+EP-1 reconstructable         ──► EP-2 verbatim-eviction / EP-3 lazy content load (compose)
+P2 (a second implementer)    ──► OMM-2 anywhere; required for the Embedding-code interop tests
+</code></pre>
+<p>The <strong>critical path is Step 1</strong> — three pure-additive R1.x field sets that need no new object, no
+<code>Reference</code> widening, and no other theme, yet <strong>close the two divergences this track inherits
+(D5, D10)</strong> and land the biggest watt lever (EP-1). Steps 3–4 are gated on Theme D / A / E landing
+first, and the cross-store <em>value</em> of the efficiency-bearing codes (like all interchange value)
+needs the <a href="./global-standard.html#breakers--adversarial-stress-test-3-passes">global-standard P2 second implementer</a>.</p>
+<h2 id="definition-of-done-per-ep"><a class="header" href="#definition-of-done-per-ep">Definition of done (per EP)</a></h2>
+<p>A proposal reaches its stated OMM when, for each field it lands: the <strong>schema</strong> and the
+<strong>version-aware reference validator</strong> support it; every new <code>ResourceType/id</code> reference field is in
+the registry-driven reference walk with a dangling-ref negative fixture in <code>examples/invalid/</code>
+(EP-4 <code>competesWith</code>, EP-6a Chunk refs); and <code>UnitInterval</code> fields (EP-1 <code>novelty</code>, EP-4
+<code>replayPriority</code>/<code>needProbability</code>, EP-6 <code>reverseStrength</code>/<code>normalizedStrength</code>) are in the CR-7
+range check. EP-6c additionally ships a worked <strong>PPR golden-file</strong> proving two importers produce
+the same ranking from the same <code>normalizedStrength</code> + <code>salience</code> seeds — the portability claim made
+testable, the same discipline <a href="./global-standard.html#definition-of-done-per-phase">global-standard</a>
+applies to the RDF and attestation vectors.</p>
+<h2 id="process"><a class="header" href="#process">Process</a></h2>
+<p>None of this is unilateral. Every change here is a <strong>candidate</strong> — an RFC, debated by the Working
+Group and balloted (<a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md">CONTRIBUTING</a>, <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md">GOVERNANCE</a>) —
+entering at <strong>OMM-0/1</strong> and earning maturity through <em>independent</em> implementation. The efficiency
+framing changes the <em>motivation</em> (watts, not just interchange), not the gate.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="global-standard.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="global-standard.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-c22b7243.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

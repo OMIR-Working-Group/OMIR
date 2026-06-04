@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OMIR — Open Memory Interoperability Resources</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="home">
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html" aria-current="page">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./spec.html">Specification</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+      </nav>
+      <div class="toolbar">
+        <span class="status hidden" id="signin-status">Signed in</span>
+        <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleGoogleCredentialResponse"></div>
+        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large"></div>
+        <button class="button secondary hidden" id="signout-button">Sign out</button>
+        <button class="button secondary hidden" id="toggle-edit">Edit page</button>
+      </div>
+    </div>
+  </header>
+  <div class="strapline"><div class="container">Open Memory Interoperability Resources</div></div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero editable" data-section="hero">
+      <div>
+        <p class="eyebrow">R1 · Specification · Open Standard</p>
+        <h1><span class="hl-line">An open model for</span> <span class="hl-line"><span class="rot" aria-hidden="true">(<span class="rw" id="rw">portable</span>)</span><span class="visually-hidden">portable</span> memory.</span></h1>
+        <p class="deck">Memory agents can hand off.</p>
+        <p class="lead">OMIR is a vendor-neutral document format for agent memory at rest — portable,
+          inspectable, and interoperable. Modeled after FHIR's resource-oriented clarity.</p>
+        <div class="hero-cta" contenteditable="false">
+          <a class="button" href="#model">Start with the schema →</a>
+          <a class="button secondary" href="https://github.com/OMIR-Working-Group/OMIR">View on GitHub</a>
+        </div>
+        <div class="hero-meta" contenteditable="false">
+          <div><div class="k">Release</div><div class="v">R1</div></div>
+          <div><div class="k">Resources</div><div class="v">5 core</div></div>
+          <div><div class="k">License</div><div class="v">CC&#8209;BY&#8209;4.0</div></div>
+        </div>
+      </div>
+      <div contenteditable="false">
+        <div class="code">
+          <div class="code-bar">
+            <span class="code-dot" style="background:#e06c5b"></span>
+            <span class="code-dot" style="background:#e0b466"></span>
+            <span class="code-dot" style="background:#7fbf7f"></span>
+            <span class="code-file">memory.omir</span>
+            <span class="code-tag">Bundle</span>
+          </div>
+          <pre><span class="cc">{</span>
+  <span class="ck">"resourceType"</span>: <span class="cs">"Bundle"</span>,
+  <span class="ck">"omirVersion"</span>: <span class="cs">"R1"</span>,
+  <span class="ck">"entry"</span>: [
+    {
+      <span class="ck">"resourceType"</span>: <span class="cs">"MemoryRecord"</span>,
+      <span class="ck">"content"</span>: <span class="cs">"Jane prefers async standups"</span>,
+      <span class="ck">"importance"</span>: <span class="cn">0.82</span>,
+      <span class="ck">"decay"</span>: { <span class="ck">"halfLife"</span>: <span class="cs">"P30D"</span> },
+      <span class="ck">"entityRefs"</span>: [{ <span class="ck">"ref"</span>: <span class="cs">"Entity/jane"</span> }],
+      <span class="ck">"source"</span>: { <span class="ck">"trust"</span>: <span class="cs">"observed"</span> }
+    }
+  ]
+<span class="cc">}</span></pre>
+        </div>
+        <p class="code-cap">The cognitive model your agents already have — finally written down.</p>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker" aria-hidden="true">
+      <div class="ticker-track" id="ticker-track"></div>
+    </div>
+
+    <!-- THE MODEL -->
+    <section class="home-section editable" data-section="model" id="model">
+      <div class="head">
+        <p class="eyebrow">The model</p>
+        <h2>One model, five levels deep.</h2>
+        <p>Five resources. One container. Every OMIR document is a Bundle of typed Resources,
+          linked through references like <code>Entity/jane</code>.</p>
+      </div>
+      <div class="ledger">
+        <div class="lrow">
+          <div class="ln">01</div>
+          <div class="lt">MemoryRecord<span class="path">MemoryRecord</span></div>
+          <div class="ld">The atomic unit — what was remembered, with timestamp, confidence, decay and provenance.</div>
+          <div class="lm">Maturity<b>OMM-4</b></div>
+        </div>
+        <div class="lrow">
+          <div class="ln">02</div>
+          <div class="lt">Entity<span class="path">Entity</span></div>
+          <div class="ld">A named person, place, concept or thing extracted from memory.</div>
+          <div class="lm">Maturity<b>OMM-3</b></div>
+        </div>
+        <div class="lrow">
+          <div class="ln">03</div>
+          <div class="lt">Relationship<span class="path">Relationship</span></div>
+          <div class="ld">A directed, weighted edge between two entities.</div>
+          <div class="lm">Maturity<b>OMM-3</b></div>
+        </div>
+        <div class="lrow">
+          <div class="ln">04</div>
+          <div class="lt">Episode<span class="path">Episode</span></div>
+          <div class="ld">A bounded experience that explains how records and entities relate.</div>
+          <div class="lm">Maturity<b>OMM-3</b></div>
+        </div>
+        <div class="lrow">
+          <div class="ln">05</div>
+          <div class="lt">Bundle<span class="path">Bundle</span></div>
+          <div class="ld">The container that is the .omir document itself.</div>
+          <div class="lm">Maturity<b>envelope</b></div>
+        </div>
+      </div>
+      <div class="stats" contenteditable="false">
+        <div class="stat">
+          <div class="sn" style="padding: 0px 0px 0px 10px">1</div>
+          <div class="sl">Document format</div>
+          <div class="sd" style="padding: 0px 0px 0px 10px">One <code>.omir</code> file you can export, share and archive.</div>
+        </div>
+        <div class="stat">
+          <div class="sn" style="padding: 0px 0px 0px 10px">5</div>
+          <div class="sl" style="padding: 0px 0px 0px 10px">CORE RESOURCES</div>
+          <div class="sd" style="padding: 0px 0px 0px 10px">A small, strict core that covers the majority of implementations.</div>
+        </div>
+        <div class="stat">
+          <div class="sn">∞</div>
+          <div class="sl">SAFE EXTENSIONS</div>
+          <div class="sd">Add anything via extension[]. Unknown extensions are ignored, never broken.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE GAP -->
+    <section class="home-section editable" data-section="gap" id="gap">
+      <div class="head">
+        <p class="eyebrow">The gap</p>
+        <h2>Agents already talk. Their memory has had no shared shape.</h2>
+        <p>Modern agents speak over MCP and A2A. But once memory leaves an agent and lands on disk,
+          there has been no standard for what it should look like — so hand-offs stay fragile and
+          migrations stay expensive.</p>
+      </div>
+      <div class="feat-grid" contenteditable="false">
+        <div class="cell">
+          <div class="ic">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v5a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5"/><path d="M12 15V3M8 7l4-4 4 4"/></svg>
+          </div>
+          <div class="num">01 · Portable</div>
+          <h3>Memory as a Bundle</h3>
+          <p>A Bundle of typed Resources can be exported, shared, archived, and consumed by any OMIR-compatible system.</p>
+        </div>
+        <div class="cell">
+          <div class="ic">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r=".7" fill="currentColor"/></svg>
+          </div>
+          <div class="num">02 · Small core</div>
+          <h3>The useful 80%, no more</h3>
+          <p>The spec captures the fields most implementations need, and leaves the rest to a clean extension mechanism.</p>
+        </div>
+        <div class="cell">
+          <div class="ic">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5c5 0 4 13 17 13"/><circle cx="3" cy="5" r="1.3" fill="currentColor" stroke="none"/><circle cx="20" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <div class="num">03 · Honest memory</div>
+          <h3>Decay &amp; salience first-class</h3>
+          <p>Fields for decay, tiering, relationship strength, and invalidation make forgetting a real part of the model.</p>
+        </div>
+        <div class="cell">
+          <div class="ic">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V13M12 20V8M19 20V4"/></svg>
+          </div>
+          <div class="num">04 · Evolution</div>
+          <h3>A maturity model</h3>
+          <p>OMM levels tell implementers which resources are stable and which are still moving — so you can trust what you build on.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta editable" data-section="cta" id="start">
+      <div>
+        <p class="eyebrow">Get started</p>
+        <h2>From prototype to a standard-compliant export in days.</h2>
+        <p class="lead"><strong>The schema is your fastest path.</strong> Use the JSON Schema as your
+          contract, build your first <code>.omir</code> file as a Bundle, and link resources with typed
+          references. Unknown extensions are safely ignored — innovate without breaking compatibility.</p>
+        <div class="hero-cta" contenteditable="false">
+          <a class="button accent" href="./spec.html">Open the schema →</a>
+          <a class="button secondary" href="./guides.html">Read the guides</a>
+        </div>
+      </div>
+      <div class="cta-actions" contenteditable="false">
+        <a class="cta-link" href="./spec/R1/overview.html">
+          <span><span class="t">Overview</span><span class="d">The full scope of OMIR</span></span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="cta-link" href="./spec/R1/principles.html">
+          <span><span class="t">Design Principles</span><span class="d">Why the spec is shaped this way</span></span>
+          <span aria-hidden="true">→</span>
+        </a>
+        <a class="cta-link" href="./spec/R1/conformance.html">
+          <span><span class="t">Conformance</span><span class="d">What makes a Bundle valid</span></span>
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="note" id="editor-note" contenteditable="false">
+      <strong>Note:</strong> This page supports in-place editing. Sign in, click <em>Edit page</em>,
+      revise any section, then <em>Save changes</em>. Saved content is stored locally to preview before publishing.
+    </div>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+
+  <script>
+    // ---- fact ticker --------------------------------------------------------
+    (function () {
+      const facts = ['Vendor-neutral', 'Schema-driven', 'Decay is first-class', 'Extensible core',
+        'Modeled after FHIR', 'Memory at rest', 'Five core resources', 'CC-BY-4.0'];
+      const track = document.getElementById('ticker-track');
+      const make = () => facts.map(f => `<span>${f}</span><i>✦</i>`).join('');
+      track.innerHTML = make() + make();  // duplicate for seamless loop
+    })();
+
+    // ---- rotating headline word (all 8 letters → layout stays fixed) -------
+    (function () {
+      const words = ['portable', 'coherent', 'flexible', 'reliable',
+        'enduring', 'lossless', 'faithful', 'adaptive'];
+      const rot = document.querySelector('.rot');
+      const rw = document.getElementById('rw');
+      if (!rot || !rw) return;
+      // reserve the widest word's width so brackets + "memory." never move;
+      // each word is centered inside the fixed box
+      function reserve() {
+        let max = 0; const prev = rw.textContent;
+        rw.style.minWidth = '0px';
+        words.forEach(w => { rw.textContent = w; max = Math.max(max, rw.offsetWidth); });
+        rw.textContent = prev; rw.style.minWidth = Math.ceil(max) + 'px';
+      }
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve);
+      else reserve();
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;                    // honor reduced-motion: stay static
+      let i = 0;
+      setInterval(() => {
+        rw.classList.add('out');             // fade current word out
+        setTimeout(() => {
+          i = (i + 1) % words.length;
+          rw.textContent = words[i];
+          rw.classList.remove('out');        // fade new word in
+        }, 280);
+      }, 2400);
+    })();
+  </script>
+
+  <!-- in-place editing + Google sign-in (preserved from original site) -->
+  <script>
+    const editToggle = document.getElementById('toggle-edit');
+    const signoutButton = document.getElementById('signout-button');
+    const editableSections = Array.from(document.querySelectorAll('.editable'));
+    let editingEnabled = false;
+
+    function setEditing(enabled) {
+      editingEnabled = enabled;
+      editToggle.textContent = enabled ? 'Disable edit' : 'Edit page';
+      editableSections.forEach(section => {
+        section.contentEditable = enabled;
+        section.setAttribute('aria-label', enabled ? 'Editable section' : 'Non-editable section');
+      });
+    }
+    function restoreSavedContent() {
+      editableSections.forEach(section => {
+        const saved = localStorage.getItem(`omir-site-${section.dataset.section}`);
+        if (saved) section.innerHTML = saved;
+      });
+    }
+    function saveAllContent() {
+      editableSections.forEach(section => {
+        localStorage.setItem(`omir-site-${section.dataset.section}`, section.innerHTML);
+      });
+      alert('Page changes saved locally. Refresh to verify persistence.');
+    }
+    function clearSavedContent() {
+      editableSections.forEach(section => localStorage.removeItem(`omir-site-${section.dataset.section}`));
+      window.location.reload();
+    }
+    editToggle.addEventListener('click', () => setEditing(!editingEnabled));
+
+    window.handleGoogleCredentialResponse = response => {
+      if (!response || !response.credential) return;
+      const base64Url = response.credential.split('.')[1];
+      const decoded = JSON.parse(decodeURIComponent(atob(base64Url.replace(/-/g, '+').replace(/_/g, '/')).split('').map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`).join('')));
+      const user = { name: decoded.name || 'Google user', email: decoded.email || 'unknown' };
+      localStorage.setItem('omir-site-user', JSON.stringify(user));
+      showSignedIn(user);
+    };
+    signoutButton.addEventListener('click', () => {
+      localStorage.removeItem('omir-site-user');
+      hideSignedIn();
+      if (window.google) google.accounts.id.disableAutoSelect();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      restoreSavedContent();
+      initializeUser();
+      setEditing(false);
+      const saveButton = document.createElement('button');
+      saveButton.textContent = 'Save changes';
+      saveButton.className = 'button';
+      saveButton.style.margin = '1rem .5rem 0 0';
+      saveButton.addEventListener('click', saveAllContent);
+      const resetButton = document.createElement('button');
+      resetButton.textContent = 'Restore default content';
+      resetButton.className = 'button secondary';
+      resetButton.style.margin = '1rem 0 0';
+      resetButton.addEventListener('click', clearSavedContent);
+      const note = document.getElementById('editor-note');
+      note.appendChild(document.createElement('br'));
+      note.appendChild(saveButton);
+      note.appendChild(resetButton);
+    });
+
+    function showSignedIn(user) {
+      const s = document.getElementById('signin-status');
+      s.textContent = `Signed in as ${user.name}`;
+      s.classList.remove('hidden');
+      signoutButton.classList.remove('hidden');
+      editToggle.classList.remove('hidden');
+    }
+    function hideSignedIn() {
+      document.getElementById('signin-status').classList.add('hidden');
+      signoutButton.classList.add('hidden');
+      editToggle.classList.add('hidden');
+    }
+    function initializeUser() {
+      const stored = localStorage.getItem('omir-site-user');
+      if (stored) showSignedIn(JSON.parse(stored)); else hideSignedIn();
+    }
+  </script>
+
+  <!-- placeholder-link guard + shared tweaks panel -->
+  <script>
+    document.addEventListener('click', e => { const a = e.target.closest('a[href="#"]'); if (a) e.preventDefault(); });
+  </script>
+  <script src="./tweaks.js" defer></script>
+</body>
+</html>

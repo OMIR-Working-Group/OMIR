@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR — 3D Field Map</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./about.html">About</a>
+        <a href="./spec.html">Specification</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./field-map.html" aria-current="page">Field Map</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+      </nav>
+    </div>
+  </header>
+  <div class="strapline"><div class="container">Open Memory Interoperability Resources</div></div>
+
+  <main>
+    <section class="section">
+      <h1>3D Field Map</h1>
+      <p class="lead">A spatial view of how OMIR's <strong>fields</strong> relate to its
+      <strong>fieldsets</strong>. The outer ring holds the five resources plus the Bundle envelope —
+      each is a <em>fieldset</em>. Their fields orbit them. The bright cluster in the centre holds the
+      <strong>shared fieldsets</strong> — the common <code>$defs</code> (<code>Meta</code>,
+      <code>Confidence</code>, <code>Decay</code>, <code>Provenance</code>, <code>Reference</code>,
+      <code>Extension</code>, <code>Instant</code>, <code>UnitInterval</code>, <code>Id</code>) that
+      many resources reuse. The web of lines from the ring into the centre <em>is</em> the
+      interoperability story: independent resources built from the same shared parts.</p>
+      <div class="callout">
+        <strong>Drag</strong> to rotate · <strong>scroll</strong> to zoom · <strong>click a
+        resource</strong> (or a chip below) to isolate its fields · <strong>hover</strong> a node for
+        detail. Everything runs in your browser — no libraries, no network. Derived directly from the
+        R1 <a href="https://github.com/OMIR-Working-Group/OMIR/tree/main/schemas">JSON Schemas</a>.
+      </div>
+
+      <div class="map-controls">
+        <button class="button" id="btn-rotate">Pause rotation</button>
+        <button class="button secondary" id="btn-labels">Show all field labels</button>
+        <button class="button secondary" id="btn-reset">Reset view</button>
+      </div>
+      <div class="map-focus" id="focus-chips" aria-label="Isolate a fieldset"></div>
+
+      <div class="map-wrap">
+        <canvas id="fieldmap"></canvas>
+        <div class="map-tooltip" id="map-tip"></div>
+      </div>
+
+      <div class="legend">
+        <span><i class="swatch" style="background:#2563eb"></i> resource (fieldset)</span>
+        <span><i class="swatch" style="background:#16a34a"></i> shared fieldset (common <code>$def</code>)</span>
+        <span><i class="swatch" style="background:#d97706"></i> enum field</span>
+        <span><i class="swatch" style="background:#0891b2"></i> timestamp (Instant)</span>
+        <span><i class="swatch" style="background:#7c3aed"></i> score (UnitInterval)</span>
+        <span><i class="swatch" style="background:#dc2626"></i> typed reference</span>
+        <span><i class="swatch" style="background:#94a3b8"></i> scalar / other</span>
+      </div>
+      <p class="muted">Lines: thin grey = field belongs to a fieldset · green = field reuses a shared
+      fieldset · red dashed = a typed reference from one resource to another
+      (<code>entityRefs</code> → Entity, <code>from</code>/<code>to</code> → Entity,
+      <code>sourceEpisode</code> → Episode, <code>parentId</code> → MemoryRecord).</p>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+
+  <script>
+  // ---------- Model: derived from schemas/ (single source of truth) ----------
+  // Shared fieldsets (common.schema.json $defs reused across resources).
+  const COMMON = ["Meta","Confidence","Decay","Provenance","Reference","Extension","Instant","UnitInterval","Id"];
+
+  // Each field: [name, type, refTo?]. `type` that names a COMMON $def draws a
+  // "reuses" edge to it; `refTo` names the resource a typed reference targets.
+  const RESOURCES = {
+    MemoryRecord: { omm: 4, fields: [
+      ["resourceType","const"],["id","Id"],["meta","Meta"],["content","string"],
+      ["kind","enum"],["experienceType","enum"],["tier","enum"],
+      ["createdAt","Instant"],["eventTime","Instant"],["importance","UnitInterval"],
+      ["confidence","Confidence"],["decay","Decay"],["provenance","Provenance"],
+      ["entityRefs","Reference[]","Entity"],["parentId","Id","MemoryRecord"],
+      ["validUntil","Instant"],["version","int"],["extension","Extension[]"],
+    ]},
+    Entity: { omm: 3, fields: [
+      ["resourceType","const"],["id","Id"],["meta","Meta"],["name","string"],
+      ["labels","enum[]"],["summary","string"],["mentionCount","int"],
+      ["salience","UnitInterval"],["properNoun","bool"],["attributes","map"],
+      ["createdAt","Instant"],["lastSeenAt","Instant"],["extension","Extension[]"],
+    ]},
+    Relationship: { omm: 3, fields: [
+      ["resourceType","const"],["id","Id"],["meta","Meta"],
+      ["from","Reference","Entity"],["to","Reference","Entity"],["relationType","string"],
+      ["strength","UnitInterval"],["context","string"],["createdAt","Instant"],
+      ["validAt","Instant"],["invalidatedAt","Instant"],
+      ["sourceEpisode","Reference","Episode"],["extension","Extension[]"],
+    ]},
+    Episode: { omm: 3, fields: [
+      ["resourceType","const"],["id","Id"],["meta","Meta"],["name","string"],
+      ["content","string"],["source","enum"],["eventTime","Instant"],
+      ["createdAt","Instant"],["entityRefs","Reference[]","Entity"],
+      ["metadata","map"],["extension","Extension[]"],
+    ]},
+    Bundle: { omm: null, fields: [
+      ["resourceType","const"],["omirVersion","const"],["entry","resource[]"],
+      ["@context","jsonld"],["id","Id"],["generatedAt","Instant"],["source","string"],
+    ]},
+  };
+
+  const COLORS = {
+    resource:"#2563eb", common:"#16a34a",
+    enum:"#d97706", instant:"#0891b2", unit:"#7c3aed", ref:"#dc2626",
+    id:"#64748b", scalar:"#94a3b8",
+  };
+  function catOf(type){
+    const t = type.replace("[]","");
+    if (t==="enum") return "enum";
+    if (t==="Instant") return "instant";
+    if (t==="UnitInterval") return "unit";
+    if (t==="Reference") return "ref";
+    if (t==="Id") return "id";
+    if (COMMON.includes(t)) return "common";   // Meta/Confidence/Decay/Provenance/Extension
+    return "scalar";
+  }
+
+  // ---------- Build nodes + edges ----------
+  const nodes = new Map();   // id -> node
+  const edges = [];          // {a,b,type}
+  function addNode(n){ nodes.set(n.id, n); return n; }
+
+  const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+  function spiral(n, i, radius, center){
+    const y = n === 1 ? 0 : 1 - (i/(n-1))*2;
+    const r = Math.sqrt(Math.max(0, 1 - y*y));
+    const phi = i * GOLDEN;
+    return { x: center.x + radius*Math.cos(phi)*r, y: center.y + radius*y, z: center.z + radius*Math.sin(phi)*r };
+  }
+
+  // Shared fieldsets: central cluster.
+  COMMON.forEach((c,i)=>{
+    const p = spiral(COMMON.length, i, 42, {x:0,y:0,z:0});
+    addNode({ id:c, label:c, kind:"common", cat:"common", base:p });
+  });
+
+  // Resources: outer ring in the XZ plane.
+  const resNames = Object.keys(RESOURCES);
+  resNames.forEach((name, ri)=>{
+    const ang = (ri/resNames.length)*Math.PI*2;
+    const RR = 150;
+    const center = { x: Math.cos(ang)*RR, y: 0, z: Math.sin(ang)*RR };
+    const def = RESOURCES[name];
+    addNode({ id:name, label:name, kind:"resource", cat:"resource", base:center, omm:def.omm, count:def.fields.length });
+    // Fields orbit their resource.
+    def.fields.forEach((f, fi)=>{
+      const [fname, ftype, refTo] = f;
+      const fid = name + "." + fname;
+      const p = spiral(def.fields.length, fi, 46, center);
+      addNode({ id:fid, label:fname, kind:"field", cat:catOf(ftype), base:p, resource:name, ftype, refTo });
+      edges.push({ a:name, b:fid, type:"member" });
+      const base = ftype.replace("[]","");
+      if (COMMON.includes(base)) edges.push({ a:fid, b:base, type:"uses" });
+      if (refTo) edges.push({ a:fid, b:refTo, type:"ref" });
+    });
+  });
+
+  // ---------- Renderer ----------
+  const canvas = document.getElementById("fieldmap");
+  const ctx = canvas.getContext("2d");
+  const tip = document.getElementById("map-tip");
+  let W=800, H=560, cx=400, cy=280, dpr=1;
+  let ax=-0.5, ay=0.6, zoom=1, autorotate=true, showLabels=false, focus=null, hover=null;
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio||1, 2);
+    W = canvas.clientWidth || 800; H = 560;
+    canvas.width = W*dpr; canvas.height = H*dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    cx = W/2; cy = H/2;
+  }
+  window.addEventListener("resize", resize);
+
+  function rot(p){
+    const cy_=Math.cos(ay), sy=Math.sin(ay);
+    let x1 = p.x*cy_ - p.z*sy, z1 = p.x*sy + p.z*cy_;
+    const cx_=Math.cos(ax), sx=Math.sin(ax);
+    let y1 = p.y*cx_ - z1*sx, z2 = p.y*sx + z1*cx_;
+    return { x:x1, y:y1, z:z2 };
+  }
+  const CAM = 360, FOV = 360;
+  function project(rp){
+    const zz = rp.z + CAM;
+    const f = FOV / Math.max(40, zz) * zoom;
+    return { x: cx + rp.x*f, y: cy - rp.y*f, depth: rp.z, f };
+  }
+
+  // focus highlighting set
+  let activeSet = null;
+  function computeActive(){
+    if (!focus){ activeSet = null; return; }
+    const s = new Set([focus]);
+    for (const n of nodes.values()){
+      if (n.kind==="field" && n.resource===focus){ s.add(n.id); if (n.refTo) s.add(n.refTo); const b=n.ftype.replace("[]",""); if (COMMON.includes(b)) s.add(b); }
+    }
+    activeSet = s;
+  }
+  const isActive = id => !activeSet || activeSet.has(id);
+
+  function draw(){
+    if (autorotate && !dragging) ay += 0.0028;
+    ctx.clearRect(0,0,W,H);
+
+    // project all nodes
+    const P = new Map();
+    for (const n of nodes.values()) P.set(n.id, project(rot(n.base)));
+
+    // ----- edges (drawn first, sorted back-to-front by midpoint depth) -----
+    const drawEdges = edges.map(e=>{
+      const pa=P.get(e.a), pb=P.get(e.b);
+      return { e, pa, pb, depth:(pa.depth+pb.depth)/2 };
+    }).sort((u,v)=>u.depth-v.depth);
+
+    for (const {e,pa,pb} of drawEdges){
+      const act = isActive(e.a) && isActive(e.b);
+      ctx.globalAlpha = act ? (e.type==="member"?0.28:0.5) : 0.05;
+      ctx.beginPath();
+      if (e.type==="ref"){ ctx.strokeStyle="#ef4444"; ctx.lineWidth=1.4; ctx.setLineDash([4,4]); }
+      else if (e.type==="uses"){ ctx.strokeStyle="#22c55e"; ctx.lineWidth=1; ctx.setLineDash([]); }
+      else { ctx.strokeStyle="#94a3b8"; ctx.lineWidth=0.7; ctx.setLineDash([]); }
+      ctx.moveTo(pa.x,pa.y); ctx.lineTo(pb.x,pb.y); ctx.stroke();
+    }
+    ctx.setLineDash([]); ctx.globalAlpha=1;
+
+    // ----- nodes (back-to-front) -----
+    const drawNodes = [...nodes.values()].map(n=>({ n, p:P.get(n.id) })).sort((u,v)=>u.p.depth-v.p.depth);
+    for (const {n,p} of drawNodes){
+      const act = isActive(n.id);
+      const r = (n.kind==="resource"?7 : n.kind==="common"?5.5 : 3.2) * p.f;
+      ctx.globalAlpha = act ? 1 : 0.12;
+      ctx.beginPath();
+      ctx.fillStyle = COLORS[n.cat] || "#94a3b8";
+      ctx.arc(p.x, p.y, Math.max(1.4, r), 0, Math.PI*2);
+      ctx.fill();
+      if (n.kind!=="field"){ ctx.lineWidth=1; ctx.strokeStyle="rgba(255,255,255,.7)"; ctx.stroke(); }
+
+      const labelThis = act && (n.kind!=="field" || showLabels || (hover && hover.id===n.id) || (focus && n.resource===focus));
+      if (labelThis){
+        ctx.globalAlpha = act ? 1 : 0.2;
+        ctx.font = (n.kind==="resource"? "600 13px":"11px") + " Inter, system-ui, sans-serif";
+        ctx.fillStyle = n.kind==="field" ? "#cbd5e1" : "#f8fafc";
+        ctx.textAlign = "left";
+        ctx.fillText(n.label, p.x + Math.max(4, r) + 3, p.y + 3);
+      }
+    }
+    ctx.globalAlpha=1;
+    requestAnimationFrame(draw);
+  }
+
+  // ---------- Interaction ----------
+  let dragging=false, lastX=0, lastY=0, moved=0;
+  canvas.addEventListener("pointerdown", e=>{ dragging=true; moved=0; lastX=e.clientX; lastY=e.clientY; canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener("pointermove", e=>{
+    const rect = canvas.getBoundingClientRect();
+    if (dragging){
+      const dx=e.clientX-lastX, dy=e.clientY-lastY; moved+=Math.abs(dx)+Math.abs(dy);
+      ay += dx*0.006; ax += dy*0.006;
+      ax = Math.max(-1.4, Math.min(1.4, ax));
+      lastX=e.clientX; lastY=e.clientY;
+    } else {
+      hover = pick(e.clientX-rect.left, e.clientY-rect.top);
+      if (hover){ showTip(hover, e.clientX-rect.left, e.clientY-rect.top); } else { tip.style.opacity=0; }
+    }
+  });
+  canvas.addEventListener("pointerup", e=>{
+    dragging=false;
+    if (moved < 5){ // treat as click
+      const rect = canvas.getBoundingClientRect();
+      const hit = pick(e.clientX-rect.left, e.clientY-rect.top);
+      if (hit && hit.kind==="resource"){ setFocus(focus===hit.id?null:hit.id); }
+      else if (!hit){ setFocus(null); }
+    }
+  });
+  canvas.addEventListener("wheel", e=>{ e.preventDefault(); zoom *= e.deltaY<0?1.08:0.926; zoom=Math.max(0.4,Math.min(3.2,zoom)); }, {passive:false});
+
+  function pick(mx,my){
+    let best=null, bestD=14*14;
+    for (const n of nodes.values()){
+      if (!isActive(n.id)) continue;
+      const p = project(rot(n.base));
+      const dx=p.x-mx, dy=p.y-my, d=dx*dx+dy*dy;
+      const rr = (n.kind==="resource"?9:n.kind==="common"?7:5);
+      if (d < Math.max(bestD, rr*rr)) { if (d < bestD){ bestD=d; best=n; } }
+    }
+    return best;
+  }
+  function showTip(n, x, y){
+    let html;
+    if (n.kind==="resource") html = `<b>${n.label}</b> — fieldset (resource)` + (n.omm!=null?` · OMM-${n.omm}`:" · envelope") + ` · ${n.count} fields`;
+    else if (n.kind==="common") html = `<b>${n.label}</b> — shared fieldset (common <code>$def</code>)`;
+    else {
+      const base = n.ftype.replace("[]","");
+      let extra = "";
+      if (COMMON.includes(base)) extra = ` · reuses <b>${base}</b>`;
+      if (n.refTo) extra += ` · references <b>${n.refTo}</b>`;
+      html = `<b>${n.resource}.${n.label}</b> — field · <code>${n.ftype}</code>${extra}`;
+    }
+    tip.innerHTML = html;
+    tip.style.left = Math.min(W-150, x+14) + "px";
+    tip.style.top = (y+14) + "px";
+    tip.style.opacity = 1;
+  }
+
+  function setFocus(id){
+    focus = id; computeActive();
+    document.querySelectorAll("#focus-chips .chip").forEach(c=> c.classList.toggle("active", c.dataset.res===id));
+  }
+
+  // focus chips
+  const chips = document.getElementById("focus-chips");
+  resNames.forEach(name=>{
+    const b=document.createElement("button"); b.className="chip"; b.dataset.res=name; b.textContent=name;
+    b.addEventListener("click", ()=> setFocus(focus===name?null:name));
+    chips.appendChild(b);
+  });
+
+  document.getElementById("btn-rotate").addEventListener("click", e=>{ autorotate=!autorotate; e.target.textContent = autorotate?"Pause rotation":"Resume rotation"; });
+  document.getElementById("btn-labels").addEventListener("click", e=>{ showLabels=!showLabels; e.target.classList.toggle("active", showLabels); e.target.textContent = showLabels?"Hide field labels":"Show all field labels"; });
+  document.getElementById("btn-reset").addEventListener("click", ()=>{ ax=-0.5; ay=0.6; zoom=1; setFocus(null); });
+
+  resize();
+  requestAnimationFrame(draw);
+  </script>
+  <script src="./tweaks.js" defer></script>
+</body>
+</html>
