@@ -53,6 +53,21 @@
       "description": "Temporal invalidation: this record is considered superseded after this instant."
     },
     "version": { "type": "integer", "minimum": 1, "default": 1 },
+    "informationContent": {
+      "$ref": "common.schema.json#/$defs/InformationContent",
+      "x-omir-maturity": 0,
+      "description": "EP-1: information content (novelty/surprisal) against a generative prior — the 'store the surprising, regenerate the predictable' watt lever. OMM-0; producer-relative (see Theory & Scope)."
+    },
+    "replayPriority": {
+      "$ref": "common.schema.json#/$defs/UnitInterval",
+      "x-omir-maturity": 0,
+      "description": "EP-4: producer-relative consolidation/replay priority (surprise x value x recency snapshot) prioritizing amortized OFFLINE re-embedding/consolidation. Snapshot as of meta.lastUpdated; producer-relative. OMM-0."
+    },
+    "interference": {
+      "$ref": "common.schema.json#/$defs/Interference",
+      "x-omir-maturity": 0,
+      "description": "EP-4: rational-eviction / interference signal (need-probability, local density, competing traces). Closes divergence D10. OMM-0."
+    },
     "extension": {
       "type": "array",
       "items": { "$ref": "common.schema.json#/$defs/Extension" }

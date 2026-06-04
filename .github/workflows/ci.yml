@@ -46,8 +46,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          echo "== positive: the example MUST pass Core =="
-          cargo run --quiet --locked -- ../examples/minimal-bundle.omir --no-color
+          echo "== positive: every example MUST pass Core =="
+          for f in ../examples/*.omir; do
+            echo "-- validating $f"
+            cargo run --quiet --locked -- "$f" --no-color
+          done
 
           echo "== negative: every invalid fixture MUST be rejected (exit 1) =="
           for f in ../examples/invalid/*.omir; do

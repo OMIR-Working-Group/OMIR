@@ -113,14 +113,43 @@ interpret.
 
 **Proposal.** Generalize content to an optional **multi-part content model** —
 `contentType` (a media type) plus either inline `content` or a `MediaReference`
-(`{ uri, contentType, hash }`) for out-of-line bytes — and define an **algorithm-neutral
-`Embedding`** representation (`{ space, model, dims, vector? | ref? }`) that any vendor can
-emit without mandating a model. Embeddings stay *optional* (they are derived, not source),
-but become *interpretable* rather than vendor-opaque. The **efficiency-bearing** extensions of
-this same `Embedding` — Matryoshka prefixes, sparse codes, a temporal-context drift space, and a
-VSA structural code — are catalogued separately in
-[Efficiency & Information-Bearing Codes](./efficiency.md) (Theme D reframed from "neutral
-embeddings" to *efficiency-bearing* codes).
+(`{ uri, contentType, hash }`) for out-of-line bytes — and define an **algorithm-neutral,
+efficiency-bearing `Embedding`** that any vendor can emit without mandating a model. Embeddings
+stay *optional* (derived, not source) but become *interpretable* rather than vendor-opaque. The
+block below is the **single canonical definition** of the embedding object: it folds in the
+efficiency-bearing fields (Matryoshka prefixes, sparse codes, a dual-trace role, and reserved
+drift / VSA spaces). The [Efficiency & Information-Bearing Codes](./efficiency.md) page (Theme D
+reframed from "neutral embeddings" to *efficiency-bearing* codes) supplies the **rationale** —
+watts / inference / canon — for each efficiency field but does **not** redefine it.
+
+```json
+"Embedding": {
+  "type": "object",
+  "description": "Algorithm-neutral, optional embedding code (derived, not source). Carries a dense, sparse, Matryoshka-nested, or out-of-line code; comparable only within one 'space'. Efficiency rationale: efficiency.md.",
+  "properties": {
+    "space":  { "type": "string", "description": "Opaque equality key — codes are comparable IFF 'space' strings are byte-equal. Reserved WG spaces: 'omir:temporal-context' (a slow-drift contiguity vector, efficiency.md EP-5a), 'omir:vsa' (a bind/bundle structural hypervector, efficiency.md EP-F)." },
+    "model":  { "type": "string", "description": "Producer model id that generated the code." },
+    "dims":   { "type": "integer", "minimum": 1, "description": "Full dimensionality; MUST equal a dense 'vector' length and the sparse index space width." },
+    "dtype":  { "type": "string", "description": "Element byte form, e.g. 'f32' | 'int8' | 'binary'. Pins the .omirb encoding; excluded from signed images by default (Phase 3)." },
+    "vector": { "type": "array", "items": { "type": "number" }, "description": "Dense code. Mutually exclusive with 'sparse'." },
+    "sparse": {
+      "type": "object",
+      "description": "Sparse code for CPU inverted-index search + one-step associative completion (efficiency.md EP-3). Mutually exclusive with 'vector'.",
+      "properties": {
+        "indices": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "Active dimension indices, strictly ascending." },
+        "values":  { "type": "array", "items": { "type": "number" }, "description": "Weights parallel to 'indices' (equal length)." }
+      },
+      "required": ["indices", "values"],
+      "additionalProperties": false
+    },
+    "ref":    { "$ref": "#/$defs/MediaReference", "description": "Out-of-line code — an offloaded / verbatim payload (efficiency.md EP-2)." },
+    "matryoshka": { "type": "boolean", "description": "True if 'vector' is a nested (Matryoshka) code: any prefix whose length is in 'nestedDims' is itself a valid, rankable embedding — coarse-to-fine shortlisting without re-embedding (efficiency.md EP-2)." },
+    "nestedDims": { "type": "array", "items": { "type": "integer", "minimum": 1 }, "description": "Ascending valid prefix lengths, e.g. [64,128,256,512,768]. Rank on any listed prefix, re-rank on a longer one; prefixes compare only within one 'space' (efficiency.md EP-2)." },
+    "role":   { "enum": ["gist", "verbatim"], "description": "Dual-trace role (efficiency.md EP-2): 'gist' = durable, compact, anchorable, ranked cheaply; 'verbatim' = fast-decaying surface trace, usually offloaded via 'ref' and fetched only for top-k." }
+  },
+  "additionalProperties": false
+}
+```
 
 ### E. Provenance and trust as a chain
 

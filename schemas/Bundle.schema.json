@@ -13,6 +13,11 @@
     "id": { "$ref": "common.schema.json#/$defs/Id" },
     "generatedAt": { "$ref": "common.schema.json#/$defs/Instant" },
     "source": { "type": "string", "description": "Producing implementation, e.g. 'veld/0.7.6 (MIF adapter)'." },
+    "familiaritySketch": {
+      "$ref": "common.schema.json#/$defs/FamiliaritySketch",
+      "x-omir-maturity": 0,
+      "description": "EP-5b: producer-level metamemory sketch — answer 'do I plausibly hold this?' before paying for retrieval. Bundle-level (no resource OMM interaction). OMM-0."
+    },
     "entry": {
       "type": "array",
       "description": "The resources carried by this bundle. Order is not significant; references resolve by 'ResourceType/id'.",

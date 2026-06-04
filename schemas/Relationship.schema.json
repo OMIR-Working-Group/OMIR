@@ -22,7 +22,22 @@
     },
     "strength": {
       "$ref": "common.schema.json#/$defs/UnitInterval",
-      "description": "Synaptic weight (0..1). Dynamic under Hebbian plasticity."
+      "description": "Synaptic weight (0..1). Dynamic under Hebbian plasticity. NOTE: producer-private; for portable spreading activation use 'normalizedStrength' + 'normalization'."
+    },
+    "reverseStrength": {
+      "$ref": "common.schema.json#/$defs/UnitInterval",
+      "x-omir-maturity": 0,
+      "description": "EP-6c (D5): backward association weight P(from|to); asymmetric counterpart to 'strength' = P(to|from). Resolves the symmetric-scalar half of D5 without two independent edges. OMM-0."
+    },
+    "normalizedStrength": {
+      "$ref": "common.schema.json#/$defs/UnitInterval",
+      "x-omir-maturity": 0,
+      "description": "EP-6c (D5): fan-normalized strength. Within a source Entity's outgoing edge set sharing one 'normalization' these sum to <= 1+epsilon (ACT-R fan: source activation conserved and divided). THIS is the portable spreading-activation / PPR weight; raw 'strength' is producer-private. MUST co-occur with 'normalization'. OMM-0."
+    },
+    "normalization": {
+      "$ref": "common.schema.json#/$defs/EdgeNormalization",
+      "x-omir-maturity": 0,
+      "description": "EP-6c (D5): the normalization regime that makes 'normalizedStrength' portable across importers. OMM-0."
     },
     "context": { "type": "string", "description": "Free-text note describing the relationship." },
     "createdAt": { "$ref": "common.schema.json#/$defs/Instant" },
@@ -43,6 +58,7 @@
       "items": { "$ref": "common.schema.json#/$defs/Extension" }
     }
   },
+  "dependentRequired": { "normalizedStrength": ["normalization"] },
   "required": ["resourceType", "id", "from", "to", "relationType"],
   "additionalProperties": false
 }

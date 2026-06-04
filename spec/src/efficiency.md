@@ -7,9 +7,20 @@
 > independent implementation. It is the **efficiency-first** companion to
 > [Toward a Global Standard](./global-standard.md) (the interchange-first schema roadmap) and
 > the forward-looking counterpart to [`memory_theory.md`](https://github.com/OMIR-Working-Group/OMIR/blob/main/memory_theory.md) (the
-> backward-looking divergence map). The live R1 schemas are **not** edited here — R1 resources
-> set `additionalProperties:false` (CR-6), so every proposal is an R2-line / R1.x candidate,
-> stated as a delta, never applied to the frozen R1 set.
+> backward-looking divergence map).
+>
+> **Status — draft-schema landing (this iteration).** The four **R1.x-additive** proposals are now
+> **applied to the draft `schemas/`** as optional fields, each annotated `x-omir-maturity: 0`:
+> **EP-1** (`InformationContent` → `MemoryRecord.informationContent`); **EP-4**
+> (`Episode.boundaryStrength`/`boundaryReason`, `MemoryRecord.replayPriority`, `Interference` →
+> `MemoryRecord.interference`); **EP-5b** (`FamiliaritySketch` → `Bundle.familiaritySketch`); and
+> **EP-6c — the D5 edge-normalization fix** (`Relationship.reverseStrength`/`normalizedStrength`/
+> `normalization` + `EdgeNormalization`, with `dependentRequired: normalizedStrength → normalization`).
+> These are non-breaking (no existing bundle becomes invalid; `additionalProperties:false` still holds
+> because the fields are now *declared*), remain **RFC-gated** for ratification, and are reversible —
+> until a TSC ballots them they are draft and **OMM-0**. The **R2 / breaking** proposals
+> (EP-2/EP-3/EP-5a/EP-F on the Theme-D `Embedding`; EP-6a `Chunk`; EP-6b `schemaType`) are **not**
+> applied — they widen the shared `Reference` pattern or `Bundle.entry` and stay candidates here.
 
 Where [Toward a Global Standard](./global-standard.md) asks *"what blocks interchange across
 domains?"*, this page asks a different question: *"what state would let an engine store less,
@@ -28,7 +39,10 @@ proposes. The highest-leverage move is therefore a reframing the divergence map 
 **extend Theme D from "neutral embeddings" to *efficiency-bearing* codes** — an `Embedding`
 that can carry a Matryoshka prefix (rank coarse-to-fine), a sparse code (CPU inverted-index
 search), a reserved drift space (cheap temporal cues), and a VSA structural code (compositional
-ops). The remaining three are: two **information-theoretic scalars OMIR has no field for**
+ops). **That fold is realized:** those four fields now live in the single canonical
+[§D `Embedding`](./global-standard.md#d-beyond-text-modality-and-embeddings) definition; this page
+supplies their watts/inference rationale and does not re-specify the schema. The remaining three
+are: two **information-theoretic scalars OMIR has no field for**
 (EP-1 surprisal, EP-4 replay/interference), and one **graph fix that makes spreading
 activation portable** (EP-6c, the D5 edge-normalization remediation). Two proposals add genuinely
 new structure: an `Episode` event-boundary (EP-4) and a `Chunk` consolidation-product resource
@@ -39,7 +53,7 @@ new structure: an `Episode` event-boundary (EP-4) and a `Chunk` consolidation-pr
 | EP | Prescription (from the principle) | Concrete delta | Additivity | Vehicle · OMM | Theme | Divergence |
 |---|---|---|---|---|---|---|
 | **EP-1** | surprisal/novelty scalar + model-redundancy flag | new `InformationContent` def + `MemoryRecord.informationContent` | §5.1-additive | RFC-gated · **R1.x** · OMM-0 | *new* | — (new lever) |
-| **EP-2** | Matryoshka gist + offloadable verbatim | extend Theme-D `Embedding`: `matryoshka`/`nestedDims`/`role` + verbatim `MediaReference` | additive to the D def | rides **D · R2** · OMM-0 | **D** | D2 (partial) |
+| **EP-2** | Matryoshka gist + offloadable verbatim | §D `Embedding` fields `matryoshka`/`nestedDims`/`role` + verbatim `MediaReference` (defined in §D) | additive to the D def | rides **D · R2** · OMM-0 | **D** | D2 (partial) |
 | **EP-3** | sparse index layer (indices+values) | `Embedding.sparse` + Theme-I external-content pointer | additive to the D def | rides **D · R2** (+ I · R2+) · OMM-0 | **D + I** | — |
 | **EP-4** | boundary metadata + replay priority + interference | `Episode.boundaryStrength/boundaryReason`; `MemoryRecord.replayPriority`; new `Interference` def + field | §5.1-additive | RFC-gated · **R1.x** · OMM-0 | *new* | **D10** (closes), D8/D4 |
 | **EP-5** | temporalContext drift vector + familiarity sketch | reserved Embedding space `omir:temporal-context` (D); new `FamiliaritySketch` def + `Bundle.familiaritySketch` | sketch §5.1-additive; tc rides D | sketch **R1.x** · OMM-0; tc rides **D · R2** | **D** + *new* | — |
@@ -134,23 +148,11 @@ analog: rank millions on a truncated prefix, re-rank survivors on more dims. The
 the gist to a durable anchorable `Embedding` and the verbatim surface to an offloaded
 `MediaReference` (Theme D) with its own faster decay.
 
-**Extends the Theme-D `Embedding` def with three efficiency fields:**
-
-```json
-"matryoshka": {
-  "type": "boolean",
-  "description": "True if 'vector' is a nested (Matryoshka) code: any prefix whose length is in 'nestedDims' is itself a valid, rankable embedding. Enables coarse-to-fine shortlisting on a truncated prefix without re-embedding."
-},
-"nestedDims": {
-  "type": "array",
-  "items": { "type": "integer", "minimum": 1 },
-  "description": "Ascending valid prefix lengths, e.g. [64,128,256,512,768]. A consumer MAY rank on any listed prefix and re-rank on a longer one. Each prefix is comparable only within the same 'space'."
-},
-"role": {
-  "enum": ["gist", "verbatim"],
-  "description": "Dual-trace role. 'gist' is the durable, compact, anchorable code ranked cheaply (pair with decay.anchored + long halfLifeHours); 'verbatim' is the fast-decaying surface trace, typically offloaded via 'ref' (MediaReference) and fetched only for top-k."
-}
-```
+**Schema:** the **`matryoshka`, `nestedDims`, and `role` fields of the canonical
+[§D `Embedding`](./global-standard.md#d-beyond-text-modality-and-embeddings)** — defined there, not
+duplicated here. `matryoshka` + `nestedDims` give the prefix-truncatable gist; `role` splits the
+durable, anchorable gist from the offloadable `verbatim` (carried out-of-line via `ref` →
+`MediaReference`).
 
 **Decay split.** The gist reuses the existing `Decay` block (`anchored:true`, long
 `halfLifeHours`); the verbatim trace carries a short `halfLifeHours` and is the first thing
@@ -179,20 +181,9 @@ magnitude cheaper), and modern-Hopfield / SDM gives one-step associative complet
 federation: the index entry resolves to remote content via the `ExternalReference` `$def` (never
 the closed-world bare `ResourceType/id`).
 
-**Extends the Theme-D `Embedding` def with a sparse variant (alternative to dense `vector`):**
-
-```json
-"sparse": {
-  "type": "object",
-  "description": "Sparse code: parallel 'indices'/'values' over a 'dims'-wide space. Enables CPU inverted-index search and one-step associative completion (Sparse Distributed Memory / modern Hopfield). Mutually exclusive with 'vector' for a given Embedding.",
-  "properties": {
-    "indices": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "Active dimension indices, strictly ascending." },
-    "values":  { "type": "array", "items": { "type": "number" }, "description": "Weights parallel to 'indices'. Equal length to 'indices'." }
-  },
-  "required": ["indices", "values"],
-  "additionalProperties": false
-}
-```
+**Schema:** the **`sparse` field (`{indices, values}`) of the canonical
+[§D `Embedding`](./global-standard.md#d-beyond-text-modality-and-embeddings)**, mutually exclusive
+with the dense `vector` — defined there, not duplicated here.
 
 **Classification.** Additive to the Theme-D `Embedding` def → **rides D · R2 · OMM-0**; the
 pointer-to-remote-content rides **Theme I · R2+** (its true gate is I's CR-5 carve-out +
@@ -283,11 +274,13 @@ forgetting). **Open question:** is `competesWith` producer-authored or derivable
 temporalContext drift vector (timestamps give recency but not cheap similarity-based contiguity);
 a producer-level familiarity sketch over entities/cues."*
 
-**(a) temporalContext** is a vector → it rides the Theme-D `Embedding` with a **reserved space
-convention**, `"space": "omir:temporal-context"`. Timestamps already give recency; the drift
-vector gives cheap *contiguity* (recall the neighbours-in-time of a hit) as a dot product, no
-scan (EM-LLM adds exactly this temporal-contiguity stage on top of similarity). No new field —
-a documented reserved space + the contiguity-retrieval semantics. **Rides Theme D · R2 · OMM-0.**
+**(a) temporalContext** is a vector → it rides the canonical
+[§D `Embedding`](./global-standard.md#d-beyond-text-modality-and-embeddings) under the **reserved
+space** `"space": "omir:temporal-context"` (registered there). Timestamps already give recency; the
+drift vector gives cheap *contiguity* (recall the neighbours-in-time of a hit) as a dot product, no
+scan (EM-LLM adds exactly this temporal-contiguity stage on top of similarity). No new field — a
+reserved space (documented in §D) + the contiguity-retrieval semantics. **Rides Theme D · R2 ·
+OMM-0.**
 
 **(b) familiarity sketch** is genuinely new: **producer-level** aggregate state OMIR has no home
 for. It answers *"do I plausibly hold this?"* before paying for retrieval — and in production the
@@ -476,7 +469,8 @@ optional VSA structural code — bind (circular convolution) + bundle (superpose
 structure into one low-precision hypervector, cleanup via an item memory — gives OMIR
 **analogical/compositional** retrieval in cheap vector ops. Low-precision and edge-friendly: a
 natural fit for the `.omirb` robotics profile. **Speculative** — propose **extension-first** (no
-RFC), under a WG/vendor URL, promotable to a reserved Theme-D `Embedding` space once a second
+RFC), under a WG/vendor URL, promotable to the reserved `omir:vsa` space of the canonical
+[§D `Embedding`](./global-standard.md#d-beyond-text-modality-and-embeddings) once a second
 implementer exercises it:
 
 ```json

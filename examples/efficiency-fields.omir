@@ -1,0 +1,147 @@
+{
+  "@context": "https://omir.io/spec/R1/context.jsonld",
+  "resourceType": "Bundle",
+  "omirVersion": "R1",
+  "id": "efficiency-fields-demo",
+  "generatedAt": "2026-06-03T09:00:00Z",
+  "source": "omir-wg (efficiency-track demo: EP-1/EP-4/EP-5b/EP-6c draft fields, x-omir-maturity 0)",
+  "familiaritySketch": {
+    "kind": "bloom",
+    "domain": "entity",
+    "hashes": 4,
+    "bits": 1024,
+    "hashAlg": "xxh3-64",
+    "data": "AAECAwQFBgcICQoLDA0ODw=="
+  },
+  "entry": [
+    {
+      "resourceType": "Episode",
+      "id": "ep-standup",
+      "name": "Sprint standup",
+      "content": "Alice reported the indexer migration is done and pivoted the team to the ranking rewrite.",
+      "source": "message",
+      "eventTime": "2026-06-03T08:30:00Z",
+      "createdAt": "2026-06-03T08:31:00Z",
+      "entityRefs": [
+        { "ref": "Entity/alice" },
+        { "ref": "Entity/indexer" },
+        { "ref": "Entity/ranking" }
+      ],
+      "boundaryStrength": 0.78,
+      "boundaryReason": "topic_shift"
+    },
+    {
+      "resourceType": "Entity",
+      "id": "alice",
+      "name": "Alice",
+      "labels": ["person"],
+      "mentionCount": 20,
+      "salience": 0.88,
+      "properNoun": true,
+      "createdAt": "2026-04-01T09:00:00Z",
+      "lastSeenAt": "2026-06-03T08:30:00Z"
+    },
+    {
+      "resourceType": "Entity",
+      "id": "indexer",
+      "name": "indexer migration",
+      "labels": ["project"],
+      "mentionCount": 9,
+      "salience": 0.6,
+      "createdAt": "2026-05-01T09:00:00Z",
+      "lastSeenAt": "2026-06-03T08:30:00Z"
+    },
+    {
+      "resourceType": "Entity",
+      "id": "ranking",
+      "name": "ranking rewrite",
+      "labels": ["project"],
+      "mentionCount": 4,
+      "salience": 0.4,
+      "createdAt": "2026-06-03T08:30:00Z",
+      "lastSeenAt": "2026-06-03T08:30:00Z"
+    },
+    {
+      "resourceType": "Relationship",
+      "id": "rel-alice-indexer",
+      "from": { "ref": "Entity/alice" },
+      "to": { "ref": "Entity/indexer" },
+      "relationType": "works_on",
+      "strength": 0.9,
+      "reverseStrength": 0.35,
+      "normalizedStrength": 0.6,
+      "normalization": { "scheme": "fan", "over": "source" },
+      "createdAt": "2026-05-01T09:05:00Z",
+      "validAt": "2026-06-03T08:30:00Z",
+      "sourceEpisode": { "ref": "Episode/ep-standup" }
+    },
+    {
+      "resourceType": "Relationship",
+      "id": "rel-alice-ranking",
+      "meta": { "omirVersion": "R1", "source": "veld/0.7.6", "maturity": 3 },
+      "from": { "ref": "Entity/alice" },
+      "to": { "ref": "Entity/ranking" },
+      "relationType": "works_on",
+      "strength": 0.5,
+      "reverseStrength": 0.5,
+      "normalizedStrength": 0.4,
+      "normalization": { "scheme": "fan", "over": "source" },
+      "createdAt": "2026-06-03T08:31:00Z",
+      "validAt": "2026-06-03T08:30:00Z",
+      "sourceEpisode": { "ref": "Episode/ep-standup" }
+    },
+    {
+      "resourceType": "MemoryRecord",
+      "id": "mem-migration-done",
+      "meta": {
+        "omirVersion": "R1",
+        "source": "veld/0.7.6",
+        "lastUpdated": "2026-06-03T08:31:05Z",
+        "maturity": 4
+      },
+      "content": "The indexer migration is complete; the team is now on the ranking rewrite.",
+      "kind": "learning",
+      "experienceType": "decision",
+      "tier": "session",
+      "createdAt": "2026-06-03T08:31:05Z",
+      "eventTime": "2026-06-03T08:30:00Z",
+      "importance": 0.7,
+      "confidence": { "alpha": 4.0, "beta": 1.0, "calibrated": 0.78 },
+      "provenance": { "source": "standup", "sourceType": "conversation", "credibility": 0.85 },
+      "entityRefs": [
+        { "ref": "Entity/indexer" },
+        { "ref": "Entity/ranking" }
+      ],
+      "informationContent": {
+        "novelty": 0.82,
+        "surprisalBits": 4.2,
+        "model": "minilm-l6-v2",
+        "reconstructable": false
+      },
+      "replayPriority": 0.71,
+      "interference": {
+        "needProbability": 0.65,
+        "localDensity": 3.1,
+        "competesWith": [
+          { "ref": "MemoryRecord/mem-migration-planned" }
+        ]
+      }
+    },
+    {
+      "resourceType": "MemoryRecord",
+      "id": "mem-migration-planned",
+      "meta": { "omirVersion": "R1", "source": "veld/0.7.6", "maturity": 4 },
+      "content": "The indexer migration is planned for next sprint.",
+      "kind": "memory",
+      "experienceType": "context",
+      "tier": "archive",
+      "createdAt": "2026-05-20T10:00:00Z",
+      "importance": 0.3,
+      "informationContent": {
+        "novelty": 0.15,
+        "reconstructable": true,
+        "reconstructableBy": "veld-base-llm"
+      }
+    }
+  ]
+}

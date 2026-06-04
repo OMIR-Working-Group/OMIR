@@ -31,6 +31,16 @@
       "type": "object",
       "additionalProperties": { "type": "string" }
     },
+    "boundaryStrength": {
+      "$ref": "common.schema.json#/$defs/UnitInterval",
+      "x-omir-maturity": 0,
+      "description": "EP-4: prediction-error / Bayesian-surprise magnitude at this episode's boundary (event segmentation). Where memory is structured; a segmentation cue for downstream consolidation. OMM-0."
+    },
+    "boundaryReason": {
+      "type": "string",
+      "x-omir-maturity": 0,
+      "description": "EP-4: why the cut was made (open vocabulary, e.g. 'topic_shift', 'temporal_gap', 'actor_change'). Promotable to a CodeableConcept under Theme A. OMM-0."
+    },
     "extension": {
       "type": "array",
       "items": { "$ref": "common.schema.json#/$defs/Extension" }

@@ -107,6 +107,82 @@
         }
       },
       "additionalProperties": false
+    },
+    "InformationContent": {
+      "type": "object",
+      "x-omir-maturity": 0,
+      "description": "EP-1. Information content of a record against a generative prior — what is NOVEL, distinct from importance (value) and confidence (belief). Operationalizes efficient/predictive coding: store the surprising, regenerate the predictable. OMM-0; R1.x-additive, RFC-gated.",
+      "properties": {
+        "novelty": {
+          "$ref": "#/$defs/UnitInterval",
+          "description": "Producer-relative normalized novelty in [0,1]: how surprising this record was against the producer's model at encoding. Comparable WITHIN one producer only (Theory & Scope: stored scalars are producer-relative)."
+        },
+        "surprisalBits": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Raw Shannon surprisal -log2 p(x) in bits against the model named in 'model'. Unbounded and model-relative; the reproducible quantity when 'model' is shared."
+        },
+        "model": {
+          "type": "string",
+          "description": "Identifier of the generative model whose p(x) defines 'novelty'/'surprisalBits'."
+        },
+        "reconstructable": {
+          "type": "boolean",
+          "description": "True if this content is regenerable from 'reconstructableBy' and is therefore a candidate to DROP and regenerate rather than store/search."
+        },
+        "reconstructableBy": {
+          "type": "string",
+          "description": "Identifier of the model that can regenerate this content when 'reconstructable' is true."
+        }
+      },
+      "additionalProperties": false
+    },
+    "Interference": {
+      "type": "object",
+      "x-omir-maturity": 0,
+      "description": "EP-4. Rational-eviction / interference signal: why a record competes for retrieval and how prunable it is. Closes divergence D10 — forgetting as interference (competition among similar traces), not pure time-decay. OMM-0; R1.x-additive, RFC-gated.",
+      "properties": {
+        "needProbability": {
+          "$ref": "#/$defs/UnitInterval",
+          "description": "Anderson need-probability: estimated P(this record is needed soon). The rational eviction key — evict lowest need, NOT oldest (LRU). Distinct from decay (time) and importance (value)."
+        },
+        "localDensity": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Nearest-neighbour crowding in embedding space. High density = high interference from similar traces."
+        },
+        "competesWith": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/Reference" },
+          "description": "MemoryRecord references this record competes with — similar traces that degrade each other's retrievability. Reuses the existing Reference pattern; no widening."
+        }
+      },
+      "additionalProperties": false
+    },
+    "FamiliaritySketch": {
+      "type": "object",
+      "x-omir-maturity": 0,
+      "description": "EP-5b. Producer-level approximate-membership sketch over entities/cues, for metamemory gating: answer 'do I plausibly hold this?' before paying for retrieval (feeling-of-knowing). A negative is authoritative (skip retrieval); a positive is probabilistic. OMM-0; R1.x-additive, RFC-gated.",
+      "properties": {
+        "kind": { "enum": ["bloom", "count_min"], "description": "Sketch family." },
+        "domain": { "enum": ["entity", "cue", "content"], "description": "What the sketch is built over." },
+        "hashes": { "type": "integer", "minimum": 1, "description": "Number of hash functions k." },
+        "bits": { "type": "integer", "minimum": 1, "description": "Filter width m in bits (bloom) / table width (count-min)." },
+        "hashAlg": { "type": "string", "description": "Named, versioned hash-function identity, required so a consumer can test membership, e.g. 'xxh3-64'." },
+        "data": { "type": "string", "contentEncoding": "base64", "description": "Serialized filter bytes." }
+      },
+      "required": ["kind", "domain", "hashes", "bits", "hashAlg", "data"],
+      "additionalProperties": false
+    },
+    "EdgeNormalization": {
+      "type": "object",
+      "x-omir-maturity": 0,
+      "description": "EP-6c. Declares the regime that makes Relationship.normalizedStrength portable. Without it, Personalized-PageRank / spreading-activation diverges across importers (divergence D5). OMM-0; R1.x-additive, RFC-gated.",
+      "properties": {
+        "scheme": { "enum": ["fan", "softmax", "none"], "description": "fan = source activation divided among associates (ACT-R fan effect); softmax = exp-normalized; none = raw (not portable)." },
+        "over": { "enum": ["source", "target"], "description": "Normalized over a node's outgoing (source) or incoming (target) edge set." }
+      },
+      "additionalProperties": false
     }
   }
 }

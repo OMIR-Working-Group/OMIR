@@ -6,10 +6,34 @@
 > [`spec/src/global-standard.md`](spec/src/global-standard.md) — these are things that are
 > *wrong or fragile today*.
 >
-> **Status: PLAN ONLY — nothing here is executed.** The mechanical, OMIR-only items are safe
-> to apply on request. The governance/grade items are **outward-facing and require TSC
-> ratification + human sign-off**, and one of them (**B3**) requires a **synchronized change in
-> Veld** or Veld begins overclaiming maturity. Do not execute B-wave items unilaterally.
+> **Status (2026-06-03): A-wave + C1 EXECUTED & VERIFIED. B-wave DECIDED — execution pending
+> sign-off. C2 pending.** The mechanical, OMIR-only items (A1–A4, C1) are done and green
+> (validator 8/8, site build, link check, RDF-lift). The governance items are **outward-facing
+> and require TSC ratification + human sign-off**; the maintainer has now taken the B-wave
+> decisions (below). Those decisions **park the one Veld-sync item** — see B3.
+
+## B-wave decisions (recorded 2026-06-03)
+
+- **B1 = Veld-seated interim TSC, opened later.** Add a one-time GOVERNANCE §2.3 bootstrap
+  clause: Veld seats a small interim TSC now to unblock balloting, with a **binding commitment
+  to expand to a non-Veld majority (honoring the §2.4 one-third cap) once an external
+  implementer joins.** *Consequence:* B2/B3 become ratifiable immediately; full neutrality is a
+  near-term commitment, not a day-one property — state that trade-off openly in the clause.
+- **B2 = OMM-2 means "exercised in real bundles by ≥1 implementation"** (the GOVERNANCE §4.1
+  wording becomes canonical). *Execution:* reconcile principles.md §4 (currently the stricter
+  *"more than one system"*) and CONTRIBUTING.md §8 (currently collapses OMM-1/2) **down to**
+  §4.1. *Consequence:* the bar is low, so the existing OMM-3/4 grades remain defensible
+  single-party — which is precisely why B3 can be deferred. *Trade-off to record:* this is the
+  weakest second-implementer signal of the three; the honest-risk emphasis (HANDOFF §2) now
+  rests on the **OMM-3** discriminator (cross-validated field use), not OMM-2.
+- **B3 = defer the re-grade.** No change to the published grades, the example bundles, or
+  Veld's emitted `meta.maturity` now. *Consequence:* **the single 🔴 Veld-sync item is parked —
+  there is no required Veld change at this time.** Revisit only if a later ballot raises the bar.
+
+**Now unblocked (OMIR-only, no Veld change):** the B1 interim-TSC clause and the B2 ladder
+reconciliation across GOVERNANCE §4.1 ↔ principles.md §4 ↔ CONTRIBUTING.md §8. Both are
+**governance-charter edits — still ✋ sign-off before I touch those files.** On your go-ahead
+I'll draft them as one governance commit for review.
 
 ## Legend
 
