@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR Governance</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>Governance</h1>
+      <p class="lead">OMIR is developed in the open by a vendor-neutral Working Group. Veld convenes
+      it and seeds the reference implementation; Veld does <strong>not</strong> own the standard.
+      Neutrality is not a nicety here — it is the product. A standard wins on neutrality, not
+      features.</p>
+      <p class="muted">This page summarizes the canonical
+      <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md">GOVERNANCE.md</a>.
+      Where this summary and that document differ, GOVERNANCE.md governs.</p>
+    </section>
+
+    <section class="section">
+      <h2>The Working Group</h2>
+      <p>OMIR is stewarded by the <strong>OMIR Working Group</strong> in a neutral GitHub
+      organization (<code>OMIR-Working-Group</code>). Membership is open; participation follows the
+      <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a>
+      (Contributor Covenant). A <strong>Technical Steering Committee (TSC)</strong> arbitrates
+      technical direction and ratifies ballots.</p>
+    </section>
+
+    <section class="section">
+      <h2>How changes happen: RFC → ballot</h2>
+      <ol>
+        <li><strong>Propose.</strong> Open an RFC describing the change — a new resource, a field, a
+          profile, a vocabulary — and the problem it solves. See
+          <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.</li>
+        <li><strong>Discuss.</strong> The Working Group reviews in the open. The single most
+          persuasive input is an <em>independent implementer</em> who needs the change.</li>
+        <li><strong>Ballot.</strong> The TSC calls a ballot. Accepted changes land in a numbered
+          release and enter the <a href="./maturity.html">maturity model</a> at a low OMM level.</li>
+        <li><strong>Earn maturity.</strong> A resource or field rises through OMM only as real,
+          independent implementations adopt it. Nothing is graded mature on assertion.</li>
+      </ol>
+    </section>
+
+    <section class="section">
+      <h2>Versioning &amp; deprecation</h2>
+      <ul>
+        <li><strong>Releases</strong> are named R1, R2, … Each release is a stable target an
+          implementation can declare conformance to.</li>
+        <li><strong>Backwards compatibility.</strong> Stabilizing resources (OMM-3+) change only
+          through a published <strong>deprecation policy</strong> — deprecate, document, then remove
+          in a later release — never silently.</li>
+        <li><strong>Honest maturity.</strong> The <a href="./maturity.html">OMM dashboard</a> makes
+          the stability promise per resource explicit, so implementers know what they can depend on.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Licensing</h2>
+      <p>Licensing is deliberately decoupled from any implementation — including Veld's:</p>
+      <ul>
+        <li>The <strong>specification and schemas</strong> are <strong>CC-BY-4.0</strong>.</li>
+        <li>The <strong>reference code</strong> (validator, generators) is <strong>Apache-2.0</strong>.</li>
+      </ul>
+      <p>A standard under a restrictive license is dead on arrival. The split keeps the spec free to
+      adopt and the tooling free to embed, with neither encumbered by any contributor's commercial
+      terms.</p>
+      <div class="callout">
+        Read the full process, the complete OMM 0–5 definitions, the TSC charter, and the license
+        rationale in
+        <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md">GOVERNANCE.md</a>.
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0 · code Apache-2.0</footer>
+</body>
+</html>

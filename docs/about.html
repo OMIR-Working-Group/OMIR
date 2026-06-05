@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About OMIR</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>About OMIR</h1>
+      <p class="lead"><strong>OMIR</strong> — <em>Open Memory Interoperability Resources</em>
+      (pronounced <em>"OH-meer"</em>) — is an open, vendor-neutral, at-rest data format for portable
+      AI agent and cognitive memory. It is a document standard: not a wire protocol, and not a product.</p>
+    </section>
+
+    <section class="section">
+      <h2>Modeled on FHIR</h2>
+      <p>OMIR is shaped deliberately on <strong>HL7 FHIR</strong>, carrying that ecosystem's hard-won
+      lessons about resources, references, profiles, and honest maturity grading into the agent-memory
+      domain. FHIR didn't win by building a better hospital — it won by defining the at-rest resources
+      every system reads and writes. OMIR makes the same bet for memory.</p>
+      <table>
+        <tr><th>FHIR</th><th>OMIR</th></tr>
+        <tr><td><strong>F</strong>ast</td><td><strong>O</strong>pen</td></tr>
+        <tr><td>Healthcare</td><td>Memory</td></tr>
+        <tr><td>Interoperability Resources</td><td>Interoperability Resources</td></tr>
+      </table>
+      <p class="muted">"Open" leads the acronym deliberately — it's the one positioning a commercial
+      product can't copy without abandoning its moat.</p>
+    </section>
+
+    <section class="section">
+      <h2>Where OMIR sits: MCP, A2A, and OMIR</h2>
+      <p>Two transport standards already exist for agent systems, both now stewarded by the Linux
+      Foundation: <strong>MCP</strong> (Model Context Protocol) connects agents to tools and context;
+      <strong>A2A</strong> (Agent-to-Agent) lets agents talk to each other. Both move data between live
+      endpoints. Neither defines what memory <em>is</em> once it has been written down.</p>
+      <div class="callout">
+        <strong>MCP and A2A transport memory. OMIR <em>is</em> the memory at rest.</strong>
+      </div>
+      <p>They are complementary, never competing. An agent can serve memory over MCP, hand it to a peer
+      over A2A, and persist or export it as an <code>.omir</code> Bundle. The transport moves the bytes;
+      OMIR defines the bytes — the same clean separation FHIR drew between its RESTful API and its
+      Resources.</p>
+    </section>
+
+    <section class="section">
+      <h2>How it works</h2>
+      <p>Everything in OMIR is a typed <strong>Resource</strong>; resources link by typed reference of
+      the form <code>ResourceType/id</code>. The R1 core is small on purpose —
+      <a href="./spec/R1/resources/memoryrecord.html">MemoryRecord</a>,
+      <a href="./spec/R1/resources/entity.html">Entity</a>,
+      <a href="./spec/R1/resources/relationship.html">Relationship</a>,
+      <a href="./spec/R1/resources/episode.html">Episode</a>, and a
+      <a href="./spec/R1/resources/bundle.html">Bundle</a> container that <em>is</em> the
+      <code>.omir</code> document.</p>
+      <ul>
+        <li><strong>80/20 core + extensions.</strong> The core covers the 80% every memory system shares:
+        content, timestamps, tiers, calibrated Bayesian confidence, multi-time-scale decay and anchoring,
+        Hebbian relationship strength, temporal invalidation, provenance, and prospective ("intention")
+        memory. The proprietary 20% rides in a typed <a href="./spec/R1/extensions.html"><code>extension[]</code></a>
+        escape hatch that any reader may safely ignore.</li>
+        <li><strong>Honest maturity (OMM).</strong> Each resource type is graded on the OMIR Maturity
+        Model, an integer 0–5 surfaced in <code>meta.maturity</code>. We do not overclaim:
+        <span class="omm omm-4">MemoryRecord OMM-4</span>
+        <span class="omm omm-3">Entity OMM-3</span>
+        <span class="omm omm-3">Relationship OMM-3</span>
+        <span class="omm omm-3">Episode OMM-3</span>.</li>
+        <li><strong>Two lossless encodings.</strong> <code>.omir</code> is canonical JSON / JSON-LD;
+        <code>.omirb</code> is a compact binary profile (CBOR) for edge and robotics. The two are
+        lossless round-trips of one logical model.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Governance &amp; licensing</h2>
+      <p>OMIR is stewarded by a vendor-neutral <strong>OMIR Working Group</strong> in a neutral GitHub
+      organization. Veld convenes the group but does not own the standard. The group operates an open
+      RFC + ballot process, a Technical Steering Committee, semantic release versioning (R1, R2, …), and a
+      published deprecation policy — see
+      <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md">GOVERNANCE.md</a>.</p>
+      <p>Licensing is deliberately decoupled from any implementation:</p>
+      <ul>
+        <li>The <strong>specification and schemas</strong> are licensed <strong>CC-BY-4.0</strong>.</li>
+        <li>The <strong>reference code</strong> (validator, generators) is licensed <strong>Apache-2.0</strong>.</li>
+      </ul>
+      <p>A standard under a restrictive license is dead on arrival. The OMIR spec is, and will remain, free.</p>
+    </section>
+
+    <section class="section">
+      <h2>The honest risk</h2>
+      <p>Standards die without a second implementer. A format with one producer and zero independent
+      consumers is documentation for a private file, not a standard. Securing an external adopter is more
+      important than any single feature — which is why <a href="./implementations.html">Implementations</a>
+      is the page we watch most closely. <strong>Status:</strong> OMIR R1 (draft).</p>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0 · code Apache-2.0</footer>
+</body>
+</html>

@@ -1,39 +1,40 @@
 #!/usr/bin/env sh
-# Build the OMIR site.
+# Build the OMIR site for GitHub Pages.
 #
-# Renders the mdBook specification into site/src/spec/R1 — *next to* the landing
-# pages — so site/src/ is directly browsable: open site/src/index.html and the
-# ./spec/R1/... links resolve with no assembly step. It then assembles the full
-# deploy artifact in site/public/ (a copy of site/src/), which is what Cloudflare
-# Pages deploys (see WEBSITE.md). Both site/src/spec/ and site/public/ are
-# gitignored build output.
+# GitHub Pages is configured as "Deploy from a branch" → main → /docs, which
+# serves COMMITTED files (GitHub runs no build step). So this script:
+#   1. renders the mdBook spec into site/src/spec/R1 — keeping site/src/ directly
+#      browsable (open site/src/index.html; ./spec/R1/… links resolve as-is);
+#   2. assembles the full site into /docs at the repo root — the published folder,
+#      which IS committed (unlike the gitignored intermediates);
+#   3. writes /docs/.nojekyll so GitHub serves mdBook's output verbatim (Jekyll
+#      otherwise drops files/dirs it doesn't understand).
+# A /docs/CNAME (custom domain), if present, is preserved across rebuilds.
 #
-# Usage:
-#   sh site/build.sh
-#
-# Runs under any POSIX shell, including Git Bash on Windows. Requires mdBook on
-# PATH (CI pins a single mdBook version; this repo is built against 0.5.x).
+# Usage: sh site/build.sh   (POSIX shell; Git Bash on Windows is fine). Requires
+# mdBook on PATH (built against 0.5.x).
 set -eu
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 SRC="$SCRIPT_DIR/src"
 SPEC_OUT="$SRC/spec/R1"
-OUT="$SCRIPT_DIR/public"
+OUT="$REPO_ROOT/docs"
 
 echo "==> Rendering spec: mdbook build -> $SPEC_OUT"
 mdbook build "$REPO_ROOT/spec" -d "$SPEC_OUT"
 
-echo "==> Cleaning $OUT"
-# Empty the directory's contents rather than removing the directory node, so the
-# build still works when a shell or watcher holds $OUT as its working directory
-# (common on Windows, where removing a busy directory fails).
+echo "==> Cleaning $OUT (preserving CNAME)"
 mkdir -p "$OUT"
-find "$OUT" -mindepth 1 -delete 2>/dev/null || true
+# Empty the contents (not the dir node, which a shell/watcher may hold on Windows),
+# but keep a custom-domain CNAME if the maintainer added one.
+find "$OUT" -mindepth 1 ! -name CNAME -delete 2>/dev/null || true
 
-echo "==> Assembling deploy artifact -> $OUT"
+echo "==> Assembling GitHub Pages site -> $OUT"
 cp -R "$SRC"/. "$OUT"/
+# Disable Jekyll so mdBook assets (e.g. FontAwesome/, files Jekyll would skip) ship as-is.
+: > "$OUT/.nojekyll"
 
 echo "==> Done."
-echo "    Browse locally: $SRC/index.html"
-echo "    Deploy artifact: $OUT"
+echo "    Browse locally:        $SRC/index.html"
+echo "    Committed for Pages:   $OUT  (commit this folder; Pages serves main:/docs)"

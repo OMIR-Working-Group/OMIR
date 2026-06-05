@@ -1,0 +1,1209 @@
+<!DOCTYPE HTML>
+<html lang="en" class="rust sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Toward a Global Standard - OMIR R1 Specification</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="OMIR — Open Memory Interoperability Resources. An open, vendor-neutral, at-rest data format for portable AI agent and cognitive memory.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-0392ca55.css">
+        <link rel="stylesheet" href="css/chrome-fc474251.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "rust";
+            const default_dark_theme = "ayu";
+            window.path_to_searchindex_js = "searchindex-54e81272.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-e50f80b2.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OMIR R1 Specification</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/OMIR-Working-Group/OMIR" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/OMIR-Working-Group/OMIR/edit/main/spec/src/global-standard.md" title="Suggest an edit" aria-label="Suggest an edit" rel="edit">
+                            <span class=fa-svg id="git-edit-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M421.7 220.3l-11.3 11.3-22.6 22.6-205 205c-6.6 6.6-14.8 11.5-23.8 14.1L30.8 511c-8.4 2.5-17.5 .2-23.7-6.1S-1.5 489.7 1 481.2L38.7 353.1c2.6-9 7.5-17.2 14.1-23.8l205-205 22.6-22.6 11.3-11.3 33.9 33.9 62.1 62.1 33.9 33.9zM96 353.9l-9.3 9.3c-.9 .9-1.6 2.1-2 3.4l-25.3 86 86-25.3c1.3-.4 2.5-1.1 3.4-2l9.3-9.3H112c-8.8 0-16-7.2-16-16V353.9zM453.3 19.3l39.4 39.4c25 25 25 65.5 0 90.5l-14.5 14.5-22.6 22.6-11.3 11.3-33.9-33.9-62.1-62.1L314.3 67.7l11.3-11.3 22.6-22.6 14.5-14.5c25-25 65.5-25 90.5 0z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="toward-a-global-standard"><a class="header" href="#toward-a-global-standard">Toward a Global Standard</a></h1>
+<blockquote>
+<p><strong>Non-normative.</strong> This page is a design discussion, not part of the R1 conformance
+surface. Nothing here changes what makes a Bundle valid (<a href="./conformance.html">Conformance</a>).
+Every change proposed below would enter through the RFC + ballot process and start low
+on the <a href="./principles.html#4-honest-maturity-via-omm">OMIR Maturity Model</a> — at <strong>OMM-0/1</strong>
+— and earn its level through independent implementation.</p>
+</blockquote>
+<p>OMIR R1 is honest about its origin: its schemas were derived from one production memory
+engine, <strong>Veld</strong>. That is a strength — the core is grounded in a system that actually
+ships calibrated confidence, decay, Hebbian edges, and tiering — and a risk. A standard
+authored by a single implementation is, until proven otherwise, that implementation’s
+export format with a logo. The work of becoming a <em>global</em> standard is the work of
+<strong>shedding the assumptions that are true only for Veld</strong> while keeping the cognitive
+substance that makes OMIR worth adopting.</p>
+<p>This page names those assumptions and proposes the generalizations that would let a
+robotics stack, a healthcare agent, a multi-tenant assistant platform, and a coding agent
+all read and write the same <code>.omir</code> files without loss. It is the OMIR equivalent of
+FHIR’s long migration from “HL7’s resources” to “everyone’s resources.”</p>
+<h2 id="what-already-generalizes-keep-it"><a class="header" href="#what-already-generalizes-keep-it">What already generalizes (keep it)</a></h2>
+<p>Before the critique, the parts of R1 that are <em>not</em> Veld-specific and should be preserved:</p>
+<ul>
+<li><strong>Resource + typed-reference model.</strong> Everything is a Resource; links are
+<code>ResourceType/id</code>. This is FHIR-proven and domain-neutral.</li>
+<li><strong>80/20 core + typed <code>extension[]</code>.</strong> The escape hatch is exactly what lets the long
+tail of proprietary data travel without bloating the core. See <a href="./extensions.html">Extensions</a>.</li>
+<li><strong>Honest maturity (OMM).</strong> A promise-about-change per resource type. Domain-neutral.</li>
+<li><strong>Calibrated confidence as a distribution</strong>, not a bare float (<a href="./semantics.html#1-confidence-as-calibrated-belief">Memory Semantics</a>).</li>
+<li><strong>Portable forgetting state</strong> — decay, anchoring, tiers — recorded as <em>state</em>, not as a
+mandated algorithm.</li>
+<li><strong>Bitemporal-ish timestamps</strong> (<code>eventTime</code> vs <code>createdAt</code>) and temporal invalidation.</li>
+<li><strong>Two lossless encodings</strong> and the <strong>Profiles</strong> mechanism for domain tightening.</li>
+</ul>
+<p>The generalizations below are mostly <em>additive</em> — new optional structure and extension
+points — precisely so they do not break the parts that already work.</p>
+<h2 id="generalization-themes"><a class="header" href="#generalization-themes">Generalization themes</a></h2>
+<p>Each theme states what is Veld-specific today, why it limits interchange, and a concrete
+proposal. The FHIR precedent is cited where one exists, because OMIR is FHIR-modeled and
+should borrow FHIR’s solved problems rather than reinvent them.</p>
+<h3 id="a-open-vocabularies-not-closed-enums--highest-interchange-leverage"><a class="header" href="#a-open-vocabularies-not-closed-enums--highest-interchange-leverage">A. Open vocabularies, not closed enums  <em>(highest interchange leverage)</em></a></h3>
+<p><strong>Today.</strong> <code>MemoryRecord.kind</code>, <code>experienceType</code>, <code>Entity.labels</code>, and <code>Episode.source</code>
+are <strong>closed enums</strong>, and they lean toward coding/dev-agent life: <code>code_edit</code>,
+<code>file_access</code>, <code>command</code>, <code>prompt</code>. A robot cannot say “object grasped”; a healthcare
+agent cannot say “symptom reported”; a research agent cannot say “hypothesis formed.”
+<code>relationType</code> is already an open string — good — but it has no way to say <em>which</em>
+vocabulary a term comes from.</p>
+<p><strong>Risk.</strong> Closed enums hard-code one domain’s worldview into the core. Every other domain
+is forced into <code>other</code> + an extension, which means their primary semantics are invisible
+to a generic consumer — defeating interchange for everyone but Veld-likes.</p>
+<p><strong>Proposal.</strong> Adopt a FHIR-style <strong>CodeableConcept</strong> for these fields: a structure
+carrying an optional <code>system</code> (vocabulary URI), a <code>code</code>, and human <code>text</code>, e.g.</p>
+<pre><code class="language-json">"experienceType": { "system": "https://omir.io/vocab/robotics", "code": "object_grasped", "text": "Picked up the red block" }
+</code></pre>
+<p>R1’s bare-string/enum forms remain valid as the degenerate case (<code>text</code> only). OMIR ships
+<em>core</em> vocabularies (the current enums, promoted to published code systems) and lets
+domains register their own. This single change is the difference between “a memory format
+for coding agents” and “a memory format.”</p>
+<h3 id="b-identity-ownership-and-multi-agent-memory"><a class="header" href="#b-identity-ownership-and-multi-agent-memory">B. Identity, ownership, and multi-agent memory</a></h3>
+<p><strong>Today.</strong> Memory is implicitly <strong>single-agent</strong>. There is no first-class notion of <em>whose</em>
+memory a record is, who authored it, or how two agents share a memory store. Veld carries
+optional <code>agent_id</code>/<code>actor_id</code> tags, but they are tags, not a model.</p>
+<p><strong>Risk.</strong> The 2026 reality is <em>fleets</em> of agents and multi-tenant platforms. Without an
+ownership/authorship model, a Bundle exchanged between agents cannot answer “can I trust
+this? who wrote it? am I allowed to read it?” — the questions that matter most when
+memory crosses a trust boundary.</p>
+<p><strong>Proposal.</strong> Introduce an <strong><code>Agent</code></strong> (or <code>Principal</code>) resource and optional
+<code>authoredBy</code> / <code>owner</code> references on records and episodes; let <code>Provenance</code> carry the
+chain of agents a memory passed through (see Theme E). Access control itself stays a
+profile/extension concern (it is policy, not data shape), but the <em>identity hooks</em> the
+policy needs belong in the core. Grade <code>Agent</code> at OMM-0 and let multi-agent stacks prove
+it.</p>
+<h3 id="c-entity-resolution-across-systems"><a class="header" href="#c-entity-resolution-across-systems">C. Entity resolution across systems</a></h3>
+<p><strong>Today.</strong> <code>Entity.id</code> is bundle-local; there is no canonical external identifier, no
+alias set, and no “this entity is the same as that one.” Within Veld a UUID suffices
+because there is one graph.</p>
+<p><strong>Risk.</strong> Interchange <em>is</em> entity resolution. If Acme’s “Alice Smith (employee 123)” and
+Globex’s “@asmith” cannot be declared the same person, two memory stores can never merge —
+the whole point of a portable format collapses to per-pair adapters.</p>
+<p><strong>Proposal.</strong> Add FHIR-style <strong><code>Entity.identifier[]</code></strong> (<code>{ system, value }</code> pairs, e.g.
+<code>{ "system": "mailto", "value": "alice@acme.com" }</code>), an <code>aliases[]</code> list of surface
+forms, and a <code>sameAs</code> link type so a Bundle can assert cross-system identity. This is the
+backbone of federation (Theme I).</p>
+<h3 id="d-beyond-text-modality-and-embeddings"><a class="header" href="#d-beyond-text-modality-and-embeddings">D. Beyond text: modality and embeddings</a></h3>
+<p><strong>Today.</strong> <code>content</code> is a single <code>string</code>. Multimodal data and embeddings are
+extension-only. Veld carries image/audio/video vectors internally, but the at-rest core
+sees text.</p>
+<p><strong>Risk.</strong> Agent memory in 2026 is increasingly multimodal (vision, audio, sensor). A
+text-only core relegates non-text memory to opaque extensions that no generic consumer can
+interpret.</p>
+<p><strong>Proposal.</strong> Generalize content to an optional <strong>multi-part content model</strong> —
+<code>contentType</code> (a media type) plus either inline <code>content</code> or a <code>MediaReference</code>
+(<code>{ uri, contentType, hash }</code>) for out-of-line bytes — and define an <strong>algorithm-neutral,
+efficiency-bearing <code>Embedding</code></strong> that any vendor can emit without mandating a model. Embeddings
+stay <em>optional</em> (derived, not source) but become <em>interpretable</em> rather than vendor-opaque. The
+block below is the <strong>single canonical definition</strong> of the embedding object: it folds in the
+efficiency-bearing fields (Matryoshka prefixes, sparse codes, a dual-trace role, and reserved
+drift / VSA spaces). The <a href="./efficiency.html">Efficiency &amp; Information-Bearing Codes</a> page (Theme D
+reframed from “neutral embeddings” to <em>efficiency-bearing</em> codes) supplies the <strong>rationale</strong> —
+watts / inference / canon — for each efficiency field but does <strong>not</strong> redefine it.</p>
+<pre><code class="language-json">"Embedding": {
+  "type": "object",
+  "description": "Algorithm-neutral, optional embedding code (derived, not source). Carries a dense, sparse, Matryoshka-nested, or out-of-line code; comparable only within one 'space'. Efficiency rationale: efficiency.md.",
+  "properties": {
+    "space":  { "type": "string", "description": "Opaque equality key — codes are comparable IFF 'space' strings are byte-equal. Reserved WG spaces: 'omir:temporal-context' (a slow-drift contiguity vector, efficiency.md EP-5a), 'omir:vsa' (a bind/bundle structural hypervector, efficiency.md EP-F)." },
+    "model":  { "type": "string", "description": "Producer model id that generated the code." },
+    "dims":   { "type": "integer", "minimum": 1, "description": "Full dimensionality; MUST equal a dense 'vector' length and the sparse index space width." },
+    "dtype":  { "type": "string", "description": "Element byte form, e.g. 'f32' | 'int8' | 'binary'. Pins the .omirb encoding; excluded from signed images by default (Phase 3)." },
+    "vector": { "type": "array", "items": { "type": "number" }, "description": "Dense code. Mutually exclusive with 'sparse'." },
+    "sparse": {
+      "type": "object",
+      "description": "Sparse code for CPU inverted-index search + one-step associative completion (efficiency.md EP-3). Mutually exclusive with 'vector'.",
+      "properties": {
+        "indices": { "type": "array", "items": { "type": "integer", "minimum": 0 }, "description": "Active dimension indices, strictly ascending." },
+        "values":  { "type": "array", "items": { "type": "number" }, "description": "Weights parallel to 'indices' (equal length)." }
+      },
+      "required": ["indices", "values"],
+      "additionalProperties": false
+    },
+    "ref":    { "$ref": "#/$defs/MediaReference", "description": "Out-of-line code — an offloaded / verbatim payload (efficiency.md EP-2)." },
+    "matryoshka": { "type": "boolean", "description": "True if 'vector' is a nested (Matryoshka) code: any prefix whose length is in 'nestedDims' is itself a valid, rankable embedding — coarse-to-fine shortlisting without re-embedding (efficiency.md EP-2)." },
+    "nestedDims": { "type": "array", "items": { "type": "integer", "minimum": 1 }, "description": "Ascending valid prefix lengths, e.g. [64,128,256,512,768]. Rank on any listed prefix, re-rank on a longer one; prefixes compare only within one 'space' (efficiency.md EP-2)." },
+    "role":   { "enum": ["gist", "verbatim"], "description": "Dual-trace role (efficiency.md EP-2): 'gist' = durable, compact, anchorable, ranked cheaply; 'verbatim' = fast-decaying surface trace, usually offloaded via 'ref' and fetched only for top-k." }
+  },
+  "additionalProperties": false
+}
+</code></pre>
+<h3 id="e-provenance-and-trust-as-a-chain"><a class="header" href="#e-provenance-and-trust-as-a-chain">E. Provenance and trust as a chain</a></h3>
+<p><strong>Today.</strong> <code>Provenance</code> is a flat <code>{ source, sourceType, credibility, externalId }</code>. Veld’s
+internal model is richer (a relay <code>chain</code> with per-hop credibility and a <code>verified</code> flag);
+the core flattens it.</p>
+<p><strong>Risk.</strong> When memory crosses vendors, “where did this come from, through whom, and is it
+signed?” is a trust-critical question a flat source string cannot answer.</p>
+<p><strong>Proposal.</strong> Align with <strong>W3C PROV</strong>: let <code>Provenance</code> carry a <code>chain[]</code> of derivation
+steps (agent, activity, time, per-hop credibility) and an optional <strong>attestation/signature</strong>
+so a consumer can verify a record was not tampered with in transit. Keep the flat form as
+the common case.</p>
+<h3 id="f-privacy-sensitivity-and-retention"><a class="header" href="#f-privacy-sensitivity-and-retention">F. Privacy, sensitivity, and retention</a></h3>
+<p><strong>Today.</strong> <strong>Absent.</strong> R1 has no notion of data sensitivity, consent, legal basis,
+retention/expiry policy, or redaction. <code>validUntil</code> is for <em>contradiction</em>, not governance.
+The <code>omir-personal-assistant</code> profile gestures at a PII-class extension, but it is opt-in
+and shallow.</p>
+<p><strong>Risk.</strong> A <em>global</em> memory format will carry personal and regulated data. Without a
+governance vocabulary, OMIR cannot be adopted where GDPR/CCPA/HIPAA-style obligations apply
+— which is most of the interesting market.</p>
+<p><strong>Proposal.</strong> Define an optional <strong>governance block</strong> (sensitivity classification, legal
+basis, retention policy / <code>deleteAfter</code>, redaction markers, consent reference). Likely a
+core extension <em>family</em> with published URLs first, promoted to core once proven. This is
+the theme most likely to decide whether OMIR is adoptable by enterprises at all.</p>
+<h3 id="g-uncertainty-beyond-a-point-estimate"><a class="header" href="#g-uncertainty-beyond-a-point-estimate">G. Uncertainty beyond a point estimate</a></h3>
+<p><strong>Today.</strong> <code>Confidence</code> is Beta(α, β) + a calibrated point — already better than most. But
+it assumes one uncertainty model and conflates evidence count with belief.</p>
+<p><strong>Proposal.</strong> Keep Beta as the recommended default; allow a more general
+<strong>uncertainty representation</strong> (credible interval, or a named distribution + parameters) and
+optionally distinguish <em>epistemic</em> (lack of evidence) from <em>aleatoric</em> (inherent
+variability) uncertainty for agents that reason about it.</p>
+<h3 id="h-a-complete-temporal-model"><a class="header" href="#h-a-complete-temporal-model">H. A complete temporal model</a></h3>
+<p><strong>Today.</strong> <code>eventTime</code> vs <code>createdAt</code> plus <code>validUntil</code> / <code>validAt</code> / <code>invalidatedAt</code> is a
+partial bitemporal model, and time is always a precise RFC 3339 instant.</p>
+<p><strong>Proposal.</strong> Make bitemporality explicit and uniform (a <em>valid-time</em> interval and a
+<em>transaction-time</em> interval), and support <strong>imprecise time</strong> (“sometime in 2024”, “before
+the incident”) via interval/precision-qualified instants. Memory is frequently vague about
+when; the format should be able to say so.</p>
+<h3 id="i-federation-and-cross-bundle-references"><a class="header" href="#i-federation-and-cross-bundle-references">I. Federation and cross-Bundle references</a></h3>
+<p><strong>Today.</strong> R1 is deliberately <strong>closed-world</strong>: every reference must resolve <em>inside</em> the
+Bundle. That is the right call for R1 (it makes conformance decidable), but it blocks
+linking a small export to a large shared graph.</p>
+<p><strong>Proposal.</strong> Define an <em>optional, higher</em> conformance level for <strong>resolvable external
+references</strong> (a reference may target a resource in another, addressable Bundle/store), with
+clear rules so the closed-world guarantee remains the default and the validator can still
+decide conformance. Federation is how a memory standard scales past one file.</p>
+<h3 id="j-structured-knowledge-and-typed-attributes"><a class="header" href="#j-structured-knowledge-and-typed-attributes">J. Structured knowledge and typed attributes</a></h3>
+<p><strong>Today.</strong> <code>Entity.attributes</code> is <code>string → string</code>; <code>Episode.metadata</code> likewise. All
+structure degrades to stringly-typed key/values.</p>
+<p><strong>Proposal.</strong> Allow <strong>typed attribute values</strong> (number, boolean, dateTime, quantity-with-unit,
+CodeableConcept, reference) so a global graph can carry real structured knowledge — a
+measurement with units, a date, a link — without serializing everything to strings.</p>
+<h3 id="k-language-and-internationalization"><a class="header" href="#k-language-and-internationalization">K. Language and internationalization</a></h3>
+<p><strong>Today.</strong> Text is implicitly English; there are no language tags, and the reference
+pipeline’s tokenization/NER assume English.</p>
+<p><strong>Proposal.</strong> Add optional <strong>language tags</strong> (BCP 47) on textual content and entity names,
+and allow multiple language variants of a <code>name</code>/<code>summary</code>. A global standard cannot assume
+one language.</p>
+<h2 id="a-prioritized-path"><a class="header" href="#a-prioritized-path">A prioritized path</a></h2>
+<p>Not all of these are equal. For <em>interchange</em> specifically — the existential goal — the
+order is clear:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Priority</th><th>Theme</th><th>Why first</th><th>Likely entry</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td><strong>A. Open vocabularies</strong></td><td>Unblocks every non-coding domain at once; small, additive change.</td><td>R1.x · OMM-1</td></tr>
+<tr><td>2</td><td><strong>C. Entity resolution</strong></td><td>Interchange <em>is</em> identity; without it, stores can’t merge.</td><td>R2 · OMM-1</td></tr>
+<tr><td>3</td><td><strong>F. Privacy / retention</strong></td><td>Gate to enterprise &amp; regulated adoption.</td><td>R2 · OMM-0</td></tr>
+<tr><td>4</td><td><strong>B. Identity / multi-agent</strong></td><td>Matches the 2026 fleet reality; trust across boundaries.</td><td>R2 · OMM-0</td></tr>
+<tr><td>5</td><td><strong>E. Provenance chain + attestation</strong></td><td>Trust when memory crosses vendors.</td><td>R2 · OMM-1</td></tr>
+<tr><td>6</td><td><strong>D. Modality + neutral embeddings</strong></td><td>Multimodal memory becomes interpretable, not opaque.</td><td>R2 · OMM-0</td></tr>
+<tr><td>—</td><td>H, G, J, K, I</td><td>Valuable, lower interchange-urgency; fold in as domains demand.</td><td>R2+</td></tr>
+</tbody>
+</table>
+</div>
+<p>The first item is the highest-leverage and lowest-cost: turning four closed enums into
+CodeableConcepts, with the current values published as the seed vocabularies, would by
+itself move OMIR from “a coding-agent memory format” to “a memory format that coding agents
+use,” at OMM-1, without breaking a single R1 document.</p>
+<h2 id="the-adoption-plan"><a class="header" href="#the-adoption-plan">The adoption plan</a></h2>
+<p>The prioritization above is a ranking; this is the <strong>plan</strong>. The Working Group’s stated
+intent is to adopt <strong>all</strong> of the proposals, in a deliberate sequence set by dependency and
+leverage — <strong>vocabularies (A) first, identity &amp; resolution (C) next</strong> — with <strong>W3C PROV (E)</strong>
+as the trust backbone the rest hangs from, and the refinements that <strong>fix G, J, and K</strong> folded
+in once the load-bearing pieces land. Every phase enters at low OMM and is gated by independent
+implementation. <strong>“Additive and non-breaking” is a claim with teeth here, not a slogan: every
+R1 resource schema sets <code>additionalProperties: false</code> (Conformance §Document rules, rule CR-6),
+so a new core <em>field</em> is rejected by the very R1 schema we promise to keep honoring. We
+therefore label each change honestly against GOVERNANCE §5.1/§5.2 and route it through the
+correct release vehicle below.</strong></p>
+<p><strong>A note on the §5.2 boundary, stated once and reused.</strong> <em>Adding a new, unreferenced <code>$defs</code>
+member to <code>common.schema.json</code> is purely additive under §5.2 (no existing bundle becomes
+invalid). It is the <strong>widening of an existing field or def to reference it</strong>, or the widening of
+the shared <code>Reference</code> pattern, that is non-additive.</em> This is the principle that lets
+<code>CodeableConcept</code> (Phase 1) and <code>TypedValue</code> (Phase 5) be added cleanly as defs while the union
+widening (Phase 1) and the Agent/Reference widening (Phase 2) are correctly breaking. Wherever
+the plan calls a shared-schema change “breaking” or “additive,” it means this. <strong>A corollary the
+plan applies throughout: any field whose value can only be expressed by widening the shared
+<code>Reference</code> pattern (<code>authoredBy</code>, <code>owner</code>, an Agent-targeting <code>sameAs</code>) is NOT §5.1-additive and
+is R2/RFC-gated, full stop — it cannot ride an R1.x increment.</strong></p>
+<h3 id="four-preconditions-before-any-phase-ships"><a class="header" href="#four-preconditions-before-any-phase-ships">Four preconditions before any phase ships</a></h3>
+<p><strong>Each precondition is itself a §3.1 normative RFC</strong> (it amends GOVERNANCE/principles/CONTRIBUTING,
+the <code>common.schema.json</code> shared defs, or process), so each needs a 14-day-minimum comment window
+and a two-thirds TSC ballot (§3.3) <strong>before Phase 1 opens</strong>. Bundle <strong>P0+P0a into one
+governance-reconciliation RFC</strong> (they are coupled) and ship <strong>P1</strong> as a second RFC; <strong>P-1 (the
+founding-TSC bootstrap) is procedurally first</strong> because no ballot is callable without a seated TSC.</p>
+<p><strong>P-1 — Seat a founding TSC (the true first domino).</strong> GOVERNANCE §2.3 targets a 3–7 seat TSC
+filled “by community nomination and confirmation by the sitting TSC” — but <strong>no TSC is seated, and
+§2.3 has no bootstrap clause for the <em>first</em> one</strong>, so the balloting body is self-perpetuating by
+design and cannot start. “Confirm it before P0” is not a mechanism. P-1 (a GOVERNANCE amendment,
+in scope) <strong>adds a one-time founding-TSC procedure that does not require a sitting TSC</strong>: a public
+call-for-nominations seating an initial <strong>3-seat TSC with at least two non-Veld seats</strong> (so Veld
+holds ≤ one-third from day one and the §2.4 cap holds — at 3 seats, one-third rounded down is
+zero, so a Veld-majority bootstrap would be unlawful), confirmed by <strong>lazy consensus over a fixed
+comment window</strong> rather than by a nonexistent sitting TSC. <strong>P-1 is therefore where external
+participation is first recruited, not an administrative formality</strong> — and it couples directly to
+P2: you cannot seat a neutral TSC without at least one non-Veld party, the same party the
+second-implementer gate needs.</p>
+<p><strong>P0 — Reconcile the OMM ladder <em>and re-grade the published R1 table</em>.</strong> The repo carries
+<strong>three inconsistent OMM-2 definitions</strong>: GOVERNANCE §4.1 OMM-2 = <em>“Exercised in real bundles by
+at least one implementation”</em> (GOVERNANCE.md:233); principles.md §4 OMM-2 = <em>“implemented in more
+than one system”</em> (principles.md:55); and CONTRIBUTING.md §8 <strong>collapses OMM-1 and OMM-2 into one
+band</strong> — <em>“Trial use — implemented somewhere, but limited field experience”</em> (CONTRIBUTING.md:372-378)
+— putting “multiple implementations” only at OMM-3. The reconciliation RFC <strong>MUST rewrite the
+ladder identically across all THREE documents</strong> (GOVERNANCE §4.1+§4.3, principles.md §4,
+CONTRIBUTING.md §8, splitting its merged “1–2” row), and update the §3.4 Draft/Trial-Use/Normative
+band table in the same RFC:</p>
+<ul>
+<li><strong>OMM-1</strong> = implemented in ≥1 system; field set volatile.</li>
+<li><strong>OMM-2</strong> = <strong>≥2 <em>independent</em> implementations</strong>; shape settling, not yet broad field use.</li>
+<li><strong>OMM-3</strong> = ≥2 independent implementations <strong>plus</strong> real-world cross-validated usage/conformance
+evidence (the discriminator from OMM-2 is <em>settling</em> vs <em>cross-validated field experience</em>).</li>
+</ul>
+<p><strong>The reconciliation is monotonic in BOTH directions — it lowers any existing grade the new
+independence gate no longer supports.</strong> Today GOVERNANCE §4.3 grades MemoryRecord at <strong>OMM-4</strong> and
+Entity/Relationship/Episode at <strong>OMM-3</strong> with Veld as sole implementer (GOVERNANCE.md:255-258),
+repeated in principles.md §4 (62-64), CONTRIBUTING.md §8 (382-384), and the README grade table
+(README.md:48-51). Under the reconciled gate those grades are unsupportable: there is no second
+independent implementation. <strong>The same RFC MUST re-grade the R1 table — demoting MemoryRecord and
+Entity/Relationship/Episode to OMM-1</strong> (“settled shape in the reference implementation; awaiting a
+second independent implementation”) <strong>across all four artifacts in one ballot.</strong> Leaving four
+overclaimed grades standing while reforming the OMM in the name of honesty is exactly the
+dishonesty §4.2 forbids and the loudest possible “the OMM is marketing” signal to a prospective
+second implementer. Until P0 lands, <strong>no phase may claim OMM-2</strong>, and every OMM target below is
+read against the reconciled, re-graded ladder. <em>P0 also assigns <strong>stable rule anchors CR-1..CR-8</strong>
+to Conformance §“Document rules (MUST)” (today a positional 1–8 list with no stable IDs), so every
+cross-reference in this plan and its RFCs survives renumbering.</em></p>
+<p><strong>P0a — Define “independent” so it is recorded, neutral, and not gameable.</strong> An implementation
+counts toward the gate <strong>iff</strong> (a) it has a <strong>separate codebase/maintainer</strong>, developed <strong>without
+copying reference-implementation code under any license other than the Apache-2.0 grant</strong> —
+<em>re-implementing from the CC-BY spec and using the validator as a conformance oracle explicitly
+COUNTS as independent</em> (otherwise the licensing invariant that anyone may re-implement from the
+spec contradicts the gate); (b) it ships under a <strong>separate product/funding line with its own
+users</strong>; and (c) it <strong>passes the reference validator while PRODUCING the feature</strong> (not merely
+ignoring it). The gate is <strong>decoupled from TSC seats and employer</strong>: a committed second adopter
+who <em>joins</em> the TSC is exactly what we want and <strong>MUST NOT</strong> be disqualified for it. An
+<strong>anti-sock-puppet clause</strong> (common control, shared funding, or shared engineering team → counts
+as <strong>one</strong>) replaces any unenforceable string-match on “shared employer.” To keep the gate from
+being decided by the party that benefits from declaring it met: the <strong>counts-as-one determination
+uses the SAME “organization/common control” definition as the §2.4 seat cap</strong> (one bright line
+governs both seat math and implementation counting), the TSC <strong>MUST publish written findings
+against the three criteria on the ballot record</strong>, and the determination is taken by a
+<strong>supermajority EXCLUDING any TSC member employed by or contracted to the reference implementer</strong>
+(extending the §2.3 recusal rule — the convening vendor has a material non-interoperability
+interest in the gate being declared met). The WG validator and any Veld-authored tool never count.</p>
+<p><strong>P1 — A versioning contract for the R1→R2 line, with a named validator-rewrite scope.</strong> The R1
+version pin is enforced at <strong>four</strong> points today; the R2 schema set and the validator MUST handle
+each: <strong>(i)</strong> <code>Bundle.omirVersion const:"R1"</code> is <strong>neutralized to a plain string in the validator</strong>
+(schemas.rs:103) — the literal-R1 envelope gate actually lives in Rust at <code>version_presence</code>
+(lib.rs:390-402 → E300), so making it version-relative is a <strong>code change, not a schema <code>const</code>
+edit</strong>; <strong>(ii)</strong> <code>Meta.omirVersion const:"R1"</code> (common.schema.json:39 → E301); <strong>(iii)</strong> <code>Meta</code> is
+<code>additionalProperties:false</code> (common.schema.json:58); <strong>(iv)</strong> <strong>every resource schema AND the
+Bundle envelope set <code>additionalProperties:false</code></strong> (CR-6; Bundle.schema.json:30). Specify:</p>
+<ol>
+<li>R2 Bundles <strong>and</strong> resources carry <code>omirVersion:"R2"</code>; the R2 <code>common.schema.json</code> (under the
+R2 namespace) sets the <code>Meta.omirVersion</code> site to <code>const:"R2"</code> (or an <code>enum</code> of accepted
+majors), leaving R1 schemas frozen. E300/E301 become <strong>version-relative, not literal-R1</strong>.</li>
+<li>A consumer reads the <strong>major</strong> version and applies that version’s schema set, and <strong>MAY</strong>
+reject a newer <em>major</em> it does not implement. <strong>Forward-read of unknown <em>core</em> fields is
+constrained by closed schemas and is stated honestly:</strong> because R2.0 resource schemas are
+<code>additionalProperties:false</code>, an already-shipped R2.0 validator <strong>does NOT silently forward-read
+a new core field introduced by a later R2.x minor</strong> — it would hard-reject it (E120), exactly as
+“R1 readers do not tolerate R2.” Intra-major additivity therefore rides the <strong><code>extension[]</code>
+lane</strong> (always tolerated by <code>ignore-unknown-extensions</code>), <strong>not</strong> undeclared new top-level
+properties. Any genuinely new <em>optional core field</em> that we want same-major consumers to skip is
+shipped only when a minor schema bump relaxes the relevant object to a <strong>controlled, pattern-
+gated extension lane</strong>; absent that, it is a new-release item. The earlier blanket
+“SHOULD ignore unknown newer-minor fields” claim is dropped as unimplementable against closed
+schemas — this corrects the Overlook table’s “R1.x-additive ⇒ forward-readable” assumption.</li>
+<li><strong>Forward-read across majors is a property of R2+ tools about older majors, never of
+already-shipped R1 tools about newer ones.</strong> A published R1 validator <strong>WILL</strong> reject any R2
+bundle at the envelope (E300) <strong>by design</strong>. The honest compatibility guarantee is exactly
+<em>“R1 bundles stay valid forever”</em> + <em>“R2 readers accept R1,”</em> <strong>not</strong> <em>“R1 readers tolerate R2.”</em></li>
+<li>The reference validator becomes <strong>version-aware</strong> as a named, scoped rewrite, not a config
+switch: <strong>(a)</strong> parameterize <code>SchemaFiles</code>, <code>COMMON_ID</code>, and <code>RESOURCE_TYPES</code> (schemas.rs) by
+declared major version (an R1 set and an R2 set, each with its own <code>common.schema.json</code> <code>$id</code>);
+<strong>(b)</strong> build a version-keyed <code>Registry</code> and dispatch in <code>Schemas::build</code>; <strong>(c)</strong> the validator
+<strong>reads the declared Bundle-level <code>omirVersion</code> at PARSE time, before any structural / reference
+/ version check, and selects the version-keyed registry; E110/E120/E200/E300/E301 then all run
+against the selected set.</strong> (Selecting “before E300” is insufficient: today structural E110/E120
+run <em>first</em> (lib.rs:31-132) and E300 last (lib.rs:142), so an R2 bundle would be double-reported
+as wrong-version AND malformed-against-R1.) An unknown newer major <strong>short-circuits to a single
+E3xx at the envelope and runs NO resource-schema checks</strong>; <strong>(d)</strong> the embedded-schema
+<code>include_str!</code> mechanism carries both releases’ schemas. <strong>DoD:</strong> P1 is done only when the
+<strong>same binary</strong> validates a published R1 example AND an R2 example, and reports an R2-declared
+bundle as a single envelope-level E300 under the R1 set.</li>
+</ol>
+<h3 id="the-phases"><a class="header" href="#the-phases">The phases</a></h3>
+<p><strong>Phase 1 — Vocabulary (A).</strong> <strong>Split into 1a (the cheap adoption surface) and 1b (closed-vocabulary
+enforcement); 1b does NOT gate 1a and is not on the second-implementer critical path.</strong></p>
+<p><em>Phase 1a, in two decoupled moves so namespace-opening costs nothing on day one.</em> <strong>(1) Open the
+namespace first, additively.</strong> Publish the seed code systems and the vocabulary registry under
+<strong><code>https://omir.io/spec/R2/vocab/&lt;field&gt;</code></strong> as an <strong>R1.x-additive documentation + JSON-LD artifact</strong>
+(no schema type change), so other domains can NAME their own concepts immediately with <strong>zero
+bundle becoming R2</strong>. This is the real payoff of A-first under the directive — <em>opening the
+namespace</em>, not paying a major-version envelope break before any consumer benefits. <strong>(2) Widen the
+union when a coded value is demanded.</strong> Add a <strong><code>CodeableConcept</code></strong> def (<code>{ system, code, text }</code>)
+to <code>common.schema.json</code> (purely-additive per the §5.2 note) and widen <code>kind</code>, <code>experienceType</code>,
+<code>Entity.labels</code>, <code>Episode.source</code>, <strong>and <code>Relationship.relationType</code></strong> (the spec’s one <em>already-open</em>
+vocabulary — CONTRIBUTING §3.10:137-140, GOVERNANCE §5.1:282 — and the single largest real-world
+fragmentation vector; widening it is the <em>least</em> breaking because its bare branch is already
+<code>type:string</code>). <strong>Widen each closed enum’s string branch to the EXISTING enum, not to <code>type:string</code>:</strong>
+<code>anyOf: [ &lt;the R1 enum&gt;, CodeableConcept ]</code> (for <code>relationType</code>, <code>anyOf: [ {type:string}, CodeableConcept ]</code>). This keeps the legacy closed set hard-validated at <strong>Core</strong> (a bad <code>kind</code>
+like <code>"banana"</code> still fails E120). <strong>Make the seed/object mapping STRUCTURAL, not prose:</strong> in the
+R2 schema, constrain the <code>CodeableConcept</code> branch of each widened field so its <code>system</code> <strong>MUST NOT
+be that field’s own seed-system URL</strong> (<code>not:{properties:{system:{const:&lt;seedURL&gt;}}}</code>), so a seed
+value is expressible <strong>only</strong> as the bare string and the union is genuinely bijective at the Core
+schema layer — no Phase-1b dependency, no honor-system. Move (2) <strong>ships as the first R2 change</strong>;
+move (1) does not. Adding or retiring a seed value is governed per the operation, below.</p>
+<p><em>Seed-registry governance, split by direction (so additive growth stays cheap):</em></p>
+<ul>
+<li><strong>ADDING a seed value</strong> to an existing seed system is <strong>§5.1-additive open-vocabulary growth</strong>
+(it matches GOVERNANCE §5.1’s existing “new open-vocabulary values” carve-out): an ordinary PR
+under Maintainer review, <strong>NOT</strong> a full RFC. Routing every new concept through a 14-day ballot
+would make A <em>heavier</em> than today’s open-vocab path — the opposite of cheap adoption.</li>
+<li><strong>RETIRING, narrowing, or re-meaning a seed value</strong> is enum-narrowing: <strong>§3.1 RFC + ballot</strong>, and
+(see Phase 3) a <strong>canonicalization-version bump under §6</strong> so historical signatures are verified
+under the frozen seed table of their own version, never retroactively flipped.</li>
+</ul>
+<p><em>Normalization, stated precisely and per-field cardinality:</em></p>
+<ul>
+<li>A bare seed string <code>s</code> and the seeded coding <code>{system:&lt;seed URL&gt;, code:s}</code> are <strong>semantically
+equivalent for matching/comparison</strong>; the <strong>bare-string seed form is the canonical at-rest form</strong>.
+<strong>R2 introduces a NEW consumer rule</strong> (not a restatement of the existing extensions-scoped SHOULD):
+an <strong>R2 consumer MUST NOT canonicalize between bare-string and object form for seed-coded fields
+on re-export</strong> — lossless pass-through. This is a consumer-side tightening listed in the R2
+migration note; equality is a consumer obligation, not a structural check (the core validates
+union <strong>shape</strong> only, with the seed-system exclusion above making the shape itself bijective).</li>
+<li>For <strong>fields carrying a schema <code>default</code></strong> (<code>kind</code>, <code>tier</code>): <strong>do NOT mutate the R1 <code>default</code> in
+place</strong> (MemoryRecord.kind:18 <code>default:"memory"</code>, tier:31 <code>default:"working"</code> live on an OMM-1
+type and are read by default-applying codegen/normalizers). The R2 schemas <strong>keep <code>default</code></strong>;
+the <strong>canonical at-rest form is <em>omission</em> when a field equals its default</strong> (not the explicit
+value). Phase 3’s canonicalizer normalizes a defaulted field to its <strong>omitted</strong> form before
+building the signed map M, so absent and explicit-default sign identically. Removing/relocating a
+<code>default</code> would change the value seen by default-applying consumers — so this is a <strong>documented
+R2 migration item under “behavior of absent fields”</strong> for <strong>both <code>kind</code> and <code>tier</code></strong> (“an absent
+<code>kind</code> MUST be interpreted as <code>memory</code>; an absent <code>tier</code> as <code>working</code>”), not a silent edit.</li>
+<li>For <strong>scalar optional fields with no default</strong> (<code>experienceType</code>, <code>Episode.source</code>): <strong>absent
+stays absent</strong> and is distinct from <code>{text:s}</code>.</li>
+<li>For the <strong>array field</strong> <code>Entity.labels</code>: the legacy <code>"other"</code> + label-extension idiom is
+<strong>DEPRECATED</strong> under §6 in favor of a CodeableConcept item. Update <code>context.jsonld</code>
+<code>labels</code>/term mappings accordingly.</li>
+<li>A <strong>non-seed</strong> coded value <strong>MUST</strong> use the object form; a <strong>seed</strong> value <strong>MUST</strong> use the bare
+string — now enforced structurally (above), so Phase-3 attestation canonicalization collapses the
+union to one byte sequence.</li>
+</ul>
+<p><em><strong>Companion item (atomic with the widening, NOT deferred to 1b): re-key every behavioral MUST that
+references a widened enum value.</strong></em> profiles.md:88-90 makes prospective-memory filtering a
+behavioral MUST keyed on the literal <code>experienceType:"intention"</code>. The moment 1a admits the object
+form, an unmodified profile MUST is silent on <code>experienceType:{system:&lt;seed&gt;, code:"intention"}</code> —
+a safety-relevant recall gap. The <strong>normative re-key</strong> (“any <code>experienceType</code> whose canonical form
+is the seeded <code>intention</code> coding MUST be filtered from ordinary recall”) <strong>lands in the SAME RFC as
+the experienceType widening</strong>, with a 1a-DoD fixture proving an object-form <code>intention</code> is still
+filtered. Only the machine-readable binding <em>engine</em> stays in 1b.</p>
+<p><em>JSON-LD <code>@context</code> audit (a DoD blocker, not an afterthought):</em> widening a field that shares an
+overloaded <code>@context</code> term silently corrupts the RDF lift of existing bundles. In R1, <strong>one term
+<code>source</code> is bound to a single bare <code>omir:source</code> with no per-field <code>@type</code> (context.jsonld:33), yet
+four fields use it</strong>: <code>Episode.source</code> (being widened), <code>Bundle.source</code>, <code>Meta.source</code>,
+<code>Provenance.source</code> (all plain strings). A coded <code>Episode.source</code> would lift a <code>{system,code,text}</code>
+node onto a predicate that elsewhere carries a literal, and <code>system</code>/<code>code</code>/<code>text</code> (unmapped) would
+fall to accidental <code>@vocab</code> predicates. <strong>Before widening any field, split every overloaded term in
+the R2 <code>context.jsonld</code>:</strong> give the widened <code>Episode.source</code> its own term (<code>episodeSource → omir:episodeSource</code>) typed for an embedded coding, add <code>CodeableConcept</code>’s <code>system</code>/<code>code</code>/<code>text</code>
+with explicit typing, and keep the three string <code>source</code> fields on a separate literal predicate.
+<strong>DoD:</strong> a Turtle/N-Quads golden-file test that the R1 minimal bundle and an R2 coded bundle both
+lift to the intended triples.</p>
+<p><em>Honest status:</em> this is a <strong>type change to existing fields</strong>, two of which live on MemoryRecord
+(now OMM-1 under P0). A bare-string producer stays valid; an object value is rejected by an R1
+consumer; an R2 bundle is opaque to an unmodified R1 consumer at the envelope (per P1). <em>Domain
+vocabularies (robotics, healthcare) live under their own non-omir.io URLs; the omir.io namespace is
+reserved for WG-published seed systems only.</em> Target: <strong>R2 · OMM-1</strong>. <em>A-first is about <strong>opening the
+namespace</strong> (move 1, day-one, additive) so other domains can name their own concepts; the union
+widening (move 2) is held to R2 and is the cheapest <em>additive spec change</em> — but milestone zero
+(below) is the literally cheapest adoption.</em></p>
+<p><em>Phase 1b — closed-vocabulary enforcement (separate work item, off the 1a critical path).</em>
+<strong>Extend profiles.md</strong> with a <strong>machine-readable</strong> terminology-binding artifact (a profile schema,
+not prose) binding a CodeableConcept field to a code system/value set with a binding strength
+(<code>required</code>/<code>extensible</code>/<code>preferred</code>), mirroring FHIR. <strong>Implement profile-constraint checking</strong> in
+the reference validator — today there is <strong>no code path</strong> (lib.rs:144 is a bare comment): this is a
+<strong>net-new subsystem</strong> (profile loader, <code>meta.profile</code> dispatch, value-set membership check, new
+finding codes: <code>required</code> → error, <code>extensible</code>/<code>preferred</code> → warning), with passing and failing
+examples. <strong>Re-issue the three R1 reference profiles</strong>, splitting by kind:</p>
+<ul>
+<li><strong>Genuinely REQUIRED enums</strong> (<code>omir-coding-agent.kind</code>) → <code>required</code>-strength bindings. <strong>The
+required-strength binding requires the field to be PRESENT</strong> — an absent <code>kind</code> relying on the
+Phase-1a normative default does <strong>not</strong> satisfy the profile (a profile narrows the base; presence
+is the thing it guarantees). Cross-referenced from the 1a “default” bullet.</li>
+<li><strong>SHOULD value fields</strong> (<code>omir-coding-agent provenance.sourceType</code> (profiles.md:41),
+<code>Entity.labels</code>) → <code>preferred</code>/<code>extensible</code> bindings reported as <strong>warnings, never errors</strong>.
+<strong>Binding strength MUST match the original RFC-2119 keyword; promoting a SHOULD to an enforced
+<code>required</code> binding is a new-release narrowing, not a re-expression.</strong></li>
+<li><strong>Behavioral MUSTs</strong> are <strong>NOT terminology bindings</strong> and stay as prose RFC-2119 requirements.
+Re-issuing a profile <strong>MUST preserve every behavioral MUST verbatim</strong> (the intention-filtering
+re-key already landed in 1a); terminology bindings constrain <strong>values</strong>, not consumer behavior.</li>
+</ul>
+<p><strong>Phase 2 — Identity (B: Agent) and Resolution (C).</strong> <strong>B (Agent) is a prerequisite ONLY for E2
+(agent-attribution hops); the headline trust deliverable E1 depends only on A and the existing
+<code>Provenance</code> and ships without Agent</strong> — so Agent’s adoption gate never holds the trust pillar
+hostage. <strong>B:</strong> introduce an <code>Agent</code> (Principal) resource and optional <code>authoredBy</code> / <code>owner</code>
+references. <strong>C:</strong> add optional <code>Entity.identifier[]</code> (<code>{ system, value }</code>), <code>aliases[]</code>, and a
+<code>sameAs</code> link so two stores can declare cross-system identity and merge.
+<em>Honest status, partitioned by whether a field touches the <code>Reference</code> pattern:</em></p>
+<ul>
+<li><strong>§5.1-additive (R1.x-eligible):</strong> <code>Entity.identifier[]</code> and <code>aliases[]</code> (a new non-<code>ref</code> def
+<code>{system,value}</code> and string array — no <code>Reference</code> widening).</li>
+<li><strong>§5.2/§3.1-breaking (R2/RFC-gated):</strong> <strong>any field that can reference <code>Agent</code></strong> — <code>authoredBy</code>,
+<code>owner</code>, and <code>sameAs</code> insofar as it permits Agent targets — because each forces the
+<code>common.schema.json#/$defs/Reference.pattern</code> widening. These are <strong>NOT</strong> R1.x-additive.
+Adding <code>Agent</code> does not invalidate any existing R1 bundle, but the conformance/bundle prose
+enumerating “the four core resources” <strong>must</strong> change in the same PR. Required, atomic work items:</li>
+<li><strong>(a1)</strong> author <code>schemas/Agent.schema.json</code>; <strong>(a2)</strong> add its <code>$ref</code> to <code>Bundle.entry.items.oneOf</code>
+(a <code>oneOf</code> of resource-schema <code>$ref</code>s, <strong>not</strong> a regex); <strong>(a3)</strong> widen the
+<strong><code>common.schema.json#/$defs/Reference.pattern</code> regex</strong> (today <code>^(MemoryRecord|Entity| Relationship|Episode)/...</code>, common.schema.json:18) to include <code>Agent</code> (the single load-bearing
+pattern change).</li>
+<li><strong>(a4)</strong> extend the validator’s <code>SchemaFiles</code> struct + <code>from_dir</code>/<code>embedded</code> loaders + <code>by_type</code>
+map (schemas.rs is a hard-coded 6-file / 4-type shape that will not pick up a new type
+automatically); update <code>RESOURCE_TYPES</code> (item b) and <strong>both</strong> “four core resources” message sites:
+the validator E101 string (lib.rs:124) <strong>and</strong> validator/README.md:93.</li>
+<li><strong>(b)</strong> add <code>Agent</code> to <code>RESOURCE_TYPES</code>.</li>
+<li><strong>(c)</strong> <strong>replace the hand-coded per-field reference walk with a registry-driven walker.</strong> The
+mandate is <strong>not</strong> “resolve every <code>{ref:"Type/id"}</code> anywhere.” It resolves <strong>(i)</strong> every
+Reference-object <code>{ref:...}</code> at a <strong>schema-declared Reference-typed field</strong> — <strong>NEVER</strong> inside
+<code>extension[].valueJson</code> or any free-form/<code>additionalProperties</code> map (a vendor may legitimately
+put a <code>{"ref":...}</code>-shaped object in <code>valueJson</code>); <strong>and (ii)</strong> every closed-world <strong>bare-id</strong>
+field enumerated in CR-5 (currently <code>MemoryRecord.parentId</code>, special-cased at lib.rs:219-230).
+Drive the walk from an <strong>explicit registry of <code>(field-path → target-type-SET, ref-shape)</code>
+entries</strong> (a <strong>set</strong>, because some R2 slots are poly-typed — see (c′)). <strong>Seed the registry with
+the FULL existing closed-world set as ground truth</strong> from lib.rs:217-239 and CR-5: <code>entityRefs → {Entity}</code> (on MemoryRecord and Episode), <code>Relationship.from → {Entity}</code>, <code>Relationship.to → {Entity}</code>, <strong><code>Relationship.sourceEpisode → {Episode}</code></strong> (silently dropped in earlier drafts — its
+E201 expected-type=Episode check must survive the refactor), <code>MemoryRecord.parentId → {MemoryRecord}</code> (bare-id). Adding <code>authoredBy</code>/<code>owner</code>/<code>sameAs</code>/<code>provenance.chain[]</code> then
+<strong>extends the registry</strong> rather than relying on shape-sniffing, and the per-field <strong>target type is
+preserved</strong> (E201 must still reject, e.g., <code>Agent/x</code> in <code>Relationship.from</code>).</li>
+<li><strong>(c′)</strong> Change E201’s check from <code>ref_type == expected</code> to <code>expected_set.contains(ref_type)</code>
+(lib.rs:337), since Phase 3’s <code>provenance.chain[].from</code> is <strong>poly-typed</strong> (any in-Bundle resource)
+while <code>chain[].agent</code> is <strong>mono-typed</strong> to <code>{Agent}</code>. The current single-type tuple cannot model
+this; the set form can.</li>
+<li><strong>(d)</strong> amend Conformance CR-5 by <strong>appending</strong> the new reference-bearing fields to the existing
+closed-world list (never re-deriving it from the Reference type); state that the closed-world set
+is exactly the schema’s Reference-typed fields <strong>plus</strong> the enumerated bare-id fields, and record
+the <strong>per-field target-type table</strong> in the migration note.</li>
+<li><strong>(e)</strong> register <code>Agent</code> in the JSON-LD <code>@context</code>; <strong>(f)</strong> ship a migration note.</li>
+</ul>
+<p>For Phase 5’s federation form, <strong>do NOT relax the shared Reference pattern</strong>: define the
+external-reference form as a <strong>distinct <code>$def</code> (<code>ExternalReference</code>, its own property, not <code>ref</code>)</strong>
+so the Core closed-world pattern is untouched. Target: <strong>R2 · B (Agent): OMM-0 / C: OMM-0</strong> —
+C is graded <strong>OMM-0 “mechanism present, cross-system merge unverifiable single-party”</strong>, not OMM-1:
+<code>identifier[]</code>/<code>aliases</code>/<code>sameAs</code> are inert until either a second store exists or federation (I)
+lands. C’s identifier fields and I’s federation mechanism are a <strong>matched pair</strong> whose combined
+value requires the second implementer; neither is claimed as delivered interop value at single-party.</p>
+<p><strong>Phase 3 — Provenance &amp; trust: W3C PROV (E), the pillar.</strong> Re-shape <code>Provenance</code> into a
+PROV-aligned derivation chain with optional, redaction-aware attestation. Detailed below. E splits:
+<strong>E1</strong> (chain over prior resources + per-hop credibility) depends only on A and the existing
+<code>Provenance</code>; <strong>E2</strong> (agent-attribution hops referencing <code>Agent</code>) depends on B. <strong>The critical
+path is <code>A → E1-chain</code></strong> — pure additive optional structure, immediately reviewable by a second
+party. <strong>The heavyweight attestation subsystem (det-CBOR / M / inclusion allow-list / redaction
+commitments / key resolution) is a PARALLEL track explicitly OFF the critical path</strong>, because
+cross-verification is its only meaningful test and is worthless with one implementer: it cannot
+reach OMM-1 or interop until the P2 second-verifier milestone is met. This honors “E emphasized” as
+the trust <strong>design</strong> pillar without front-loading a multi-quarter cryptographic interop project
+ahead of any second implementer. <strong>The E1/E2 discriminator is normative:</strong> a record is <strong>E1</strong> only
+if its chain contains <strong>no <code>agent</code> operand and no agent-naming attestation</strong>; the moment any hop
+carries <code>agent</code> <strong>or</strong> the attestation’s signed subset includes an <code>Agent</code> reference, it is <strong>E2</strong>
+and capped at the Agent OMM floor. E2 <strong>MUST NOT</strong> advance past OMM-0 until <code>Agent</code> is at least
+OMM-1 with Phase-2 Reference support. Target: <strong>R2 · E1-chain: OMM-1 / attestation &amp; E2: OMM-0
+(capped at the Agent floor; non-interoperable until P2)</strong>.</p>
+<p><strong>Phase 4 — Sensitivity &amp; modality (F, D).</strong> <strong>F:</strong> an optional governance block (classification,
+legal basis, retention / <code>deleteAfter</code>, <strong>redaction markers</strong>, consent reference) — plus a typed
+<strong><code>redactionCommitments[]</code></strong> array (<code>{ fieldPath, commitment, salt }</code>) so per-field signed
+commitments have a declared schema home under <code>additionalProperties:false</code> (without it there is no
+legal place to store a commitment for an arbitrary redactable field). The redaction <em>mechanism</em> is
+co-designed with E’s attestation envelope (Phase 3). On introducing the core governance block,
+<strong>deprecate the WG-published, omir.io-namespaced, profile-REQUIRED <code>pii-class</code> extension</strong>
+(<code>https://omir.io/spec/R1/extension/pii-class</code>, profiles.md:91-93) under §6 (deprecated R2, earliest
+removal R3): because it is <strong>required</strong> by <code>omir-personal-assistant</code>, during the R2 window that
+profile <strong>MUST accept EITHER the deprecated extension OR the core <code>classification</code> field</strong> (so no
+existing producer is instantly non-conformant), and the R2 migration note <strong>MUST carry an explicit
+field-by-field value-shape mapping</strong> (pii-class → core <code>classification</code>). <strong>D:</strong> a multi-part
+content model (<code>contentType</code> + inline-or-<code>MediaReference</code>) and an algorithm-neutral <code>Embedding</code>
+representation <code>{ space, model, dims, dtype, vector?|ref? }</code> where <code>space</code> is an <strong>opaque equality
+key</strong> (vectors comparable <strong>iff</strong> <code>space</code> strings are byte-equal; no cross-<code>space</code> comparability
+claim), <code>dims</code> <strong>MUST</strong> equal the vector length, and <code>dtype</code> pins the byte form. <em>On-the-wire:</em> a
+JSON decimal array in <code>.omir</code>, a typed CBOR array in <code>.omirb</code>. <strong>Because <code>.omir</code> decimal and
+<code>.omirb</code> dtype bytes are not byte-reconstructable from each other, embedding vectors are EXCLUDED
+from signed images by default; if ever committed, the commitment is over a single dtype-independent
+canonical-decimal (shortest-round-trip) form, never the dtype byte form</strong> (see Phase 3). <em>Honest
+status:</em> F and D are <strong>new optional fields</strong>; absent the Agent/ref dependency they qualify for
+R1.x-additive (footnote ¹). Target: <strong>R2 · OMM-0</strong> (D grades OMM-0 until two vendors demonstrate a
+cross-store similarity round-trip).</p>
+<p><strong>Phase 5 — Refinements: fix G, J, and K (and fold in H, I).</strong></p>
+<ul>
+<li><strong>G — uncertainty:</strong> keep Beta as default; <strong>add</strong> a general uncertainty value (credible
+interval, or named distribution + params) and optionally separate <em>epistemic</em> from <em>aleatoric</em>.
+New optional fields — R1.x-additive-eligible.</li>
+<li><strong>J — typed attributes:</strong> <strong>do not replace</strong> the string maps. <strong>Add</strong> an additive optional
+sibling channel — <code>Entity.typedAttributes[]</code> / <code>Episode.typedMetadata[]</code>, each <code>{ key, value }</code>
+where <code>value</code> is a <strong>shared <code>TypedValue</code> def in <code>common.schema.json</code></strong> (number, boolean,
+dateTime, quantity-with-unit, CodeableConcept, reference; the def-add is purely additive) — and
+<strong>mark <code>attributes</code>/<code>metadata</code> DEPRECATED</strong> under §6 (deprecated R2, earliest removal R3),
+updating <code>context.jsonld</code>. <strong>Adding the typed channel AND marking the maps deprecated are both
+§5.1-additive and R1.x-eligible</strong> (per §6.4 validators only <em>warn</em> on deprecated-but-present
+items); <strong>only the eventual R3 REMOVAL of the maps is the breaking boundary.</strong> CodeableConcept
+(from A) is one member of the union; keep the dependency <code>A → J</code>, and J’s typed channel caps at
+A’s grade. <strong><code>TypedValue</code> is NOT reused in the <code>Extension</code> value slots</strong> — constraining them to a
+closed union would remove arbitrary <code>valueJson</code> (a §5.2 break violating the typed-extension
+escape-hatch invariant). <code>Extension.valueJson</code> stays maximally permissive; if typed extension
+values are later wanted, <strong>add</strong> an optional <code>valueTyped</code> (<code>$ref TypedValue</code>) <strong>alongside</strong> the
+existing <code>value*</code> fields (purely additive) — never retro-type <code>valueJson</code>.</li>
+<li><strong>K — i18n:</strong> BCP-47 <strong>language tags</strong> on textual content and entity names, with optional
+multilingual variants. New optional fields — R1.x-additive-eligible.</li>
+<li>Fold in <strong>H</strong> (full bitemporality + imprecise/interval time — new optional fields) and <strong>I</strong>
+(federation). <strong>I requires a mechanism before a target:</strong> introduce the syntactically distinct
+<strong><code>ExternalReference</code> <code>$def</code></strong> (its own property, an absolute/identifier-based locator built on
+Theme C’s identifiers, <strong>never</strong> the bare <code>ResourceType/id</code> and <strong>never</strong> a relaxed Core pattern);
+define a third conformance level <strong>“Federated”</strong> in Conformance.md (via RFC) that relaxes CR-5
+<strong>only</strong> for explicitly-external references; <strong>closed-world remains the Core default and the
+R1/R2 invariant is preserved</strong> for anything not claiming Federated. <strong>I is blocked by (1)</strong> the
+widened Reference (Phase 2 B-work), <strong>(2)</strong> the new <code>ExternalReference</code> <code>$def</code>, and <strong>(3)</strong> the
+CR-5 carve-out RFC — <strong>C’s identifiers are an <em>input</em> to how external references are expressed,
+not the gate.</strong> Target: <strong>R2+ · OMM-0</strong>.</li>
+</ul>
+<h3 id="phase-3-in-depth--aligning-provenance-with-w3c-prov"><a class="header" href="#phase-3-in-depth--aligning-provenance-with-w3c-prov">Phase 3 in depth — aligning <code>Provenance</code> with W3C PROV</a></h3>
+<p>W3C <strong>PROV</strong> models the world with <strong>Entity</strong> (a thing), <strong>Activity</strong> (something that acts over
+time), and <strong>Agent</strong> (who/what is responsible), related by a <strong>type-constrained</strong> verb set whose
+relations take incompatible operands: <code>wasAttributedTo</code> is Entity→Agent; <code>wasDerivedFrom</code> is
+Entity→Entity; <code>wasGeneratedBy</code> is Entity→Activity (generated entity is the subject); <strong><code>used</code> is
+Activity→Entity</strong> and <strong><code>wasInformedBy</code> is Activity→Activity</strong> — both Activity-subject. OMIR’s flat
+<code>{ source, sourceType, credibility, externalId }</code> is the <em>common case</em>; the proposal lets it
+<strong>expand into a chain</strong> when trust matters. <strong>The chain’s implicit subject is the resource carrying
+the <code>provenance</code> block, lifting to <code>prov:Entity</code>.</strong> Each step is a <strong>discriminated union keyed on
+<code>role</code></strong> that pins its legal operands. <strong>To avoid a fatal <code>@context</code> term collision, the chain does
+NOT reuse the globally-bound terms <code>from</code> (Relationship operand, context.jsonld:158) or
+<code>credibility</code> (context.jsonld:91): it uses distinct field names <code>derivedFrom</code> and <code>hopCredibility</code></strong>
+(JSON-LD term definitions are document-global, not subtree-scoped — the same term cannot mean two
+things under one merged context).</p>
+<pre><code class="language-json">"provenance": {
+  "source": "design-review",
+  "credibility": 0.92,
+  "aggregateCredibility": { "value": 0.75, "model": "product" },
+  "chain": [
+    { "role": "wasAttributedTo", "agent": { "ref": "Agent/agent-a" },         "at": "2026-05-30T11:42:00Z", "hopCredibility": 0.95 },
+    { "role": "wasDerivedFrom",  "derivedFrom": { "ref": "Episode/ep-launch-chat" }, "at": "2026-05-30T11:42:03Z", "hopCredibility": 0.90 },
+    { "role": "wasGeneratedBy",  "activity": { "id": "act-consolidation", "label": "consolidation", "at": "2026-05-31T03:00:00Z" }, "hopCredibility": 0.88 }
+  ],
+  "attestation": { "alg": "ed25519", "keyId": "did:web:example.org#k1", "key": "&lt;inline JWK&gt;", "agent": "Agent/agent-a", "at": "2026-05-31T03:00:01Z", "signature": "base64url…" }
+}
+</code></pre>
+<ul>
+<li>
+<p><strong>Role/operand validation is normative and enforced.</strong> With the bearing resource as subject, the
+<strong>Entity-subject</strong> verbs are well-formed and enumerated: <code>wasAttributedTo</code> → MUST carry <code>agent</code>,
+MUST NOT carry <code>derivedFrom</code>; <code>wasDerivedFrom</code> → MUST carry <code>derivedFrom</code> (a prior resource), MUST
+NOT carry <code>agent</code>; <code>wasGeneratedBy</code> → MUST carry an <code>activity</code> operand, MUST NOT carry <code>agent</code>. A
+validator rule <strong>rejects role/operand mismatches.</strong> The <strong>Activity-subject</strong> verbs <code>used</code>,
+<code>wasAssociatedWith</code>, <strong>and <code>wasInformedBy</code></strong> are <strong>ALL reserved</strong> (none can take the bearing
+<code>prov:Entity</code> as subject) until a first-class Activity referent exists. (<code>wasInformedBy</code> is
+Activity→Activity, the same subject-type problem as the others — it was previously and
+contradictorily permitted with an inline activity; that permission is <strong>dropped</strong>, leaving
+<code>wasGeneratedBy</code> as the only Activity-touching verb in R2.)</p>
+</li>
+<li>
+<p><strong><code>derivedFrom</code> is poly-typed; <code>agent</code> is mono-typed.</strong> <code>wasDerivedFrom.derivedFrom</code> may resolve
+to <strong>any in-Bundle resource type</strong> (Episode, MemoryRecord, Entity, Relationship, Agent), so its
+registry entry carries the <strong>full resource-type set</strong> and role/operand validation is what narrows
+it per hop; <code>wasAttributedTo.agent</code> is mono-typed to <code>{Agent}</code>. The widened E201 set-membership
+check (Phase 2 c′) covers both.</p>
+</li>
+<li>
+<p><strong>Activity is an inline shape, not a literal and not a top-level resource.</strong> R2 carries Activity
+<strong>within the hop</strong> as <code>activity: { id, label?, at? }</code> (no new <code>Bundle.entry</code>/oneOf type, so the
+“five core resources” prose is untouched). The PROV-O lift mints a <strong>blank-node <code>prov:Activity</code></strong>
+from it. Activity operands carry <strong>no <code>ref</code></strong> and are <strong>EXEMPT from closed-world resolution</strong>; the
+walker keys strictly on <code>ref</code>/<code>derivedFrom</code>/<code>agent</code> and skips them. Promoting Activity to a
+first-class resource is deferred.</p>
+</li>
+<li>
+<p><strong>Closed-world applies to the resource-typed chain refs.</strong> <code>chain[].agent</code> and
+<code>chain[].derivedFrom</code> are <strong>closed-world references in R2</strong> and MUST resolve within the Bundle;
+the registry-driven walker covers them. <strong>Chain-ref integrity is a DOCUMENT property:</strong> the
+validator walks it unconditionally. A producer that cannot include an upstream Agent/Episode MUST
+inline a minimal resource, satisfy the hop with a <strong>placeholder tombstone</strong> of the right type, or
+omit the hop — never emit a dangling ref. A placeholder tombstone Agent MUST carry an explicit
+<code>placeholder:true</code> marker. <strong>Cross-Bundle provenance is deferred to Federated</strong>, never permitted
+at Core; until I lands, attested records carry their provenance closure.</p>
+</li>
+<li>
+<p><strong>Per-hop credibility is the only normative trust number; any roll-up is optional and
+non-normative.</strong> <code>chain[].hopCredibility</code> is a <strong>UnitInterval</strong>, added to the CR-7 [0,1]
+enumeration and bound to <code>common.schema.json#/$defs/UnitInterval</code>. The legacy
+<code>provenance.credibility</code> <strong>keeps its R1 meaning</strong> — it is <strong>not</strong> silently redefined as a derived
+product. Any roll-up lives in a <strong>new optional</strong> <code>provenance.aggregateCredibility { value: UnitInterval, model: "product"|"min"|… }</code>. <strong><code>product</code> is a series-reliability / weakest-chain
+heuristic, NOT an independent-evidence probability</strong> — the “independent-evidence” label is dropped
+as false. A SHOULD-level check warns when <code>aggregateCredibility.value</code> is inconsistent with
+<code>model</code> over the present hops (rounding-tolerant).</p>
+</li>
+<li>
+<p><strong>Attestation — explicitly an OMM-0, off-critical-path, parallel track</strong> until two independent
+verifiers demonstrate cross-encoding verification AND the A-normalization and J-migration
+canonicalization versions are pinned. <strong>The validator cannot enforce any of this today</strong> (Outcome
+is a closed <code>{Pass, Fail}</code> enum, report.rs:64-69; <code>Check</code> is <code>{Structural, ReferenceIntegrity, VersionPresence, Profile}</code>, report.rs:45-52; lib.rs has no crypto, no CBOR, and reads only parsed
+<code>.omir</code> JSON). The attestation track therefore includes an <strong>honest validator work item paralleling
+Phase 1b’s “net-new subsystem”:</strong> <strong>(a)</strong> add an <code>.omirb</code>/CBOR reader with a declared sub-profile
+tag byte; <strong>(b)</strong> add a <strong><code>Check::Attestation</code></strong> variant and a per-attestation finding triplet
+<strong><code>verified</code> / <code>tampered</code> / <code>unverifiable</code></strong> that is <strong>SEPARATE from the document-level Pass/Fail</strong>
+— an <code>unverifiable</code> attestation <strong>MUST NOT</strong> flip <code>core_conformant</code> to false (it is orthogonal to
+schema conformance); <strong>(c)</strong> scope the ed25519/key code as OMM-0 and <strong>OUT of the Core conformance
+path</strong>, so a Core-R2 consumer that does not verify is still conformant. <strong>Until (a)-(c) land, the
+bincode-under-attestation rule is documentation only and attestation is OMM-0/non-interoperable —
+no validator-enforced MUST is claimed.</strong> The mechanism, when built:</p>
+<ul>
+<li><strong>Signing input is a canonical typed map M</strong> defined by a <strong>closed, version-tagged INCLUSION
+allow-list</strong>, enumerated <strong>per signable resource type</strong>. For <strong>MemoryRecord</strong>, M includes <code>id</code>,
+<code>resourceType</code>, a <code>content</code>-commitment, the <strong>ordered</strong> chain (roles, operand
+<code>ref</code>/inline-activity-id, per-hop <code>hopCredibility</code>), the asserting <code>Agent</code> ref + <code>keyId</code> + the
+<strong>inline signing key</strong> + signing-time <code>at</code>, and <code>classification</code> once Phase 4 lands; M
+<strong>excludes</strong> mutable/operational fields (<code>decay.*</code>, <code>meta.lastUpdated</code>, <code>version</code>). Entity/
+Relationship subsets, if signable, are enumerated separately (Entity excludes <code>mentionCount</code>,
+<code>salience</code>, <code>lastSeenAt</code>; Relationship excludes <code>strength</code>, <code>validAt</code>, <code>invalidatedAt</code>).</li>
+<li><strong>Scope.</strong> An attestation signs the bearing resource’s enumerated subset <strong>plus a
+hash-commitment of each referenced resource’s <code>id</code>+<code>resourceType</code></strong> (not their mutable bodies).</li>
+<li><strong>One canonical byte form.</strong> The signature is over <strong><code>SHA-256(det-CBOR(M))</code></strong> (RFC 8949 §4.2).
+A JSON (<code>.omir</code>) signer/verifier <strong>MUST construct the identical typed map M and the identical
+det-CBOR(M) bytes</strong>; JCS is at most an aid to building M, never an alternate signed form. <strong>No
+field whose <code>.omir</code> and <code>.omirb</code> representations are not provably byte-reconstructable from each
+other may enter a signed commitment</strong> (dtype-pinned binary byte forms MUST NOT) — this clause is
+also written into encodings.md so encoding-neutrality (Principle 5) and one-canonical-form hold
+simultaneously.</li>
+<li><strong>Number normalization is a single pre-CBOR step</strong> applying to <strong>ALL</strong> signed numeric fields
+(not only UnitInterval/score): every JSON number in M maps to its <strong>shortest round-tripping
+decimal</strong>, so <code>9</code>, <code>9.0</code>, <code>9.00</code> collapse (the shipped corpus already drifts —
+<code>{alpha:9,beta:1}</code> in encodings.md:36 vs <code>{alpha:9.0,beta:1.0}</code> in minimal-bundle.omir:82) and
+<strong>CBOR floats are forbidden for signed numeric fields</strong>. A KAT fixture proves <code>{alpha:9}</code> and
+<code>{alpha:9.0}</code> sign identically. Defaulted fields are normalized to their <strong>omitted</strong> form before
+M is built, so absent and explicit-default sign identically (Phase 1a). A KAT fixture proves two
+MemoryRecords differing only in presence/absence of a default-valued <code>kind</code> produce the identical
+digest.</li>
+<li><strong>CodeableConcept-union fields are pre-canonicalized into M</strong> (seed values → bare string —
+enforced bijective by the Phase-1a seed-system exclusion — non-seed → <code>{system,code}</code> with
+<code>text</code> dropped) <strong>before</strong> CBOR. The <strong>canonicalization-profile version is carried INSIDE M</strong>
+(not merely on the envelope), and the verifier selects canonicalization rules by the version
+recorded <strong>in M</strong>, never by its current profile. A seed retirement (Phase 1a) is a
+canonicalization-version bump; attestations are verified under their own version’s <strong>frozen,
+per-release-published seed table (§5.3)</strong> — so seed evolution is <strong>non-retroactive</strong> to
+historical signatures.</li>
+<li><strong>Ordered chain, not a set.</strong> M commits to the <strong>ordered</strong> chain (a det-CBOR array of per-hop
+commitments, equivalently a Merkle root), so reorder/drop/duplicate is detected.</li>
+<li><strong>Key authority is self-contained — verification is decidable from the Bundle alone.</strong> Because
+OMIR is an <strong>at-rest</strong> format with a closed-world invariant, a <code>verified</code> result <strong>MUST be a
+pure function of the bundle bytes</strong>. M therefore <strong>inlines the full public key (JWK)</strong> used and
+<strong>MAY</strong> inline a short Agent-signed key-authorization assertion binding <code>keyId</code> at <code>at</code>;
+verification = signature valid over M + key-binding valid + <code>at</code> within validity. <strong>Out-of-band
+DID/HTTPS key resolution is demoted to an OPTIONAL Federated-level enhancement</strong> (it belongs
+with Theme I, which already gates open-world). A <code>sameAs</code> merge <strong>MUST NOT rewrite a signed Agent
+id</strong>. Lawful key rotation/revocation does not retroactively flip historical attestations.</li>
+<li><strong>Redaction is cryptographically honest — and the security claim is stated honestly.</strong> For each
+redactable field M contains a <strong><code>commitment = H(field-bytes ∥ per-field-salt)</code></strong> (stored in the
+Phase-4 <code>redactionCommitments[]</code>) and <strong>MUST NOT</strong> contain the plaintext. Redaction deletes only
+the plaintext and leaves the <code>commitment</code>, so the signature still verifies; absent plaintext +
+intact signature-covered commitment = <strong>“lawfully redacted, chain intact,” NOT tampered</strong>.
+<strong>Because the salt is retained in the at-rest document, it provides ZERO brute-force resistance
+for low-entropy fields</strong> — the honest property is <strong>unlinkability</strong> (commitments are
+non-correlatable across resources/documents), not brute-force resistance. For genuine
+brute-force resistance a producer MUST use a high-entropy per-field nonce that is itself
+<strong>deleted at redaction time</strong> (accepting that such fields can never be re-verified against
+plaintext) <strong>or</strong> explicit out-of-band salt escrow; the chosen model is recorded. The
+impossible “tombstone bearing the same hash” phrasing is dropped: the tombstone bears a
+<code>redacted:true</code> marker; the sibling <code>commitment</code> carries the hash.</li>
+<li><strong>Erasure dominates the trust pillar — the conflict is acknowledged, not legislated away.</strong> When
+a data subject’s erasure is legally compelled and the subject <em>is</em> the signing Agent, retaining
+id + key-commitment + an attributing signature can itself be unlawful personal data. So: Agent
+identity enters M via the <strong>erasable salted commitment</strong> (above), not a raw resolvable ref;
+erasing the Agent’s PII deletes the plaintext while the commitment + signature survive, and
+closed-world is preserved by a <strong>placeholder tombstone carrying that commitment</strong>. The earlier
+“MUST NOT sign over a placeholder Agent reference” is relaxed to <strong>“MUST NOT sign over a
+placeholder that carries no key-commitment”</strong> — i.e. sign over the commitment, not the
+resolvable id. When erasure nonetheless forces signature invalidation, the verifier reports the
+record as <strong><code>unverifiable-by-erasure</code></strong> (a defined sub-outcome), <strong>NOT</strong> <code>tampered</code>. The hard
+privacy invariant is <strong>not</strong> subordinated to the trust pillar.</li>
+<li><strong>Encoding cannot silently break a signature — and the rule lives in the SPEC, not only the
+validator.</strong> A producer emitting <code>.omirb</code> for a bundle containing any <code>provenance.attestation</code>
+<strong>MUST</strong> use the <strong>CBOR sub-profile</strong>, never <strong>bincode</strong> (bincode is not self-describing and
+cannot reconstruct M). This narrows an existing release-published allowance, so it is an <strong>R2
+normative edit to encodings.md §“.omirb binary profile” (encodings.md:84-101) under §3.1/§5.2</strong>:
+amend the “bincode permitted as an internal sub-profile” sentence (encodings.md:90) to
+“…permitted <strong>EXCEPT when the bundle carries any <code>provenance.attestation</code>, in which case the CBOR
+sub-profile is REQUIRED</strong>.” The validator <code>Check::Attestation</code> then enforces a rule the spec
+actually states. An attestation whose canonical form cannot be reconstructed is reported
+<code>unverifiable</code> — a third outcome distinct from <code>verified</code>/<code>tampered</code>. A cross-verifier
+<strong>known-answer test vector</strong> (canonical det-CBOR bytes + digest over the worked example) ships
+as a DoD artifact, gated on the P2 second verifier.</li>
+</ul>
+</li>
+<li>
+<p><strong>The PROV-O lift is a SEPARATE opt-in context that does NOT silently compose under <code>@vocab</code>.</strong>
+The base <code>context.jsonld</code> sets <code>@vocab: https://omir.io/ns#</code> (line 4) and <code>resourceType → @type</code>,
+so unmapped chain terms would otherwise mint accidental <code>omir:role</code>/<code>omir:at</code> predicates and the
+chain hops (which carry <strong>no <code>resourceType</code></strong>) have nothing for <code>@type</code> to attach to. The
+<strong><code>https://omir.io/spec/R2/prov-context.jsonld</code></strong> therefore: <strong>(a)</strong> re-declares the <code>provenance</code>
+term, dropping the inherited <code>@type:@id</code> (context.jsonld:144) and declaring it an embedded node
+with typed interior <code>chain</code>/<code>agent</code>/<code>derivedFrom</code>/<code>activity</code> terms; <strong>(b)</strong> sets <code>@vocab: null</code>
+within the chain/attestation sub-context (or gives every chain/attestation property an explicit
+<code>@id</code>) so <strong>unmapped terms are DROPPED, not coerced to <code>omir:</code></strong>; <strong>(c)</strong> attaches PROV to the
+bearing resource via <strong>explicit PROV relations whose subject is the <code>omir:MemoryRecord</code> node</strong>
+(the resource keeps its single <code>omir:</code> <code>@type</code> and <em>gains</em> PROV edges) rather than giving it a
+conflicting second <code>@type</code> of <code>prov:Entity</code>. The disjointness assertion is <strong>narrowed</strong>:
+<em>“OMIR Entity-as-subject-matter is NOT <code>prov:Entity</code>; any OMIR resource appearing as a provenance
+derivation operand lifts to <code>prov:Entity</code> for the derivation graph”</em> (publish that, not a blanket
+<code>owl:disjointWith</code> that would make a <code>wasDerivedFrom Episode</code> triple ill-formed or the graph
+inconsistent). A normative <strong>omir-role → prov: predicate</strong> table accompanies the chain. <strong>DoD:</strong> a
+worked RDF-output test vector proving two implementers produce identical triples under
+base-only and base+prov, with no spurious coercion artifacts.</p>
+</li>
+<li>
+<p><strong>Redaction mechanics (Phase 4) are concrete.</strong> A redacted resource retains <code>resourceType</code>/<code>id</code>
+and all reference targets (graph stays valid per CR-5), sets <code>content</code> to a defined sentinel
+(<code>"[redacted]"</code> + <code>redacted:true</code> in the governance block) while its signed <code>commitment</code> sibling
+is preserved, and <strong>MUST NOT</strong> be removed while anything references it. Whole-resource deletion
+uses a distinct <strong>tombstone</strong> (a present, conformant resource of the right type). A redaction
+round-trip example ships with the phase.</p>
+</li>
+<li>
+<p><strong>Vendor-neutral by construction.</strong> The worked example uses placeholder agents (<code>Agent/agent-a</code>)
+and a placeholder issuer. Any Veld-specific signing convention lives in a vendor extension under
+<code>veld.dev</code>, never in the normative core example.</p>
+</li>
+</ul>
+<h3 id="overlook--the-sequence-lens-1"><a class="header" href="#overlook--the-sequence-lens-1">Overlook — the sequence (lens 1)</a></h3>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Phase</th><th>Themes</th><th>Release · OMM</th><th>Breaking?</th><th>Unlocks</th></tr>
+</thead>
+<tbody>
+<tr><td>1a / 1b</td><td><strong>A</strong> vocabularies</td><td>R2 · OMM-1</td><td><strong>Union = type-change; R2, RFC-gated. Vocab registry (move 1) ships R1.x-additive; 1b binding-engine off the critical path</strong></td><td>Every non-coding domain can name concepts</td></tr>
+<tr><td>2</td><td><strong>B</strong> Agent + <strong>C</strong> identity</td><td>R2 · OMM-0/0</td><td><strong>New resource + Reference widening; R2, RFC-gated, non-invalidating to R1 bundles. C inert single-party → OMM-0</strong></td><td>Agents to attribute to; cross-store merge (needs 2nd store)</td></tr>
+<tr><td>3</td><td><strong>E</strong> PROV (E1-chain on path; attestation parallel)</td><td>R2 · E1-chain OMM-1 / attestation OMM-0</td><td>New optional fields (R2 line)</td><td>Verifiable trust across vendors (at P2)</td></tr>
+<tr><td>4</td><td><strong>F</strong> + <strong>D</strong> governance, modality</td><td>R1.x where additive¹</td><td>New optional fields</td><td>Regulated &amp; multimodal adoption</td></tr>
+<tr><td>5</td><td><strong>G J K</strong> + H, I</td><td>R1.x additive / R2+ structural¹</td><td>I’s CR-5 carve-out → R2+; G/K/H/F/D <strong>and J’s typed-channel + deprecation markers</strong> additive → R1.x¹</td><td>Structured, multilingual, federated memory</td></tr>
+</tbody>
+</table>
+</div>
+<p>¹ <strong>Genuinely §5.1-additive themes ship as R1.x increments <em>as they land</em></strong> (K, G, H, F, D, the
+<strong>non-<code>Reference</code> C fields only</strong> — <code>identifier[]</code>/<code>aliases[]</code>, never <code>authoredBy</code>/<code>owner</code>/
+Agent-<code>sameAs</code> — and J’s <strong>typed channel + deprecation markers</strong>, since §6.4 makes a deprecation
+<em>marker</em> a warn-only additive change). The R2 boundary is reserved <strong>strictly</strong> for the actually
+non-additive items: the <strong>CodeableConcept union</strong> (type change), the <strong>Agent resource + Reference
+widening</strong> (§5.2/§3.1), the eventual <strong>R3 REMOVAL</strong> of J’s deprecated string maps, and <strong>I’s CR-5
+carve-out</strong>. Holding a purely-additive optional field for a major release works against the
+cheap-adoption invariant. <em>Caveat from P1: “R1.x-additive” means “additive to the data model and
+deprecation-policy-clean,” NOT “forward-readable by an already-shipped same-major closed-schema
+validator” — closed schemas reject undeclared new core fields, so intra-major novelty rides
+<code>extension[]</code> until a minor schema bump admits it.</em></p>
+<h3 id="overlook--dependencies-lens-2"><a class="header" href="#overlook--dependencies-lens-2">Overlook — dependencies (lens 2)</a></h3>
+<pre><code>A (vocabularies) ──► everything (domains can finally name their own concepts)
+A ──► J (typed values reuse CodeableConcept via the shared TypedValue def; NOT via Extension)
+A ──► E1-chain (chain over prior resources; needs no Agent)
+B (Agent) ──► E2 (agent-attribution hops attribute memory to Agents) ──► (only) the agent case
+B (Reference widening) ──► I (the ExternalReference $def extends, never relaxes, the widened Reference)
+C (identifier/sameAs) ──► I (input to how external refs are expressed; not the gate)
+I (Federated CR-5 carve-out) ──► attested cross-store E2 (a real Agent or an external ref)
+D, F ──► E (close the attestation inclusion allow-list; F's classification enters M)
+E (attestation, redaction-aware) ──► F (signed retention/consent; redaction preserves the commitment)
+P2 (a second implementer / verifier) ──► OMM-2 anywhere; ──► attestation interop &amp; E maturity at all
+</code></pre>
+<p>The critical path is <strong>A → E1-chain</strong>, a pure additive structure reviewable by a second party; the
+<strong>attestation subsystem and E2 are a parallel track gated on P2</strong> (cross-verification is their only
+test). C runs in parallel after A per the directive, but its <em>value</em> (cross-system merge) and I’s
+mechanism are a matched pair that also need P2. <strong>Maturity floor rule:</strong> a dependent feature’s OMM
+is <code>min(grade(its dependencies), grade(its own mechanism), gate(P2 where interop is the test))</code> —
+while <code>Agent</code> is OMM-0, E2 and any agent-signing attestation are at most OMM-0; J caps at A’s grade;
+I and C at single-party OMM-0 until P2. <strong>I’s true gate is the CR-5 carve-out RFC + the
+<code>ExternalReference</code> <code>$def</code>, not C.</strong></p>
+<h3 id="breakers--adversarial-stress-test-3-passes"><a class="header" href="#breakers--adversarial-stress-test-3-passes">Breakers — adversarial stress-test (3 passes)</a></h3>
+<p><strong>Pass 1 — semantic collisions &amp; compatibility.</strong></p>
+<ul>
+<li><em>PROV <code>Entity</code> vs OMIR <code>Entity</code>, the base context, and term collisions.</em> <strong>Mitigation:</strong> distinct
+chain field names (<code>derivedFrom</code>/<code>hopCredibility</code>, never the globally-bound <code>from</code>/<code>credibility</code>);
+a separate opt-in PROV context that re-declares <code>provenance</code>, suppresses <code>@vocab</code> inside the
+subtree, attaches PROV via explicit relations on the <code>omir:</code> node (not a second <code>@type</code>), and
+publishes the <strong>narrowed</strong> disjointness (“subject-matter Entity ≠ prov:Entity; derivation operands
+DO lift to prov:Entity”). The published context + RDF golden-file vector is what makes the lift
+deterministic.</li>
+<li><em>CodeableConcept softens validation.</em> <strong>Mitigation:</strong> the widened branch is the <strong>existing enum</strong>
+(not free <code>type:string</code>), and the seed/object mapping is made <strong>structurally bijective</strong> by
+excluding the field’s own seed-system URL from the object branch — so a seed value is expressible
+<em>only</em> as the bare string at the Core schema layer, with no Phase-1b/honor-system dependency.
+Phase 1b adds the machine-readable binding construct + net-new validator subsystem for
+closed-vocabulary enforcement.</li>
+<li><em>Vocabulary fragmentation — including the field that actually fragments.</em> <strong>Mitigation:</strong>
+WG-published seed code systems (release-governed) + a public registry (add = additive PR; retire =
+RFC) + a mandatory <code>text</code> fallback. <strong><code>relationType</code> is included in A</strong> — the one already-open,
+highest-fragmentation field — so the namespace discipline lands where collisions actually happen.
+Domain vocabularies live under non-omir.io URLs.</li>
+</ul>
+<p><strong>Pass 2 — trust &amp; governance hard parts.</strong></p>
+<ul>
+<li><em>Attestation brittle under re-serialization / across encodings.</em> <strong>Mitigation:</strong> one canonical
+form <code>SHA-256(det-CBOR(M))</code> over a versioned inclusion allow-list, JSON signers build identical M,
+numbers normalized to shortest-round-trip decimal pre-CBOR (floats forbidden), CodeableConcept
+folded bijectively, <strong>dtype-pinned binary forms barred from signed commitments</strong> (and embeddings
+excluded by default), <strong>forbid bincode under attestation (encodings.md edit + validator
+enforcement)</strong>, ship a KAT vector — gated on P2.</li>
+<li><em>Retention vs immutable provenance; redaction vs signatures; erasure of a signing Agent.</em>
+<strong>Mitigation:</strong> signed subset holds <strong>salted per-field commitments, not plaintext</strong> (with an
+<strong>honest unlinkability-not-brute-force claim</strong> and an erasable-nonce option for real resistance);
+redaction deletes only plaintext; <strong>erasure dominates</strong> — Agent identity enters via an erasable
+commitment so a compelled deletion yields <code>unverifiable-by-erasure</code>, never <code>tampered</code>, and never a
+dangling ref.</li>
+<li><em>Key authority across rotation/merge/redaction — and the closed-world invariant.</em> <strong>Mitigation:</strong>
+<strong>inline the key + key-binding into M</strong> so <code>verified</code> is decidable from the bundle bytes alone;
+demote out-of-band DID/HTTPS resolution to Federated; bind to signing-time <code>at</code>; never rewrite a
+signed Agent id on merge.</li>
+<li><em>Classification across a trust boundary.</em> <strong>Mitigation:</strong> classification is declarative;
+enforcement is consumer policy; a profile may require the core governance block (and the legacy
+pii-class extension is deprecated with a dual-accept window + value-shape mapping).</li>
+</ul>
+<p><strong>Pass 3 — adoption &amp; process risks.</strong></p>
+<ul>
+<li><em>The whole plan is gated on a second implementer — and nobody is tasked with producing one.</em>
+<strong>Mitigation: P2 makes the gate a named, dated deliverable, not a deferred “later.”</strong> Milestone
+zero is reframed: <strong>a NON-Veld party consumes a published minimal Bundle unchanged and publishes a
+conformance statement</strong> (Conformance §“Declaring conformance”). A is the cheapest <em>additive spec
+change</em>, sequenced first to <strong>open the namespace</strong> (move 1, additive, day-one). The independence
+test (P0a) — technical/economic, recusal-bounded — prevents “Veld twice.” Co-design C and E <em>with</em>
+the first external adopter, named on the RFC record.</li>
+<li><em>Backwards compatibility is not a slogan.</em> <strong>Adding any new core field is a new-release change
+because R1/R2 schemas are closed (<code>additionalProperties:false</code>).</strong> Honest guarantee: <em>“R&lt;n&gt; bundles
+stay valid forever”</em> + <em>“R&lt;n+1&gt; readers accept R&lt;n&gt;,”</em> <strong>not</strong> <em>“older readers tolerate newer.”</em>
+A published R1 reader rejects any R2 bundle at the envelope (E300) by design. Until a field is
+promoted, data rides <code>extension[]</code> under a non-omir.io URL.</li>
+<li><em>Scope creep / 80-20 violation — measured by the SPEC SURFACE a second implementer must read, not
+the required-field count.</em> <strong>Mitigation:</strong> the Adopter floor (below) defines a normatively-labeled
+<strong>Core-R2 mandatory-to-understand tier</strong> (the four+Agent core resources + the CodeableConcept
+text-fallback + ignore-unknown rules) and an <strong>Optional-capability tier</strong> (B-semantics, D, E, F, G,
+H, I, J, K) a Core-R2 consumer <strong>MAY ignore wholesale without reading their specs</strong>. WG effort is
+tied to the gate: <strong>no phase past Phase 2 begins schema work until a candidate second implementer
+has cleared the Phase-1a floor (P2).</strong> “Adopt all” stays the destination without spending the
+cheap-adoption budget before the gate is met. <strong><code>Extension.valueJson</code> stays arbitrary JSON.</strong> OMM
+is graded <strong>per resource TYPE</strong>; new volatile <em>fields</em> on a type do not inherit or drag the type’s
+grade — but the field-level signal must be machine-readable, not buried in prose: a new field on a
+mature type either <strong>rides <code>extension[]</code> until it earns promotion</strong> or carries an
+<strong><code>x-omir-maturity</code> annotation the validator surfaces as an INFO finding</strong> when a bundle uses a
+below-type-grade field (prose <code>description</code> is governed as editorial §5.1 and would let stability
+claims escape the OMM ballot gate — so it is not the vehicle).</li>
+<li><em>Velocity vs honesty.</em> <strong>Mitigation:</strong> the OMM rule — <strong>no OMM-2 without ≥2 independent
+implementations</strong> — is the brake, real only once P0 reconciles the three conflicting definitions
+<em>and re-grades the four overclaimed R1 types</em>. A <strong>falling trigger</strong> keeps the gate visible: any
+feature holding OMM-1 across a full release cycle (or fixed calendar window) <strong>with no recorded
+independent implementation MUST be flagged</strong> “OMM-1 (single-party; no independent implementation as
+of &lt;date&gt;)” and becomes a candidate for §4.2 TSC review — so a standard stuck single-party forever
+is <strong>not</strong> indistinguishable in the grade table from a healthy one.</li>
+</ul>
+<h3 id="adopter-conformance-floor"><a class="header" href="#adopter-conformance-floor">Adopter conformance floor</a></h3>
+<p>So a second implementer can scope the work, the <strong>Core-R2</strong> floor is explicit, split into a
+<strong>mandatory-to-understand</strong> tier and an <strong>optional-capability</strong> tier.</p>
+<p><strong>Mandatory to understand (the whole of Core-R2 reading):</strong> the five core resources (MemoryRecord,
+Entity, Relationship, Episode, Agent), the CodeableConcept union + <code>text</code> fallback, and the
+ignore-unknown rules. A Core-R2 consumer:</p>
+<ul>
+<li><strong>MUST</strong> parse the CodeableConcept union and read <code>text</code>; <strong>MAY</strong> ignore <code>system</code>/<code>code</code> it does
+not know.</li>
+<li><strong>MUST</strong> ignore the <em>semantics</em> of unknown Agents, chain hops, governance blocks, embeddings,
+typed attributes, and i18n variants without rejecting (extending “ignore unknown extensions” to
+new optional core blocks).</li>
+<li><strong>MUST</strong> satisfy reference integrity as a <strong>document property</strong> for Bundles it <strong>AUTHORS</strong>: a
+Bundle a Core-R2 implementation authors <strong>MUST have a closed chain</strong> (every <code>chain[].agent</code>/
+<code>chain[].derivedFrom</code> resolves in-Bundle), exactly as CR-5 is unconditional. <strong>When RELAYING a
+Bundle it did not author, it MUST pass the chain through unmodified (lossless pass-through) and
+MUST NOT introduce a new dangling ref</strong> — a trust-agnostic relay is never forced to mint
+placeholder Agents into a chain it cannot interpret, and the Phase-3 “producer MUST emit a closed
+chain” wording means <em>author</em>, not <em>relay</em>.</li>
+</ul>
+<p><strong>Optional capability (may be ignored wholesale, specs unread):</strong> attestation verification,
+federation references, Agent/B semantics beyond ignore-and-preserve, D modality, F governance
+enforcement, G/H/J/K. A Core-R2 implementation is <strong>NOT</strong> required to verify attestations, resolve
+federation references, or implement any profile it does not claim.</p>
+<p>A Core-R2 <strong>producer</strong> MUST emit the backward-compatible (bare-string) form where it has no coded
+value, and MUST place implementation-specific data in <code>extension[]</code> under a non-omir.io URL.</p>
+<h3 id="definition-of-done-per-phase"><a class="header" href="#definition-of-done-per-phase">Definition of done (per phase)</a></h3>
+<p>A phase reaches <strong>its stated target maturity</strong> when, for each theme it lands: the <strong>schema</strong> and the
+<strong>version-aware reference validator</strong> support it — including that <strong>every new <code>ResourceType/id</code>
+reference field (and every closed-world bare-id field, new and pre-existing) is in the
+registry-driven reference walk and exercised by a dangling-reference invalid example in
+<code>examples/invalid/</code></strong>. The <strong>non-regression clause is split by the phase that introduces the field</strong>,
+because a field cannot have a fixture before it exists:</p>
+<ul>
+<li><strong>Phase 2 DoD (the walker-refactor guard):</strong> a dangling-<code>parentId</code> fixture <strong>AND</strong> a dangling
+<code>Relationship.sourceEpisode</code> fixture MUST be added and MUST still be rejected, asserted in
+<code>validator/tests/conformance.rs</code> <strong>before the registry-walker refactor merges</strong> (parentId is the
+lib.rs:219-230 special case the refactor risks dropping; sourceEpisode was the silently-omitted
+pre-existing field).</li>
+<li><strong>Phase 3 DoD:</strong> dangling <code>chain[].derivedFrom</code> and <code>chain[].agent</code> fixtures, <strong>plus</strong> a
+wrong-shape <code>chain[].agent</code> (e.g. resolving to <code>Episode/x</code>) fixture proving the broadened
+set-membership E201 still rejects a non-Agent in the Agent slot.</li>
+</ul>
+<p>For <strong>A</strong>: a <strong>forward-compat fixture PAIR</strong>, each with a single unambiguous expected code —
+<strong>(i)</strong> an <strong>R2-declared</strong> bundle with object-form CodeableConcept that the <strong>R1 validator rejects
+with E300 at the envelope</strong> (proves “R1 readers reject R2 by design”); and <strong>(ii)</strong> an
+<strong>R1-declared</strong> bundle that nonetheless contains an object-form CodeableConcept, which the <strong>R1
+schema set rejects with E120 at per-entry dispatch</strong> (proves the legacy enum stays hard-validated).
+Plus the <code>@context</code> Turtle golden-file (the <code>source</code>-split audit) and the intention-filtering
+object-form fixture. For <strong>1b</strong>: profile-constraint checking enforces code-system membership with
+passing/failing examples. For <strong>E</strong>: the cross-verifier known-answer attestation vector, the
+bincode-under-attestation failing example, the default-vs-omitted and <code>9</code>-vs-<code>9.0</code> digest-equality
+KATs, and the RDF golden-file — the <em>interop</em> DoD items gated on P2. At least one <strong>profile</strong>
+exercises each theme; <strong>docs + examples</strong> exist; an <strong>OMM grade</strong> is assigned honestly under the
+reconciled, re-graded P0 ladder.</p>
+<p><strong>The independent-implementation requirement applies to claiming OMM-2+, not to completing a phase
+— but P2 binds at least one phase to a real second party.</strong> OMM-0/1 = the reference implementation
+alone; OMM-2 = ≥2 independent (per P0a). Phases 1–5 may ship at OMM-0/1 on the reference
+implementation alone, so the standard ships <strong>before</strong> a second implementer materializes — directly
+serving “cheap early adoption matters more than feature count.” <strong>But Phase 1a MUST NOT be declared
+done until a candidate independent implementer (named on the RFC/ballot record) has either (a)
+consumed an R2 CodeableConcept-union bundle and round-tripped it, or (b) recorded a public statement
+of intent</strong> — so the one existential invariant is a gate, not an owner-less “later.” <strong>Process
+preconditions (P-1, P0, P0a, P1) must land before the phases they gate</strong> — no phase may claim OMM-2
+before the OMM reconciliation, no R2 traffic is testable before the validator is version-aware, and
+no ballot is callable before the founding TSC is seated.</p>
+<h2 id="process"><a class="header" href="#process">Process</a></h2>
+<p>None of this is unilateral. Every change here is a <strong>candidate</strong>, to be proposed as an RFC,
+debated by the Working Group, and balloted (see <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/CONTRIBUTING.md"><code>CONTRIBUTING.md</code></a>
+and <a href="https://github.com/OMIR-Working-Group/OMIR/blob/main/GOVERNANCE.md"><code>GOVERNANCE.md</code></a>).
+New resources and fields enter at <strong>OMM-0/1</strong> and earn maturity through <em>independent</em>
+implementation — the same honesty rule the rest of the spec lives by. The fastest way to
+move any of these forward is the project’s stated existential need: <strong>a second implementer</strong>
+whose requirements turn one of these themes from a hypothesis into a ballot.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="resources/bundle.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="efficiency.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="resources/bundle.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="efficiency.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-c22b7243.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

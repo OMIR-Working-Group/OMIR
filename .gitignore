@@ -2,7 +2,11 @@
 spec/book/
 book/
 
-# --- Site build output (mdBook spec rendered into src; assembled deploy tree) ---
+# --- Site build output ---
+# Intermediates only. The mdBook spec is rendered into site/src/spec/ and (legacy)
+# site/public/ — both gitignored. The published site is assembled into /docs at the
+# repo root and IS committed: GitHub Pages ("Deploy from a branch" → main → /docs)
+# serves committed files, so /docs is deliberately NOT ignored.
 site/src/spec/
 site/public/
 

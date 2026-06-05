@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR Spec</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section class="section">
+      <h1>OMIR R1 Specification</h1>
+      <p class="lead">The full specification is rendered from the <code>spec/</code> mdBook source.
+      Start with the overview, or jump to a section:</p>
+      <ul>
+        <li><a href="./spec/R1/overview.html">Overview</a> — the full scope of OMIR.</li>
+        <li><a href="./spec/R1/principles.html">Design Principles</a> — why the spec is shaped this way.</li>
+        <li><a href="./spec/R1/semantics.html">Memory Semantics</a> — what the fields mean over time (the cognitive model).</li>
+        <li><a href="./spec/R1/encodings.html">Encodings</a> — the <code>.omir</code> JSON and <code>.omirb</code> binary forms.</li>
+        <li><a href="./spec/R1/extensions.html">Extensions</a> — how to keep the core stable while innovating.</li>
+        <li><a href="./spec/R1/profiles.html">Profiles</a> — constraining the core for a domain.</li>
+        <li><a href="./spec/R1/conformance.html">Conformance</a> — what makes a Bundle valid.</li>
+      </ul>
+      <h2>Resources</h2>
+      <ul>
+        <li><a href="./spec/R1/resources/memoryrecord.html">MemoryRecord</a> <span class="omm omm-4">OMM-4</span> — the atomic unit of memory.</li>
+        <li><a href="./spec/R1/resources/entity.html">Entity</a> <span class="omm omm-3">OMM-3</span> — a named thing extracted from memory.</li>
+        <li><a href="./spec/R1/resources/relationship.html">Relationship</a> <span class="omm omm-3">OMM-3</span> — a directed, weighted edge between entities.</li>
+        <li><a href="./spec/R1/resources/episode.html">Episode</a> <span class="omm omm-3">OMM-3</span> — a bounded experience.</li>
+        <li><a href="./spec/R1/resources/bundle.html">Bundle</a> <span class="omm omm-env">envelope</span> — the container that is the <code>.omir</code> document.</li>
+      </ul>
+      <h2>Beyond R1</h2>
+      <ul>
+        <li><a href="./spec/R1/global-standard.html">Toward a Global Standard</a> — how OMIR generalizes from a Veld-seeded core to a vendor-neutral global format (non-normative roadmap).</li>
+      </ul>
+      <p><a href="./spec/R1/index.html">Open the full specification →</a></p>
+    </section>
+  </main>
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+</body>
+</html>

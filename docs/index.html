@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OMIR — Open Memory Interoperability Resources</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+      <div class="toolbar">
+        <span class="status hidden" id="signin-status">Signed in</span>
+        <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-callback="handleGoogleCredentialResponse"></div>
+        <div class="g_id_signin" data-type="standard" data-shape="rectangular" data-theme="outline" data-text="signin_with" data-size="large"></div>
+        <button class="button secondary hidden" id="signout-button">Sign out</button>
+        <button class="button secondary hidden" id="toggle-edit">Edit page</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero section editable" data-section="hero">
+      <p><strong>OMIR</strong> is the open, friendly memory format for agents: the standard way to write down, share, and preserve what an intelligent system remembers.</p>
+      <p>Modeled after FHIR's resource-oriented clarity, OMIR makes agent memory portable, inspectable, and interoperable without sacrificing the real-world complexity of forgetting, source trust, and temporal context.</p>
+    </section>
+
+    <section class="section editable" data-section="why-necessary">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>Why this spec is necessary</h2>
+      <p>Modern agents already speak to each other over MCP and A2A. But once memory leaves an agent and lands on disk, there has been no shared standard for what that memory should look like.</p>
+      <ul>
+        <li>Different systems call the same concept by different names.</li>
+        <li>Memory is more than text: it has confidence, decay, provenance, and relationships.</li>
+        <li>Without a shared format, hand-offs become fragile, and migrations become expensive.</li>
+      </ul>
+      <p>OMIR solves that gap by defining a stable, vendor-neutral document format for memory at rest — the same way FHIR defined the document model that made healthcare data portable.</p>
+    </section>
+
+    <section class="section editable" data-section="aims">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>What OMIR aims to do</h2>
+      <div class="grid grid-2">
+        <div>
+          <h3>1. Make memory portable</h3>
+          <p>OMIR describes memory as a Bundle of typed Resources. That Bundle can be exported, shared, archived, and consumed by any OMIR-compatible system.</p>
+        </div>
+        <div>
+          <h3>2. Keep the core small</h3>
+          <p>The spec captures the most useful fields for the majority of implementations, while still letting systems include extra data through extensions.</p>
+        </div>
+        <div>
+          <h3>3. Preserve real memory behavior</h3>
+          <p>Fields for decay, tiering, relationship strength, and invalidation make forgetting and salience first-class, not optional.</p>
+        </div>
+        <div>
+          <h3>4. Support honest evolution</h3>
+          <p>OMIR uses a maturity model so implementers can trust which resources are stable and which are still evolving.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section editable" data-section="hardness">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>Why this is hard — and how OMIR makes it easier</h2>
+      <p>Agent memory is not just a log of text or a simple record. It is a live structure with:</p>
+      <ul>
+        <li>temporal decay and anchoring</li>
+        <li>relationships between concepts</li>
+        <li>multiple memory tiers</li>
+        <li>trust and provenance</li>
+        <li>future intentions and invalidation</li>
+      </ul>
+      <p>OMIR accepts that difficulty up front. The spec does not pretend memory is easy. It gives you:</p>
+      <ul>
+        <li>a resource model that is grounded and familiar</li>
+        <li>clear rules for references and containment</li>
+        <li>a strict core plus an extension mechanism</li>
+        <li>a schema-driven contract you can implement against immediately</li>
+      </ul>
+    </section>
+
+    <section class="section editable" data-section="adoption">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>Logical sections for fast adoption</h2>
+      <p>New developers can adopt OMIR in clear stages. Start small, then grow with confidence.</p>
+      <div class="callout">
+        <strong>Start here:</strong> use the schema as your contract, not your guess.</div>
+      <ol>
+        <li><strong>Bundle</strong>: every OMIR document is a `Bundle`. It is the container for the data you exchange.</li>
+        <li><strong>MemoryRecord</strong>: capture what was remembered, with timestamp, confidence, decay, and provenance.</li>
+        <li><strong>Entity</strong>: name the people, places, concepts, and things your system extracts from memory.</li>
+        <li><strong>Relationship</strong>: connect entities with directed edges and strength values.</li>
+        <li><strong>Episode</strong>: represent bounded experiences that explain how records and entities relate.</li>
+      </ol>
+      <p>Once the core is in place, add your implementation-specific values using `extension[]` rather than inventing new top-level fields.</p>
+    </section>
+
+    <section class="section editable" data-section="developer-path">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>How a new developer can make leaps and bounds</h2>
+      <p>If you are just starting, the schema is your fastest path. It gives you a ready-made domain model so you don’t have to design memory from scratch.</p>
+      <ul>
+        <li>Use the JSON Schema under `schemas/` as the authoritative field list.</li>
+        <li>Build your first `.omir` file as a `Bundle` of `MemoryRecord` and `Entity` resources.</li>
+        <li>Link resources through typed references like `Entity/jane`.</li>
+        <li>Keep unknown extensions safe: consumers ignore unknown extensions, so you can innovate without breaking compatibility.</li>
+        <li>Check maturity levels in `meta.maturity` before depending on a resource shape.</li>
+      </ul>
+      <p>This means you can jump from a prototype to a shareable, standard-compliant export in a few days instead of weeks of custom schema design.</p>
+    </section>
+
+    <section class="section editable" data-section="checklist">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>Fast adoption checklist</h2>
+      <ul>
+        <li>Read the schema for the resources you need.</li>
+        <li>Create a `Bundle` document with an `entry` array.</li>
+        <li>Implement `MemoryRecord` first, then add `Entity` and `Relationship`.</li>
+        <li>Use `extension[]` for anything outside the core model.</li>
+        <li>Validate with a schema-aware tool before sharing your `.omir` file.</li>
+      </ul>
+    </section>
+
+    <section class="section editable" data-section="next-steps">
+      <div class="edit-handle"><button class="button secondary">Edit</button></div>
+      <h2>Where to go next</h2>
+      <p>Once your first OMIR document works, the next step is to explore:</p>
+      <ul>
+        <li><a href="./spec/R1/overview.html">Overview</a> — the full scope of OMIR.</li>
+        <li><a href="./spec/R1/principles.html">Design Principles</a> — why the spec is shaped this way.</li>
+        <li><a href="./spec/R1/extensions.html">Extensions</a> — how to keep the core stable while innovating.</li>
+        <li><a href="./spec/R1/conformance.html">Conformance</a> — what makes a Bundle valid.</li>
+      </ul>
+    </section>
+
+    <div class="note" id="editor-note">
+      <strong>Note:</strong> This page supports in-place editing. Click any section's Edit button and then Save. Signed-in users can also store changes locally to preview content before publishing.
+    </div>
+  </main>
+
+  <script>
+    const editToggle = document.getElementById('toggle-edit');
+    const signoutButton = document.getElementById('signout-button');
+    const status = document.getElementById('signin-status');
+    const editableSections = Array.from(document.querySelectorAll('.editable'));
+    let editingEnabled = false;
+
+    function setEditing(enabled) {
+      editingEnabled = enabled;
+      editToggle.textContent = enabled ? 'Disable edit' : 'Edit page';
+      editableSections.forEach(section => {
+        section.contentEditable = enabled;
+        section.setAttribute('aria-label', enabled ? 'Editable section' : 'Non-editable section');
+      });
+    }
+
+    function restoreSavedContent() {
+      editableSections.forEach(section => {
+        const saved = localStorage.getItem(`omir-site-${section.dataset.section}`);
+        if (saved) {
+          section.innerHTML = saved;
+        }
+      });
+    }
+
+    function saveAllContent() {
+      editableSections.forEach(section => {
+        localStorage.setItem(`omir-site-${section.dataset.section}`, section.innerHTML);
+      });
+      alert('Page changes saved locally. Refresh to verify persistence.');
+    }
+
+    function clearSavedContent() {
+      editableSections.forEach(section => {
+        localStorage.removeItem(`omir-site-${section.dataset.section}`);
+      });
+      window.location.reload();
+    }
+
+    editToggle.addEventListener('click', () => {
+      if (!editingEnabled) {
+        setEditing(true);
+        signoutButton.style.display = 'none';
+      } else {
+        setEditing(false);
+      }
+    });
+
+    document.querySelectorAll('.edit-handle button').forEach(button => {
+      button.addEventListener('click', event => {
+        const section = event.target.closest('.editable');
+        const enabled = section.contentEditable === 'true';
+        section.contentEditable = enabled ? 'false' : 'true';
+        section.focus();
+      });
+    });
+
+    window.handleGoogleCredentialResponse = response => {
+      if (!response || !response.credential) return;
+      const base64Url = response.credential.split('.')[1];
+      const decoded = JSON.parse(decodeURIComponent(atob(base64Url.replace(/-/g, '+').replace(/_/g, '/')).split('').map(c => `%${('00' + c.charCodeAt(0).toString(16)).slice(-2)}`).join('')));
+      const name = decoded.name || 'Google user';
+      const email = decoded.email || 'unknown';
+      const user = { name, email };
+      localStorage.setItem('omir-site-user', JSON.stringify(user));
+      showSignedIn(user);
+    };
+
+    signoutButton.addEventListener('click', () => {
+      localStorage.removeItem('omir-site-user');
+      hideSignedIn();
+      google.accounts.id.disableAutoSelect();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      restoreSavedContent();
+      initializeUser();
+      setEditing(false);
+      const saveButton = document.createElement('button');
+      saveButton.textContent = 'Save changes';
+      saveButton.className = 'button';
+      saveButton.style.marginTop = '1rem';
+      saveButton.addEventListener('click', saveAllContent);
+      document.querySelector('main').appendChild(saveButton);
+      const resetButton = document.createElement('button');
+      resetButton.textContent = 'Restore default content';
+      resetButton.className = 'button secondary';
+      resetButton.style.marginTop = '1rem';
+      resetButton.addEventListener('click', clearSavedContent);
+      document.querySelector('main').appendChild(resetButton);
+    });
+
+    function showSignedIn(user) {
+      document.getElementById('signin-status').textContent = `Signed in as ${user.name} (${user.email})`;
+      document.getElementById('signin-status').classList.remove('hidden');
+      document.getElementById('signout-button').classList.remove('hidden');
+      document.getElementById('toggle-edit').classList.remove('hidden');
+    }
+
+    function hideSignedIn() {
+      document.getElementById('signin-status').classList.add('hidden');
+      document.getElementById('signout-button').classList.add('hidden');
+      document.getElementById('toggle-edit').classList.add('hidden');
+    }
+
+    function initializeUser() {
+      const stored = localStorage.getItem('omir-site-user');
+      if (stored) {
+        const user = JSON.parse(stored);
+        showSignedIn(user);
+      } else {
+        hideSignedIn();
+      }
+    }
+  </script>
+</body>
+</html>

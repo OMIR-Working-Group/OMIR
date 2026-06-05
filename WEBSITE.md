@@ -21,9 +21,13 @@ adopter list is the scoreboard.
 
 ## Hosting
 
-- **Cloudflare Pages** for the static site (`omir.io` DNS is already on Cloudflare).
+- **GitHub Pages** is the current host: **Settings → Pages → Deploy from a branch → `main` → `/docs`.**
+  Pages serves the committed `/docs` folder verbatim (a `/docs/.nojekyll` marker disables Jekyll so
+  mdBook's output ships intact). Project URL: `https://omir-working-group.github.io/OMIR/`.
+- **Custom domain (optional):** add `/docs/CNAME` containing `omir.io` and point DNS at GitHub Pages;
+  `site/build.sh` preserves an existing `/docs/CNAME` across rebuilds. (`omir.io` DNS is on Cloudflare,
+  so this can be a CNAME/ALIAS to the Pages host, or Cloudflare Pages can serve the same `/docs` tree.)
 - **Cloudflare Workers** only for `/playground` (later — see Sequencing).
-- Custom domain: `omir.io` apex + `www` → Pages.
 
 ## Repo layout (decision)
 
@@ -33,20 +37,26 @@ build feeds the site, so co-location avoids a cross-repo build. Split into a sep
 
 ```
 site/
-├─ public/                # Pages deploy output (built artifact; gitignored)
 ├─ src/                   # landing pages (plain static HTML first; Astro only if needed)
 ├─ src/index.html         # friendly OMIR landing page prototype
-├─ wrangler.toml          # (or Pages dashboard config)
-└─ build.sh               # mdbook build spec/ → site/src/spec/R1 ; then assemble site/public/
+├─ src/spec/              # mdBook render target (gitignored intermediate)
+└─ build.sh               # mdbook build spec/ → site/src/spec/R1 ; then assemble /docs
+                          # (committed GitHub Pages root)
 ```
+
+(`/docs` lives at the **repo root**, not under `site/`, because GitHub Pages publishes
+`main:/docs`.)
 
 ## Build pipeline
 
 1. `mdbook build spec/ -d <abs>/site/src/spec/R1` — **pin mdBook 0.5.x (0.5.3)** (same version CI installs; see HANDOFF §5 Toolchain). Rendering the spec *next to* the landing pages keeps `site/src/` directly browsable (open `site/src/index.html`; the `./spec/R1/…` links resolve with no assembly step).
-2. Assemble the deploy tree: copy `site/src/` → `site/public/`.
-3. Cloudflare Pages deploys `site/public/`.
+2. Assemble the published site: copy `site/src/` → `/docs` (repo root) and write `/docs/.nojekyll`.
+3. **Commit `/docs`.** GitHub Pages serves `main:/docs` (no build step on GitHub's side), so the
+   assembled output must be committed. A `/docs/CNAME` is preserved across rebuilds.
 
-All three steps are wrapped by `site/build.sh` (run `sh site/build.sh`). Both `site/src/spec/` and `site/public/` are gitignored build output.
+All steps are wrapped by `site/build.sh` (run `sh site/build.sh`). `site/src/spec/` is a gitignored
+intermediate; `/docs` is committed. All site links are **relative**, so the site works whether served
+at a domain root (`omir.io/`) or a project subpath (`…github.io/OMIR/`).
 
 Landing framework: **start with plain static HTML.** The spec itself is mdBook; don't
 over-tool the shell. Reach for Astro only if component reuse actually demands it.

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR Maturity (OMM)</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>Maturity — the OMM dashboard</h1>
+      <p class="lead">OMIR grades the stability of each resource <em>type</em> with the
+      <strong>OMIR Maturity Model (OMM)</strong>, an integer 0–5 surfaced in
+      <code>meta.maturity</code>. Maturity is a <strong>promise about change</strong>, not a
+      quality score — and we grade honestly. We never overclaim.</p>
+    </section>
+
+    <section class="section">
+      <h2>The scale</h2>
+      <table>
+        <tr><th>OMM</th><th>Meaning</th></tr>
+        <tr><td><span class="omm">0</span></td><td>Draft — shape may change without notice.</td></tr>
+        <tr><td><span class="omm">1</span></td><td>Early — implemented, but the field set is volatile.</td></tr>
+        <tr><td><span class="omm">2</span></td><td>Trial use — implemented in more than one system; breaking changes possible.</td></tr>
+        <tr><td><span class="omm omm-3">3</span></td><td>Stabilizing — widely implemented; changes require deprecation.</td></tr>
+        <tr><td><span class="omm omm-4">4</span></td><td>Mature — broadly implemented, battle-tested; backwards-compatible evolution only.</td></tr>
+        <tr><td><span class="omm">5</span></td><td>Normative — locked; changes only via a new release.</td></tr>
+      </table>
+    </section>
+
+    <section class="section">
+      <h2>R1 resource grades</h2>
+      <table>
+        <tr><th>Resource</th><th>OMM</th><th>Rationale</th></tr>
+        <tr>
+          <td><a href="./spec/R1/resources/memoryrecord.html">MemoryRecord</a></td>
+          <td><span class="omm omm-4">OMM-4</span></td>
+          <td>The atomic unit; the most exercised and stable shape in the reference implementation.</td>
+        </tr>
+        <tr>
+          <td><a href="./spec/R1/resources/entity.html">Entity</a></td>
+          <td><span class="omm omm-3">OMM-3</span></td>
+          <td>Widely implemented; changes require deprecation.</td>
+        </tr>
+        <tr>
+          <td><a href="./spec/R1/resources/relationship.html">Relationship</a></td>
+          <td><span class="omm omm-3">OMM-3</span></td>
+          <td>Stable graph-edge shape; Hebbian strength + temporal validity.</td>
+        </tr>
+        <tr>
+          <td><a href="./spec/R1/resources/episode.html">Episode</a></td>
+          <td><span class="omm omm-3">OMM-3</span></td>
+          <td>The episodic backbone; event-time vs ingestion-time well established.</td>
+        </tr>
+        <tr>
+          <td><a href="./spec/R1/resources/bundle.html">Bundle</a></td>
+          <td><span class="omm omm-env">envelope</span></td>
+          <td>The document container, not a graded memory resource — it carries no OMM level.</td>
+        </tr>
+      </table>
+      <p class="muted">Honesty is a feature: a consumer <strong>SHOULD</strong> treat lower-OMM
+      resources as more likely to change between releases. New resources introduced later start
+      lower and earn their level through real, independent implementation.</p>
+    </section>
+
+    <section class="section">
+      <h2>What's still earning its level</h2>
+      <p>Candidate generalizations that would move OMIR from a Veld-seeded core toward a global
+      standard enter at <span class="omm">OMM-0</span>/<span class="omm">1</span> and earn maturity
+      through independent implementation — for example open vocabularies (CodeableConcept),
+      cross-system entity identifiers, a privacy/retention block, and multi-agent identity. See
+      <a href="./spec/R1/global-standard.html">Toward a Global Standard</a> for the full roadmap and
+      its priority order.</p>
+      <div class="callout">
+        The single most important input to maturity is a <strong>second implementer</strong>. A
+        resource cannot honestly reach OMM-2 until more than one system implements it. Tell us what
+        you've built on <a href="./implementations.html">Implementations</a>, or push on a specific
+        part via <a href="./feedback.html">Feedback</a>.
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+</body>
+</html>

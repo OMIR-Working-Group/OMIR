@@ -914,8 +914,8 @@ I and C at single-party OMM-0 until P2. **I's true gate is the CR-5 carve-out RF
   test (P0a) — technical/economic, recusal-bounded — prevents "Veld twice." Co-design C and E *with*
   the first external adopter, named on the RFC record.
 - *Backwards compatibility is not a slogan.* **Adding any new core field is a new-release change
-  because R1/R2 schemas are closed (`additionalProperties:false`).** Honest guarantee: *"R<n> bundles
-  stay valid forever"* + *"R<n+1> readers accept R<n>,"* **not** *"older readers tolerate newer."*
+  because R1/R2 schemas are closed (`additionalProperties:false`).** Honest guarantee: *"R&lt;n&gt; bundles
+  stay valid forever"* + *"R&lt;n+1&gt; readers accept R&lt;n&gt;,"* **not** *"older readers tolerate newer."*
   A published R1 reader rejects any R2 bundle at the envelope (E300) by design. Until a field is
   promoted, data rides `extension[]` under a non-omir.io URL.
 - *Scope creep / 80-20 violation — measured by the SPEC SURFACE a second implementer must read, not
@@ -937,7 +937,7 @@ I and C at single-party OMM-0 until P2. **I's true gate is the CR-5 carve-out RF
   *and re-grades the four overclaimed R1 types*. A **falling trigger** keeps the gate visible: any
   feature holding OMM-1 across a full release cycle (or fixed calendar window) **with no recorded
   independent implementation MUST be flagged** "OMM-1 (single-party; no independent implementation as
-  of <date>)" and becomes a candidate for §4.2 TSC review — so a standard stuck single-party forever
+  of &lt;date&gt;)" and becomes a candidate for §4.2 TSC review — so a standard stuck single-party forever
   is **not** indistinguishable in the grade table from a healthy one.
 
 ### Adopter conformance floor

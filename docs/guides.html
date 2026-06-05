@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OMIR Guides</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="./index.html">
+          <div class="brand-name">OMIR</div>
+          <div class="brand-tagline">Open Memory Interoperability Resources</div>
+        </a>
+      </div>
+      <nav class="nav" aria-label="Main navigation">
+        <a href="./index.html">Home</a>
+        <a href="./spec.html">Spec</a>
+        <a href="./field-map.html">Field Map</a>
+        <a href="./guides.html">Guides</a>
+        <a href="./playground.html">Playground</a>
+        <a href="./implementations.html">Implementations</a>
+        <a href="./maturity.html">Maturity</a>
+        <a href="./governance.html">Governance</a>
+        <a href="./feedback.html">Feedback</a>
+        <a href="./about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <h1>Guides</h1>
+      <p class="lead">Practical, implementer-facing how-tos. The <a href="./spec.html">specification</a>
+      is the contract; these guides are the on-ramp. Everything below is grounded in the R1 schemas
+      and the conformant <code>examples/minimal-bundle.omir</code> in the repository.</p>
+    </section>
+
+    <section class="section">
+      <h2>1 · Your first <code>.omir</code> Bundle</h2>
+      <p>An OMIR document <em>is</em> a <a href="./spec/R1/resources/bundle.html">Bundle</a>: a small
+      envelope (<code>resourceType</code>, <code>omirVersion</code>, <code>entry[]</code>) wrapping a
+      flat list of typed resources. Resources don't nest — they <strong>link</strong> by typed
+      reference of the form <code>ResourceType/id</code>. Here is a complete, conformant Bundle: one
+      <a href="./spec/R1/resources/entity.html">Entity</a> and one
+      <a href="./spec/R1/resources/memoryrecord.html">MemoryRecord</a> that references it.</p>
+      <pre><code>{
+  "resourceType": "Bundle",
+  "omirVersion": "R1",
+  "entry": [
+    {
+      "resourceType": "Entity",
+      "id": "rust",
+      "name": "Rust programming",
+      "labels": ["technology", "skill"],
+      "salience": 0.8
+    },
+    {
+      "resourceType": "MemoryRecord",
+      "id": "m1",
+      "content": "The team standardized on Rust for the reference validator.",
+      "createdAt": "2026-06-01T09:00:00Z",
+      "kind": "learning",
+      "experienceType": "decision",
+      "importance": 0.8,
+      "entityRefs": [{ "ref": "Entity/rust" }]
+    }
+  ]
+}</code></pre>
+      <p>That's it. The <code>MemoryRecord.entityRefs[]</code> entry <code>Entity/rust</code> resolves to
+      the Entity with <code>id: "rust"</code> in the same Bundle — that resolution is a conformance rule
+      (see step 3).</p>
+    </section>
+
+    <section class="section">
+      <h2>2 · Validate before you share</h2>
+      <p>Don't guess at conformance — check it. The reference validator
+      (<a href="https://github.com/OMIR-Working-Group/OMIR/tree/main/validator"><code>omir-validate</code></a>,
+      Apache-2.0) decides whether a file is a valid R1 Bundle and to what level. It checks structural
+      validity against the schemas, <strong>reference integrity</strong> (every
+      <code>ResourceType/id</code> resolves within the Bundle), and the <code>R1</code> version marker.</p>
+      <pre><code># from the repository root
+cd validator
+cargo run -- ../examples/minimal-bundle.omir
+
+#   structural ............. pass   (5 entries: 2 Entity, 1 Episode, 1 MemoryRecord, 1 Relationship)
+#   reference integrity .... pass   (7 of 7 references resolved)
+#   version presence ....... pass   (Bundle=R1, 5/5 entries meta.omirVersion=R1)
+#
+# RESULT: PASS  —  Core conformant ✓  (badge-eligible)</code></pre>
+      <p>A clean <code>--level core</code> run (exit code <code>0</code>) is exactly what gates the
+      <strong>"Powered by OMIR"</strong> badge. Use <code>--format json</code> for CI and badge
+      automation. See <a href="./spec/R1/conformance.html">Conformance</a> for the full rule set.</p>
+    </section>
+
+    <section class="section">
+      <h2>3 · Reference integrity</h2>
+      <p>OMIR is <em>closed-world</em> for references in R1: a Bundle is self-contained, and every typed
+      reference must resolve to an entry of the right type in the same Bundle. A dangling reference is
+      non-conformant.</p>
+      <table>
+        <tr><th>Reference</th><th>Must target</th></tr>
+        <tr><td><code>MemoryRecord.entityRefs[]</code>, <code>Episode.entityRefs[]</code></td><td>an <code>Entity</code></td></tr>
+        <tr><td><code>Relationship.from</code> / <code>.to</code></td><td>an <code>Entity</code></td></tr>
+        <tr><td><code>Relationship.sourceEpisode</code></td><td>an <code>Episode</code></td></tr>
+        <tr><td><code>MemoryRecord.parentId</code></td><td>a <code>MemoryRecord</code></td></tr>
+      </table>
+      <p class="muted">The validator's negative corpus in <code>examples/invalid/</code> shows what
+      rejection looks like — a dangling ref, a score out of range, a bad enum, an undeclared field.</p>
+    </section>
+
+    <section class="section">
+      <h2>4 · Keep proprietary data in <code>extension[]</code></h2>
+      <p>The R1 core is an <strong>80/20</strong> set: the fields ~80% of memory systems share. Every
+      resource schema sets <code>additionalProperties: false</code>, so a new top-level field is
+      non-conformant <em>by construction</em>. That's deliberate — your bespoke data rides in the typed
+      <a href="./spec/R1/extensions.html"><code>extension[]</code></a> array, under a URL you control:</p>
+      <pre><code>"extension": [
+  {
+    "url": "https://your-company.example/omir/ext/scoring-signals",
+    "valueJson": { "recency": 0.91, "graphStrength": 0.62, "arousal": 0.40 }
+  }
+]</code></pre>
+      <p>A consumer that doesn't recognize the <code>url</code> <strong>must ignore it and still process
+      the record</strong>. That single rule is what lets two engines exchange Bundles and lose nothing:
+      the shared 80% is interoperable; the proprietary 20% travels safely alongside it.</p>
+    </section>
+
+    <section class="section">
+      <h2>5 · Migrating from an existing memory store</h2>
+      <p>Most memory engines (Mem0, Letta, or a homegrown store) already track the same concepts under
+      different names. Migration is mostly a field-mapping exercise; the cognitive richness OMIR carries
+      — calibrated confidence, decay/anchoring, Hebbian edge strength, tiering — maps onto core fields
+      rather than getting flattened away.</p>
+      <table>
+        <tr><th>In your store</th><th>OMIR</th></tr>
+        <tr><td>memory / document text</td><td><code>MemoryRecord.content</code></td></tr>
+        <tr><td>created vs. happened time</td><td><code>createdAt</code> vs. <code>eventTime</code></td></tr>
+        <tr><td>score / weight</td><td><code>importance</code> (a <code>[0,1]</code> UnitInterval)</td></tr>
+        <tr><td>tags / named things</td><td><code>Entity</code> + <code>entityRefs[]</code></td></tr>
+        <tr><td>graph edges</td><td><code>Relationship</code> (<code>from</code>/<code>to</code>/<code>strength</code>)</td></tr>
+        <tr><td>raw source event / transcript</td><td><code>Episode</code></td></tr>
+        <tr><td>vendor scores, embeddings, signals</td><td><code>extension[]</code> (never the core)</td></tr>
+      </table>
+      <p>Start as a <strong>producer</strong>: emit Core-conformant Bundles from your export path, validate
+      them, then list yourself on <a href="./implementations.html">Implementations</a>.</p>
+    </section>
+
+    <section class="section">
+      <h2>Where to go next</h2>
+      <ul>
+        <li><a href="./spec/R1/overview.html">Overview</a> — the full scope of OMIR.</li>
+        <li><a href="./spec/R1/conformance.html">Conformance</a> — every rule the validator enforces.</li>
+        <li><a href="./feedback.html">Feedback</a> — tell us what's unclear; it's how resources earn maturity.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">OMIR — Open Memory Interoperability Resources · spec CC-BY-4.0</footer>
+</body>
+</html>
